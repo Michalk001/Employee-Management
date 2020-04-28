@@ -4,13 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack --mode production",
+    "start-dev": "nodemon --exec babel-node ./src/index.js",
+    "start": "node ./build/app.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.0",
+    "@babel/node": "^7.8.7",
     "@babel/preset-env": "^7.9.0",
     "@babel/register": "^7.9.0",
     "babel-core": "^6.26.3",
@@ -25,6 +28,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.8.7",
     "@types/bcrypt": "^3.0.0",
+    "@types/sequelize": "^4.28.8",
     "babel-runtime": "^6.26.0",
     "backpack-core": "^0.8.4",
     "bcryptjs": "^2.4.3",
@@ -34,9 +38,13 @@
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^2.2.0",
     "node-pre-gyp": "^0.14.0",
+    "nodemon": "^2.0.3",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
+    "pg": "^8.0.2",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.21.6",
     "webpack-dev-server": "^3.10.3"
   }
 }

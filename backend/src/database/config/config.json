@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "wollier",
+    "password": "test1234",
+    "database": "emdb",
+    "host": "34.67.90.33",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "wollier",
+    "password": "test1234",
+    "database": "emdb",
+    "host": "34.67.90.33",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "wollier",
+    "password": "test1234",
+    "database": "emdb",
+    "host": "34.67.90.33",
+    "dialect": "postgres"
+  }
+}

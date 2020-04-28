@@ -1,0 +1,36 @@
+*{
+    font-family: 'Rajdhani', sans-serif;
+}
+body{
+    background-color: #f5f6f8;
+    margin: 0;
+
+}
+
+.load-ico-box{
+    &--center{
+        width: 100%;
+        text-align: center;
+        margin: 20px auto;
+    }
+}
+.load-ico {
+    font-size: 48px;
+    &__wrap-center{
+        text-align: center;
+    }
+    &__spin {
+        -webkit-animation: fa-spin 1.3s infinite linear;
+        animation: fa-spin 1.3s infinite linear;
+        &--big{
+            font-size: 82px;
+        }
+    }
+    &__text{
+        font-size: 22px;
+        margin: 20px;
+    }
+    &--center{
+        margin: auto;
+    }
+}

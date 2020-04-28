@@ -1,0 +1,77 @@
+.header {
+    $base-text-color: white;
+    $base-hover-text-color: #46adf9;
+    background-color: black;
+    justify-content: space-between;
+    position: sticky;
+    height: 70px;
+    padding-right: 100px;
+    padding-left: 30px;
+    display: flex;
+
+    &__home {
+        position: relative;
+        color: $base-text-color;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+
+        &--transition {
+            transition: all 0.25s;
+        }
+
+        &--ico {
+            font-size: 32px;
+        }
+
+        &--text {
+            font-size: 20px;
+            padding-left: 10px;
+        }
+
+        &:hover & {
+            &--text {
+                font-size: 24px;
+            }
+
+            &--ico {
+                font-size: 36px;
+            }
+        }
+
+        &:hover {
+
+            color: $base-hover-text-color;
+        }
+    }
+
+    &__menu {
+        position: relative;
+
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+
+    }
+
+    &__item {
+        padding: 10px 15px;
+    }
+
+    &__text {
+        color: $base-text-color;
+        font-size: 18px;
+        text-decoration: none;
+        transition-duration: 0.25s;
+
+        &:hover {
+
+            color: $base-hover-text-color;
+        }
+
+        &--link{
+            text-decoration: none;
+            cursor: pointer; 
+        }
+    }
+}

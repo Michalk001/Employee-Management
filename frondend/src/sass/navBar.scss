@@ -1,0 +1,73 @@
+.navBar {
+    $base-text-color: #dcdcdc;
+    $base-hover-text-color: #46adf9;
+    background-color: #2a3038;
+    width: 250px;
+    height: 100%;
+    position: fixed;
+    transition: transform 0.5s;
+    z-index: 5;
+    &--close &{
+        &__menu{
+            transform: translateX(-60px) 
+        }
+     
+    }
+    &--close{
+        transform: translateX(-195px)
+    }
+    &__arrows {
+        position: relative;
+        width: 100%;
+        padding: 10px 0;
+        height: 40px;
+        display: inline-flex;
+        align-items: center;
+
+        &--style {
+            font-size: 32px;
+            color: white;
+            right: 15px;
+            position: absolute;
+            cursor: pointer;
+        }
+
+        &--close {
+            transform: rotate(180deg);
+            transition-duration: 0.5s;
+            color: #46adf9;
+        }
+
+        &--open {
+            transform: rotate(0deg);
+            transition-duration: 0.5s;
+           
+        }
+    }
+
+    &__menu{
+    
+        position: relative;
+        transition: transform 0.25s;
+
+        &--item{
+            width: 100%;
+            position: relative;
+        }
+        &--text{
+            color: $base-text-color;
+            padding: 10px 20px;
+            word-break: break-all;
+        }
+        &--link{
+            text-decoration: none;
+            display: block;
+            transition-duration: 0.25s;
+            &:hover{
+                background-color: #39404a;
+                color:  $base-hover-text-color;
+            }
+        }
+    }
+   
+}

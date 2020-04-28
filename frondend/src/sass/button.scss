@@ -1,0 +1,21 @@
+.button {
+    $normal-color:#00bffd;
+    $normal-hover-color:#008bfd;
+
+    background-color:  $normal-color;
+    position: relative;
+    padding: 10px 10px;
+    width: 140px;
+    text-align: center;
+    box-shadow: -3px 0px 9px 0px rgba(0, 0, 0, 0.36);
+    transition: background-color 0.3s ease;
+    border: none;
+    color: white;
+    text-decoration: none;
+
+    &:hover {
+        cursor: pointer;
+        background-color:  $normal-hover-color;
+    }
+
+}
