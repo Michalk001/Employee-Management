@@ -16,10 +16,36 @@
         margin-top: 60px;
     }
 
+    &--large {
+        width: 100%;
+    }
+
+    &--employe-list {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    &--half-border-bottom {
+        padding-bottom: 10px;
+        position: relative;
+
+        &::after {
+            content: '';
+            display: block;
+            position: absolute;
+            bottom: 0;
+            width: 75%;
+            left: 12.5%;
+            border-top: 1px solid #d6d6d6;
+        }
+    }
+
     &__text {
         color: black;
         font-size: 22px;
         position: relative;
+        word-break: break-all;
+        text-decoration: none;
 
         &--center {
             text-align: center;
@@ -32,6 +58,15 @@
         &--normal {
             font-size: 18px;
         }
+
+        &--text-item {
+            margin: 0px 10px;
+        }
+
+        &--bold {
+            font-weight : 600;
+        }
+
     }
 
     &__loading {
@@ -65,12 +100,38 @@
             justify-content: center;
             display: flex;
         }
+
+        &--inline {
+            display: inline-flex;
+            flex-wrap: wrap;
+        }
+
+        &--employe {
+            background: #2a3038db;
+            width: fit-content;
+            padding: 5px 10px;
+            border-radius: 7px;
+            color: #fff;
+            transition: color 0.25s;
+            margin-right: 10px;
+
+            &:hover {
+                color: #46adf9;
+            }
+        }
+
+        &--description {
+            box-shadow: -1px 3px 20px -8px rgba(0, 0, 0, 0.56);
+            -webkit-box-shadow: -1px 3px 20px -8px rgba(0, 0, 0, 0.56);
+            -moz-box-shadow: -1px 3px 20px -8px rgba(0, 0, 0, 0.56);
+            padding: 15px 15px;
+        }
     }
 
     &__active-project {
         display: flex;
         padding: 10px 10px;
-      
+
 
         &--name {
             width: 250px;
@@ -87,6 +148,7 @@
             cursor: pointer;
             color: black;
             text-decoration: none;
+
             &:hover {
                 background-color: #fbfbfb;
             }

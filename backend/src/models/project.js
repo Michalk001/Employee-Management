@@ -36,8 +36,9 @@ export const getById = async (req, res) => {
             {
                 model: database.user,
                 required: false,
+                attributes: ["id","firstname","lastname","username"],
                 through: {
-                    attributes: []
+                    attributes: ["id","hours","isRemove"],
                 }
             }]
     });

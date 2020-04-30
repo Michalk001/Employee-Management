@@ -7,14 +7,21 @@ export default (sequelize, type) => {
       defaultValue: type.UUIDV4,
 
     },
-    name: type.STRING,
+    firstname: type.STRING,
     lastname: type.STRING,
     username: type.STRING,
+    email: type.STRING,
+    phone: type.STRING,
     password: type.STRING,
+    isRetired:{
+      type: type.BOOLEAN,
+      defaultValue: false,
+  },
     isRemove: {
       type: type.BOOLEAN,
       defaultValue: false,
     }
+    
   })
 
 

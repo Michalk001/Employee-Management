@@ -30,14 +30,14 @@ export const login = async (req, res) => {
         return;
     }
 
-    if(user.isRemove){
+    if (user.isRemove) {
         res.status(401).json({ succeeded: false, error: ["account is removed"] });
         return;
     }
 
     if (bcrypt.compareSync(password, user.password)) {
 
-        const payload = { id: user.id, sub: user.username, firstname: user.name, lastname: user.lastname};
+        const payload = { id: user.id, sub: user.username, firstname: user.name, lastname: user.lastname };
         const token = jwt.sign(payload, jwtOptions.secretOrKey, { expiresIn: '3000m' });
 
         res.json({ succeeded: true, token: token });
@@ -61,7 +61,11 @@ export const register = async (req, res) => {
     const hashPassword = bcrypt.hashSync(req.body.password, 10);
     const user = {
         username: req.body.username,
-        password: hashPassword
+        password: hashPassword,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        email: req.body.email,
+        phone: req.body.phone,
     }
 
     const users = await database.user.findAll({

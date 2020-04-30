@@ -7,15 +7,18 @@
     position: fixed;
     transition: transform 0.5s;
     z-index: 5;
-    &--close &{
-        &__menu{
-            transform: translateX(-60px) 
+
+    &--close & {
+        &__menu {
+            transform: translateX(-60px)
         }
-     
+
     }
-    &--close{
+
+    &--close {
         transform: translateX(-195px)
     }
+
     &__arrows {
         position: relative;
         width: 100%;
@@ -41,33 +44,42 @@
         &--open {
             transform: rotate(0deg);
             transition-duration: 0.5s;
-           
+
         }
     }
 
-    &__menu{
-    
+    &__menu {
+
         position: relative;
         transition: transform 0.25s;
 
-        &--item{
+        &--item {
             width: 100%;
             position: relative;
         }
-        &--text{
+
+        &--text {
             color: $base-text-color;
             padding: 10px 20px;
             word-break: break-all;
         }
-        &--link{
+
+        &--link {
             text-decoration: none;
             display: block;
             transition-duration: 0.25s;
-            &:hover{
+
+            &:hover {
                 background-color: #39404a;
-                color:  $base-hover-text-color;
+                color: $base-hover-text-color;
             }
         }
+
+        &--title {
+            text-align: center;
+            font-size: 20px;
+            color: $base-hover-text-color;
+        }
     }
-   
+
 }

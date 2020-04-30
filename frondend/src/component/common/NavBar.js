@@ -15,7 +15,16 @@ export const NavBar = () => {
             </div>
             <div className={`navBar__menu ${hiddeMenu ? ` navBar__menu--close` : ``} `}>
                 <div className={`navBar__menu--item`}>
-                    <Link to="#" className={`navBar__menu--text navBar__menu--link`} >TEST</Link>
+                    <div className={`navBar__menu--text navBar__menu--title `}>Panel Użytkownika</div>
+                </div>
+                <div className={`navBar__menu--item`}>
+                    <Link to="/" className={`navBar__menu--text navBar__menu--link`} >Kokpit</Link>
+                </div>
+                <div className={`navBar__menu--item`}>
+                    <Link to="#" className={`navBar__menu--text navBar__menu--link`} >Projekty</Link>
+                </div>
+                <div className={`navBar__menu--item`}>
+                    <div className={`navBar__menu--text navBar__menu--title `}>Panel Administratora</div>
                 </div>
                 <div className={`navBar__menu--item`}>
                     <Link to="#" className={`navBar__menu--text navBar__menu--link  `}>TEST 2</Link>

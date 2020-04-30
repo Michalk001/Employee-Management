@@ -8,6 +8,10 @@ export default (sequelize, type) => {
         },
         description: type.STRING,
         name: type.STRING,
+        isRetired:{
+            type: type.BOOLEAN,
+            defaultValue: false,
+        },
         isRemove: {
             type: type.BOOLEAN,
             defaultValue: false,

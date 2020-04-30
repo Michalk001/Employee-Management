@@ -26,8 +26,12 @@ export default (sequelize, type) => {
             }
         },
         hours:{
-            type: type.INTEGER,
+            type: type.INTEGER, 
             defaultValue: 0
+        },
+        isRetired:{
+            type: type.BOOLEAN,
+            defaultValue: false,
         },
         isRemove:{
             type: type.BOOLEAN,

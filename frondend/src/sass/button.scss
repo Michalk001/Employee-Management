@@ -10,9 +10,12 @@
     box-shadow: -3px 0px 9px 0px rgba(0, 0, 0, 0.36);
     transition: background-color 0.3s ease;
     border: none;
-    color: white;
+    color: white; 
     text-decoration: none;
-
+    &--edit-box{
+        text-align: right;
+        margin: 20px 0px;
+    }
     &:hover {
         cursor: pointer;
         background-color:  $normal-hover-color;
