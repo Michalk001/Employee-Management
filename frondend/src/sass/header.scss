@@ -2,13 +2,20 @@
     $base-text-color: white;
     $base-hover-text-color: #46adf9;
     background-color: black;
-    justify-content: space-between;
-    position: sticky;
+   
+    position: fixed;
     height: 70px;
-    padding-right: 100px;
-    padding-left: 30px;
-    display: flex;
-
+   
+  
+    width: 100%;
+    z-index: 6;
+    &--wrap{
+        justify-content: space-between;
+        padding-right: 100px;
+        padding-left: 30px;
+        display: flex;
+        height: 100%;
+    }
     &__home {
         position: relative;
         color: $base-text-color;

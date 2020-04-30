@@ -7,7 +7,7 @@
     position: fixed;
     transition: transform 0.5s;
     z-index: 5;
-
+    top: 70px;
     &--close & {
         &__menu {
             transform: translateX(-60px)

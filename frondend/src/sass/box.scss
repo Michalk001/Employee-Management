@@ -40,6 +40,21 @@
         }
     }
 
+    &--half-border-top {
+        padding-top: 10px;
+        position: relative;
+
+        &::after {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 0;
+            width: 75%;
+            left: 12.5%;
+            border-top: 1px solid #d6d6d6;
+        }
+    }
+
     &__text {
         color: black;
         font-size: 22px;
@@ -104,6 +119,7 @@
         &--inline {
             display: inline-flex;
             flex-wrap: wrap;
+            width: 100%;
         }
 
         &--employe {

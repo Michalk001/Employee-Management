@@ -21,7 +21,7 @@ export const Project = (props) => {
             .then(res => res.json())
             .then(res => {
                 if (res.succeeded) {
-   
+
                     setProject(res.project)
                 }
 
@@ -40,8 +40,8 @@ export const Project = (props) => {
     return (
         <>{project &&
             <div className="box box--large" >
-                <div className=" box__item button--edit-box">
-                <Link to={`/admin/edit/project/${project.id}`} className="button">EDYTUJ</Link>
+                <div className="box__item--inline box__item button--edit-box">
+                    <Link to={`/admin/project/edit/${project.id}`} className="button">EDYTUJ</Link>
                 </div>
                 <div className="box__text box__item box--half-border-bottom">
                     <span className="box__text--bold ">Projekt: </span>
@@ -64,10 +64,10 @@ export const Project = (props) => {
                         ))}
                     </div>
                 </>}
-                {project.users && project.users.length != 0 && project.users.find(x =>{ return x.userProjects.isRemove == true}) && <>
+                {project.users && project.users.length != 0 && project.users.find(x => { return x.userProjects.isRemove == true }) && <>
                     <div className="box__text ">Byli pracownicy: </div>
                     <div className="box--employe-list ">
-                        {(project.users.filter(xx =>{ return xx.userProjects.isRemove == true})).map((x) => (
+                        {(project.users.filter(xx => { return xx.userProjects.isRemove == true })).map((x) => (
                             <Link className="box__text  box__item box__item--employe" key={`emploact-${x.username}`} to={`/user/${x.username}`}>{x.firstname} {x.lastname}</Link>
                         ))}
                     </div>
@@ -76,5 +76,5 @@ export const Project = (props) => {
         }</>
     )
 
- 
+
 }
