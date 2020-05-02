@@ -44,18 +44,18 @@ export const UserProfile = (props) => {
     return (
         <>{user &&
             <div className="box box--large" >
-                <div className=" box__item button--edit-box">
+                <div className="box__item--inline box__item--full-width box__item button--edit-box">
                     <Link to={`/admin/edit/project/${user.id}`} className="button">EDYTUJ</Link>
                 </div>
                 <div className="box__text box__item box__text--bold">
                     {user.firstname} {user.lastname}
                 </div>
-                <div className=" box__item  box__item--inline ">
-                    <div className="box__text  box__item  box__item--inline">
+                <div className=" box__item box__item--inline ">
+                    <div className="box__text box__item--inline ">
                         <div className=" box__text--bold">E-mail: </div>
                         <div className=" box__text--text-item">{user.email}</div>
                     </div>
-                    <div className="box__text  box__item  box__item--inline">
+                    <div className="box__text box__item--inline">
                         <div className=" box__text--bold">Telefon: </div>
                         <div className=" box__text--text-item ">{user.phone}</div>
                     </div>

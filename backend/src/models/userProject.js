@@ -32,8 +32,17 @@ export const update = async (req, res) => {
         res.end();
         return
     }
+
+    if (req.body.userProject.isRetired != null || req.body.userProject.isRetired != undefined) {
+        userProject.isRetired = req.body.userProject.isRetired;
+        await userProject.save();
+        res.status(201).json({ succeeded: true });
+        res.end();
+    }
+
+
     if (req.body.hours)
-        userProject.hours = req.body.hours
+        userProject.hours = req.body.userProject.hours
 
 
     await userProject.save();

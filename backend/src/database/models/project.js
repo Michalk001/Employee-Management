@@ -6,7 +6,10 @@ export default (sequelize, type) => {
             type: type.DataTypes.UUID,
             defaultValue: type.UUIDV4,
         },
-        description: type.STRING,
+        description: {
+            type: type.STRING,
+            defaultValue: "",
+        },
         name: type.STRING,
         isRetired:{
             type: type.BOOLEAN,

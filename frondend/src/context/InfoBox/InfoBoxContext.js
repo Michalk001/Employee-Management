@@ -3,8 +3,8 @@ import nextId from "react-id-generator";
 
 export const InfoBoxContext = React.createContext({
 
-    addInfo: (text) => { }
-
+    addInfo: (text, time) => { },
+    Confirm: (msg, callback) => { }
 })
 
 
@@ -35,7 +35,7 @@ export const RenderInfo = (props) => {
     if (!isRemove)
         return (
 
-            <div key={`error-${props.msg.id}`} className={`info-box ${isClose ? "info-box--close" : ""}`}  >
+            <div className={`info-box ${isClose ? "info-box--close" : ""}`}  >
                 <div onClick={() => { remove() }} className={`info-box--wrap `}>
                     <div className={`info-box__text `} >
                         {props.msg.text}
@@ -50,15 +50,46 @@ export const RenderInfo = (props) => {
 }
 
 
+export const RenderConfirm = (props) => {
+
+    return (
+
+        <div className={`info-box info-box--fullpage`} >
+            <div className={`info-box--wrap info-box--confirm`} >
+                <div className={`info-box__text `} >
+                    {props.msg}
+                </div>
+                <div className={`info-box__button-inline `}>
+                    <div className={`button `} onClick={() => { props.callback(); props.remove() }}>
+                        Tak
+                    </div>
+                    <div className={`button `} onClick={() => { props.remove() }}>
+                        Nie
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    )
+
+}
+
+
 export const InfoBoxProvider = (props) => {
 
 
     const [informationList, setInformationList] = useState([]);
-
+    const [confirmData, setConfirmData] = useState(null)
 
     const addInfo = (text, time = 0) => {
         setInformationList([...informationList, { msg: { text: text, id: nextId(), time } }]);
     }
+
+    const Confirm = (msg, callback) => {
+        setConfirmData({ msg, callback });
+    }
+
+
 
     useEffect(() => {
         console.log(informationList)
@@ -73,19 +104,28 @@ export const InfoBoxProvider = (props) => {
         setInformationList(informationList.filter((x) => { return x.msg.id != id }))
     }
 
+    const removeConfirm = () => {
+        setConfirmData(null)
+    }
+
     return (
 
         <InfoBoxContext.Provider
             value={
                 {
                     addInfo,
+                    Confirm
                 }
             }>
             <>
                 {informationList.length != 0 && informationList.map((x, index) => (
-                    < RenderInfo {...x} callback={removeFromList} />
+                    <span key={`error-${x.msg.id}`} >
+                        < RenderInfo {...x} callback={removeFromList} />
+                    </span>
                 ))}
-
+                {confirmData &&
+                    <RenderConfirm msg={confirmData.msg} callback={confirmData.callback} remove={removeConfirm} />
+                }
                 {props.children}
 
             </>

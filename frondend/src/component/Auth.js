@@ -25,8 +25,6 @@ export const UserRoute = ({ component: Component, ...rest }) => (
 export const RequireLogin = ({ path, component, ...rest }) => {
     const authContext = useContext(AuthContext);
     return (<>
-        {console.log(authContext.isLogin)}
-
         {(authContext.isLogin || authContext.isLogin == null) ? <> <NavBar /> <UserRoute path={path} component={component} /></> : <Route render={() => (<Redirect to='/login' />)} />}
     </>
     )

@@ -119,9 +119,11 @@
         &--inline {
             display: inline-flex;
             flex-wrap: wrap;
+           
+        }
+        &--full-width{
             width: 100%;
         }
-
         &--employe {
             background: #2a3038db;
             width: fit-content;

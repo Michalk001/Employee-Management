@@ -12,7 +12,14 @@
     animation-fill-mode: forwards;
     animation-timing-function: cubic-bezier(0, 0, 0.28, 1.0);
 
-
+    &--fullpage {
+        height: 100%;
+        width: 100%;
+        background-color: #00000085;
+        top: 0;
+        justify-content: center;
+        display: flex;
+    }
 
     &--wrap {
         padding: 10px 15px;
@@ -31,7 +38,20 @@
         display: inline-block;
         position: relative;
         cursor: pointer;
+        height: fit-content;
+    }
 
+    &__button-inline {
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 0;
+    }
+
+
+    &--confirm {
+        cursor: default;
+        top: 35%;
+        transform: translateY(-50%);
     }
 
     &--close {
@@ -62,6 +82,7 @@
         bottom: 40%;
     }
 }
+
 @keyframes close {
     0% {
         bottom: 40%;

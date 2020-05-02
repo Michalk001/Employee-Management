@@ -40,7 +40,7 @@ export const Project = (props) => {
     return (
         <>{project &&
             <div className="box box--large" >
-                <div className="box__item--inline box__item button--edit-box">
+                <div className="box__item--inline box__item--full-width box__item button--edit-box">
                     <Link to={`/admin/project/edit/${project.id}`} className="button">EDYTUJ</Link>
                 </div>
                 <div className="box__text box__item box--half-border-bottom">
@@ -59,7 +59,7 @@ export const Project = (props) => {
                 {project.users && project.users.length != 0 && <>
                     <div className="box__text ">Przydzieleni pracownicy: </div>
                     <div className="box--employe-list  box--half-border-bottom">
-                        {project.users.map((x) => (
+                        {project.users.filter(xx => { return xx.userProjects.isRetired == false }).map((x) => (
                             <Link className="box__text  box__item box__item--employe" key={`emploact-${x.username}`} to={`/user/${x.username}`}>{x.firstname} {x.lastname}</Link>
                         ))}
                     </div>
@@ -67,7 +67,7 @@ export const Project = (props) => {
                 {project.users && project.users.length != 0 && project.users.find(x => { return x.userProjects.isRemove == true }) && <>
                     <div className="box__text ">Byli pracownicy: </div>
                     <div className="box--employe-list ">
-                        {(project.users.filter(xx => { return xx.userProjects.isRemove == true })).map((x) => (
+                        {(project.users.filter(xx => { return xx.userProjects.isRetired == true })).map((x) => (
                             <Link className="box__text  box__item box__item--employe" key={`emploact-${x.username}`} to={`/user/${x.username}`}>{x.firstname} {x.lastname}</Link>
                         ))}
                     </div>

@@ -36,12 +36,50 @@ export const getById = async (req, res) => {
             {
                 model: database.user,
                 required: false,
-                attributes: ["id","firstname","lastname","username"],
+                attributes: ["id", "firstname", "lastname", "username", "isRetired"],
                 through: {
-                    attributes: ["id","hours","isRemove"],
+                    attributes: ["id", "hours", "isRemove", "isRetired"],
                 }
             }]
     });
     res.status(200).json({ succeeded: true, project });
     res.end();
+}
+
+
+export const update = async (req, res) => {
+
+    const project = await database.project.findOne({
+        where: {
+            id: req.params.id
+        },
+        include: [
+            {
+                model: database.user,
+                required: false,
+                attributes: ["id", "firstname", "lastname", "username", "isRetired"],
+                through: {
+                    attributes: ["id", "hours", "isRemove", "isRetired"],
+                }
+            }]
+    });
+
+
+    if (req.body.project.isRetired != null || req.body.project.isRetired != undefined) {
+
+        project.isRetired = req.body.project.isRetired;
+        await project.save();
+        res.status(200).json({ succeeded: true });
+        res.end();
+        return
+    }
+
+    if (req.body.project.name)
+        project.name = req.body.project.name;
+    if (req.body.project.description)
+        project.description = req.body.project.description;
+    await project.save();
+    res.status(200).json({ succeeded: true });
+    res.end();
+
 }
