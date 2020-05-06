@@ -82,7 +82,7 @@ export const InfoBoxProvider = (props) => {
     const [confirmData, setConfirmData] = useState(null)
 
     const addInfo = (text, time = 0) => {
-        setInformationList([...informationList, { msg: { text: text, id: nextId(), time } }]);
+        setInformationList([...informationList, { msg: { text: text, id: nextId(), time }, isRemove: false }]);
     }
 
     const Confirm = (msg, callback) => {
@@ -95,13 +95,14 @@ export const InfoBoxProvider = (props) => {
         console.log(informationList)
     }, [informationList])
 
-    useEffect(() => {
-
-    }, [informationList])
 
 
     const removeFromList = (id) => {
-        setInformationList(informationList.filter((x) => { return x.msg.id != id }))
+        const item = informationList.find((x) => { return x.msg.id == id })
+        if (item != null) {
+            item.isRemove = true;
+        }
+        setInformationList(informationList.filter((x) => { return x.isRemove != true }))
     }
 
     const removeConfirm = () => {
@@ -120,7 +121,7 @@ export const InfoBoxProvider = (props) => {
             <>
                 {informationList.length != 0 && informationList.map((x, index) => (
                     <span key={`error-${x.msg.id}`} >
-                        < RenderInfo {...x} callback={removeFromList} />
+                        {!x.isRemove && < RenderInfo {...x} callback={removeFromList} />}
                     </span>
                 ))}
                 {confirmData &&

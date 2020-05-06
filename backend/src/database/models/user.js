@@ -13,15 +13,18 @@ export default (sequelize, type) => {
     email: type.STRING,
     phone: type.STRING,
     password: type.STRING,
-    isRetired:{
+    isRetired: {
       type: type.BOOLEAN,
       defaultValue: false,
-  },
+    },
     isRemove: {
       type: type.BOOLEAN,
       defaultValue: false,
-    }
-    
+    },
+  /*  isAdmin: {
+      type: type.BOOLEAN,
+      defaultValue: false,
+    }*/
   })
 
 

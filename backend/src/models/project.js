@@ -39,6 +39,9 @@ export const getById = async (req, res) => {
                 attributes: ["id", "firstname", "lastname", "username", "isRetired"],
                 through: {
                     attributes: ["id", "hours", "isRemove", "isRetired"],
+                    where:{
+                        isRemove: false
+                    }
                 }
             }]
     });

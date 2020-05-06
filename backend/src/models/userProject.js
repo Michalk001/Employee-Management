@@ -9,14 +9,27 @@ export const save = async (req, res) => {
         return
     }
 
+    const uP = await database.userProject.findOne({
+        where: { userId: req.body.idUser }
+    });
+
+    if (uP) {
+        uP.isRemove = false;
+        uP.isRetired = false;
+        uP.hours = 0;
+        await uP.save();
+        res.status(201).json({ succeeded: true, idUserProject: uP.id });
+        res.end();
+        return
+    }
     const userProject = {
         userId: req.body.idUser,
         projectId: req.body.idProject,
     }
 
 
-    await database.userProject.create(userProject)
-    res.status(201).json({ succeeded: true });
+    const created = await database.userProject.create(userProject)
+    res.status(201).json({ succeeded: true, idUserProject: created.id });
     res.end();
 }
 

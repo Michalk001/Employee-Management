@@ -8,12 +8,16 @@ import { InfoBoxContext } from '../../context/InfoBox/InfoBoxContext';
 import config from '../../config.json'
 import Cookies from 'js-cookie';
 import { Project } from "../user/Project";
+import Select from 'react-select'
+
+
 
 export const ProjectEditor = (props) => {
 
     const infoBoxContext = useContext(InfoBoxContext);
     const [project, setProject] = useState(null);
-
+    const [users, setUsers] = useState([]);
+    const [employeeToAdd, setEmployeeToAdd] = useState(null);
 
     const updateProjectData = e => {
         setProject({ ...project, [e.name]: e.value })
@@ -32,13 +36,47 @@ export const ProjectEditor = (props) => {
                 if (res.succeeded) {
 
                     setProject(res.project)
+
+                }
+                return res;
+            })
+            .then(
+                res => {
+                    getUser(res.project.users);
+                }
+            )
+    }
+
+    const getUser = async (users) => {
+        await fetch(`${config.apiRoot}/user/`, {
+            method: "get",
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                'Authorization': 'Bearer ' + Cookies.get('token'),
+            },
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.succeeded) {
+                    const usersTmp = res.user
+                        .filter(x => { return (x.isRetired == false && x.isRemove == false) })
+                        .filter(x => !users.find(z => x.id === z.id))
+                        .map(x => {
+                            return { label: x.firstname + " " + x.lastname, value: x.id, username: x.username, firstname: x.firstname, lastname: x.lastname }
+
+                        });
+
+                    const a = usersTmp;// usersTmp.map(x => {return users.find(z => {return z.id != x.value})})
+                    console.log(res.user.filter(x => !users.find(z => x.id === z.id)))
+                    console.log(users)
+                    setUsers(usersTmp)
+
                 }
 
             })
     }
 
     const updateProject = async () => {
-        console.log({ ...project, isRetired: null })
         await fetch(`${config.apiRoot}/project/${project.id}`, {
             method: "put",
             headers: {
@@ -55,6 +93,7 @@ export const ProjectEditor = (props) => {
                 else {
                     infoBoxContext.addInfo("Wystąpił błąd");
                 }
+
             })
 
     }
@@ -109,15 +148,68 @@ export const ProjectEditor = (props) => {
             })
     }
 
+    const addEmployee = async () => {
+        console.log({ idUser: employeeToAdd.value, idProject: project.id })
+        await fetch(`${config.apiRoot}/userproject/`, {
+            method: "post",
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                'Authorization': 'Bearer ' + Cookies.get('token'),
+            },
+            body: JSON.stringify({ idUser: employeeToAdd.value, idProject: project.id })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.succeeded) {
+                    console.log(res)
+                    const u = project.users;
+                    u.push({ firstname: employeeToAdd.firstname, lastname: employeeToAdd.lastname, id: employeeToAdd.value, username: employeeToAdd.username, userProjects: { isRetired: false, isRemove: false, id: res.idUserProject } })
+                    setProject({ ...project, users: u })
+
+                    setUsers(users.filter(x => { return x.value != employeeToAdd.value }))
+
+                    infoBoxContext.addInfo("Dodano pracownika do projektu");
+                }
+                else {
+                    infoBoxContext.addInfo("Wystąpił błąd");
+                }
+                setEmployeeToAdd(null)
+            })
+    }
+
+    const removeUser = async (id) => {
+        await fetch(`${config.apiRoot}/userproject/${id}`, {
+            method: "delete",
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                'Authorization': 'Bearer ' + Cookies.get('token'),
+            }
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.succeeded) {
+                    const user = project.users.find(x => { return x.userProjects.id == id });
+                    setUsers([...users, {label: user.firstname + " " + user.lastname,  firstname: user.firstname, lastname: user.lastname, value: user.id, username: user.username, userProjects: { isRetired: false, isRemove: false, id: id } }])
+                    project.users = project.users.filter(x => { return x.userProjects.id != id })
+                    infoBoxContext.addInfo("Usunięto pracownika z projektu");
+                }
+                else {
+                    infoBoxContext.addInfo("Wystąpił błąd");        
+                }
+            })
+    }
+
+
+
     useEffect(() => {
         if (props.match.params.id)
-            getProject(props.match.params.id)
+            getProject(props.match.params.id);
 
     }, [props.match.params.id])
 
     useEffect(() => {
-        console.log(project)
-    }, [project])
+console.log(users)
+    }, [project, users, employeeToAdd])
 
 
     return (
@@ -138,25 +230,31 @@ export const ProjectEditor = (props) => {
                 <div className="form-editor__text form-editor__text--vertical-center">Nazwa </div>
                 <input className="form-editor__input" type="text" name="name" value={project ? project.name : ""} onChange={x => updateProjectData(x.target)} />
             </div>
-            <div className="box__text">Opis </div>
+            <div className="form-editor__text">Opis </div>
             <textarea className="form-editor__input form-editor__input--textarea" name="description" value={project ? project.description : ""} onChange={x => updateProjectData(x.target)} />
-            <div className="box__text ">Przydzieleni pracownicy: </div>
+            <div className="form-editor--inline">
+                <div className="form-editor__text form-editor__text--vertical-center">Dodaj nowego pracownika: </div>
+                <Select value={employeeToAdd} onChange={(x) => setEmployeeToAdd(x)} placeholder="Wybierz" noOptionsMessage={() => { return "Brak pracowników" }} options={users} className="form-editor__input form-editor__input--select " />
+                <div className="button" onClick={() => addEmployee()} >Dodaj</div>
+            </div>
+            <div className="form-editor__text">Przydzieleni pracownicy: </div>
             {project && project.users.filter(xx => { return xx.userProjects.isRetired == false }).map((x) => (
                 <div key={`UserPE-${x.username}`} className="box__item form-editor__employe-box">
                     <Link className="form-editor__employe-box--text  form-editor__employe-box--name " to={`/user/${x.username}`}>{x.firstname} {x.lastname}</Link>
                     <div className="form-editor__employe-box--text  form-editor__employe-box--retired" onClick={() => infoBoxContext.Confirm("Czy napewno chcesz usunąć pracownika z projektu", () => (archiveUser(x.userProjects.id, true)))}> <i className="fas fa-ban"></i></div>
                 </div>))}
             {project && !project.users.find(x => { return x.userProjects.isRetired == false }) &&
-                <div className="box__text">
+                <div className="form-editor__text">
                     Brak
             </div>}
             {project && project.users.find(x => { return x.userProjects.isRetired == true }) &&
                 <>
-                    <div className="box__text  box--half-border-top">Byli pracownicy: </div>
+                    <div className="form-editor__text  box--half-border-top">Byli pracownicy: </div>
                     {project && project.users.filter(xx => { return xx.userProjects.isRetired == true }).map((x) => (
                         <div key={`unUserPE-${x.username}`} className="box__item form-editor__employe-box">
                             <Link className="form-editor__employe-box--text  form-editor__employe-box--name " to={`/user/${x.username}`}>{x.firstname} {x.lastname}</Link>
-                            <div className="form-editor__employe-box--text  form-editor__employe-box--retired" onClick={() => infoBoxContext.Confirm("Czy napewno chcesz przywrócić pracownika do projektu", () => (archiveUser(x.userProjects.id, false)))}>  <i className="fas fa-undo-alt"></i></div>
+                            <div className="form-editor__employe-box--text  form-editor__employe-box--restore" onClick={() => infoBoxContext.Confirm("Czy napewno chcesz przywrócić pracownika do projektu", () => (archiveUser(x.userProjects.id, false)))}>  <i className="fas fa-undo-alt"></i></div>
+                            <div className="form-editor__employe-box--text  form-editor__employe-box--retired" onClick={() => infoBoxContext.Confirm("Czy napewno chcesz trwale usunąć pracownika z projektu", () => (removeUser(x.userProjects.id)))}>  <i className="fas fa-trash"></i></div>
                         </div>
                     ))}
                 </>}

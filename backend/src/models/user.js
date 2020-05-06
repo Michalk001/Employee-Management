@@ -4,7 +4,7 @@ import database from "../database/models/database";
 export const get = async (req, res) => {
 
     const user = await database.user.findAll({
-        attributes: ['firstname', 'lastname', 'id', 'isRemove']
+        attributes: ['firstname', 'lastname', 'id', 'isRemove', 'isRetired', 'username']
     });
     res.status(200).json({ succeeded: true, user });
     res.end();
@@ -17,13 +17,13 @@ export const getByLogin = async (req, res) => {
             username:
                 { [database.Sequelize.Op.iLike]: `%${req.params.id}` }
         },
-        attributes: ['firstname', 'lastname', 'id', 'isRemove','isRetired','email','phone'],
+        attributes: ['firstname', 'lastname', 'id', 'isRemove', 'isRetired', 'email', 'phone', 'username'],
         include: [{
             model: database.project,
             required: false,
             attributes: ['id', 'name'],
             through: {
-                attributes: ['isRemove', 'hours','id'],
+                attributes: ['isRemove', 'hours', 'id'],
             }
         }]
     });
