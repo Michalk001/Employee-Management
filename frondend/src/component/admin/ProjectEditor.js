@@ -67,8 +67,7 @@ export const ProjectEditor = (props) => {
                         });
 
                     const a = usersTmp;// usersTmp.map(x => {return users.find(z => {return z.id != x.value})})
-                    console.log(res.user.filter(x => !users.find(z => x.id === z.id)))
-                    console.log(users)
+
                     setUsers(usersTmp)
 
                 }
@@ -149,7 +148,7 @@ export const ProjectEditor = (props) => {
     }
 
     const addEmployee = async () => {
-        console.log({ idUser: employeeToAdd.value, idProject: project.id })
+     
         await fetch(`${config.apiRoot}/userproject/`, {
             method: "post",
             headers: {
@@ -161,7 +160,7 @@ export const ProjectEditor = (props) => {
             .then(res => res.json())
             .then(res => {
                 if (res.succeeded) {
-                    console.log(res)
+                
                     const u = project.users;
                     u.push({ firstname: employeeToAdd.firstname, lastname: employeeToAdd.lastname, id: employeeToAdd.value, username: employeeToAdd.username, userProjects: { isRetired: false, isRemove: false, id: res.idUserProject } })
                     setProject({ ...project, users: u })
@@ -208,7 +207,6 @@ export const ProjectEditor = (props) => {
     }, [props.match.params.id])
 
     useEffect(() => {
-console.log(users)
     }, [project, users, employeeToAdd])
 
 
@@ -232,11 +230,11 @@ console.log(users)
             </div>
             <div className="form-editor__text">Opis </div>
             <textarea className="form-editor__input form-editor__input--textarea" name="description" value={project ? project.description : ""} onChange={x => updateProjectData(x.target)} />
-            <div className="form-editor--inline">
+            {project && !project.isRetired && <div className="form-editor--inline">
                 <div className="form-editor__text form-editor__text--vertical-center">Dodaj nowego pracownika: </div>
                 <Select value={employeeToAdd} onChange={(x) => setEmployeeToAdd(x)} placeholder="Wybierz" noOptionsMessage={() => { return "Brak pracowników" }} options={users} className="form-editor__input form-editor__input--select " />
                 <div className="button" onClick={() => addEmployee()} >Dodaj</div>
-            </div>
+            </div>}
             <div className="form-editor__text">Przydzieleni pracownicy: </div>
             {project && project.users.filter(xx => { return xx.userProjects.isRetired == false }).map((x) => (
                 <div key={`UserPE-${x.username}`} className="box__item form-editor__employe-box">

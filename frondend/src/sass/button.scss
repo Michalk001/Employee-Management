@@ -4,6 +4,8 @@ $normal-remove-color:#c82814;
 $normal-remove-hover-color:#9c1907;
 $normal-save-color:#00fd1c;
 $normal-save-hover-color:#00bf15;
+$normal-diseble-color:#7d7d7d;
+
 
 .button {
 
@@ -43,6 +45,14 @@ $normal-save-hover-color:#00bf15;
         &:hover {
        
             background-color:  $normal-save-hover-color;
+        }
+    }
+    &--disabled{
+        background-color: $normal-diseble-color;
+        cursor: default;
+        &:hover {
+         
+            background-color: $normal-diseble-color;
         }
     }
 }

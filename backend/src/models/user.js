@@ -23,7 +23,7 @@ export const getByLogin = async (req, res) => {
             required: false,
             attributes: ['id', 'name'],
             through: {
-                attributes: ['isRemove', 'hours', 'id'],
+                attributes: ['isRemove', 'hours', 'id', 'isRetired'],
             }
         }]
     });

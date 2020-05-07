@@ -10,7 +10,7 @@ import Cookies from 'js-cookie';
 export const UserProfile = (props) => {
 
     const [user, setUser] = useState(null);
-
+    const authContext = useContext(AuthContext);
     const getUser = async (id) => {
         await fetch(`${config.apiRoot}/user/${id}`, {
             method: "get",
@@ -37,16 +37,18 @@ export const UserProfile = (props) => {
     }, [props.match.params.id])
 
     useEffect(() => {
-
+        console.log(user)
     }, [user])
 
 
     return (
         <>{user &&
             <div className="box box--large" >
-                <div className="box__item--inline box__item--full-width box__item button--edit-box">
-                    <Link to={`/admin/edit/project/${user.id}`} className="button">EDYTUJ</Link>
-                </div>
+                {(authContext.isAdmin || authContext.userDate.username == user.username) &&
+                    <div className="box__item--inline box__item--full-width box__item button--edit-box">
+                        <Link to={`/admin/edit/project/${user.id}`} className="button">EDYTUJ</Link>
+                    </div>
+                }
                 <div className="box__text box__item box__text--bold">
                     {user.firstname} {user.lastname}
                 </div>
@@ -61,22 +63,24 @@ export const UserProfile = (props) => {
                     </div>
                 </div>
 
-                {user.projects && user.projects.length != 0 && <>
+                {user.projects && user.projects.find(x => { return (x.userProjects.isRemove == false && x.userProjects.isRetired == false) }) && <>
                     <div className="box__text ">Aktywne projekty: </div>
                     <div className="box--employe-list  box--half-border-bottom">
-                        {user.projects.map((x) => (
+                        {user.projects.filter(x => { return (x.userProjects.isRetired == false) }).map((x) => (
                             <Link className="box__text  box__item box__item--employe" key={`emploact-${x.name}`} to={`/project/${x.id}`}>{x.name}</Link>
                         ))}
                     </div>
                 </>}
-                {!user.projects || user.projects.length == 0 && <div className="box__text  box__item box--half-border-bottom">
-                   Brak aktywnych pojektów
-                </div>}
+                {!user.projects || !user.projects.find(x => { return (x.userProjects.isRemove == false && x.userProjects.isRetired == false) }) &&
+                    <div className="box__text  box__item box--half-border-bottom">
+                        Brak aktywnych pojektów
+                    </div>
+                }
 
-                {user.projects && user.projects.length != 0 && user.projects.find(x => { return x.userProjects.isRemove == true }) && <>
+                {user.projects && user.projects.find(x => { return (x.userProjects.isRemove == false && x.userProjects.isRetired == true) }) && <>
                     <div className="box__text ">Byłe projekty: </div>
                     <div className="box--employe-list ">
-                        {(user.projects.filter(xx => { return xx.userProjects.isRemove == true })).map((x) => (
+                        {(user.projects.filter(xx => { return xx.userProjects.isRetired == true })).map((x) => (
                             <Link className="box__text  box__item box__item--employe" key={`emploact-${x.name}`} to={`/project/${x.id}`}>{x.name}</Link>
                         ))}
                     </div>
