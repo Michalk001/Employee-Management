@@ -131,6 +131,11 @@
             width: 100%;
         }
 
+        &--user-edit-mode {
+            margin-right: 25px;
+            display: inline-block;
+        }
+
         &--employe {
             background: #2a3038db;
             width: fit-content;
@@ -195,6 +200,12 @@
             margin: 0 10px;
             text-align: left;
             padding: 0 5px;
+        }
+        &--user-edit{
+            text-align: left;
+            padding: 0 10px;
+            width: 300px;
+            margin-top: 5px;
         }
 
     }

@@ -19,7 +19,8 @@ import { InfoBoxProvider } from './context/InfoBox/InfoBoxContext';
 import { Dashboard } from './component/dashboard/Dashboard'
 import { Project } from './component/user/Project'
 import { UserProfile } from './component/user/UserProfile'
-import {ProjectEditor} from './component/admin/ProjectEditor'
+import { UserProfileEditor } from './component/user/UserProfileEditor'
+import { ProjectEditor } from './component/admin/ProjectEditor'
 
 
 export const App = () => {
@@ -39,8 +40,11 @@ export const App = () => {
                         <RequireLogin path="/Admin/Project/New" component={ProjectEditor} />
                         <RequireLogin path="/Admin/Project/Edit/:id" component={ProjectEditor} />
                         <RequireLogin path="/Project/:id" component={Project} />
+                        <RequireLogin path="/User/Profile/:id" component={UserProfileEditor} />
+                        <RequireLogin path="/User/Profile" component={UserProfileEditor} />
+
                         <RequireLogin path="/User/:id" component={UserProfile} />
-                        
+
                     </Switch>
 
                 </AuthProvider>

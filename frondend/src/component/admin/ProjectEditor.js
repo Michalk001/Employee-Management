@@ -148,7 +148,7 @@ export const ProjectEditor = (props) => {
     }
 
     const addEmployee = async () => {
-     
+
         await fetch(`${config.apiRoot}/userproject/`, {
             method: "post",
             headers: {
@@ -160,7 +160,7 @@ export const ProjectEditor = (props) => {
             .then(res => res.json())
             .then(res => {
                 if (res.succeeded) {
-                
+
                     const u = project.users;
                     u.push({ firstname: employeeToAdd.firstname, lastname: employeeToAdd.lastname, id: employeeToAdd.value, username: employeeToAdd.username, userProjects: { isRetired: false, isRemove: false, id: res.idUserProject } })
                     setProject({ ...project, users: u })
@@ -188,12 +188,12 @@ export const ProjectEditor = (props) => {
             .then(res => {
                 if (res.succeeded) {
                     const user = project.users.find(x => { return x.userProjects.id == id });
-                    setUsers([...users, {label: user.firstname + " " + user.lastname,  firstname: user.firstname, lastname: user.lastname, value: user.id, username: user.username, userProjects: { isRetired: false, isRemove: false, id: id } }])
+                    setUsers([...users, { label: user.firstname + " " + user.lastname, firstname: user.firstname, lastname: user.lastname, value: user.id, username: user.username, userProjects: { isRetired: false, isRemove: false, id: id } }])
                     project.users = project.users.filter(x => { return x.userProjects.id != id })
                     infoBoxContext.addInfo("Usunięto pracownika z projektu");
                 }
                 else {
-                    infoBoxContext.addInfo("Wystąpił błąd");        
+                    infoBoxContext.addInfo("Wystąpił błąd");
                 }
             })
     }
@@ -233,7 +233,7 @@ export const ProjectEditor = (props) => {
             {project && !project.isRetired && <div className="form-editor--inline">
                 <div className="form-editor__text form-editor__text--vertical-center">Dodaj nowego pracownika: </div>
                 <Select value={employeeToAdd} onChange={(x) => setEmployeeToAdd(x)} placeholder="Wybierz" noOptionsMessage={() => { return "Brak pracowników" }} options={users} className="form-editor__input form-editor__input--select " />
-                <div className="button" onClick={() => addEmployee()} >Dodaj</div>
+                <div className={`button ${!employeeToAdd ? `button--disabled` : ``}`} onClick={() => addEmployee()} >Dodaj</div>
             </div>}
             <div className="form-editor__text">Przydzieleni pracownicy: </div>
             {project && project.users.filter(xx => { return xx.userProjects.isRetired == false }).map((x) => (

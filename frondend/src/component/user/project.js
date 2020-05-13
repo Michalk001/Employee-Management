@@ -116,7 +116,7 @@ export const Project = (props) => {
     }, [project])
 
     useEffect(() => {
-        console.log(currentUserInfo)
+        console.log(authContext)
     }, [currentUserInfo])
 
 
@@ -124,9 +124,9 @@ export const Project = (props) => {
         <>{project &&
             <div className="box box--large" >
                 {project && project.isRetired && <div className="form-editor__text form-editor__text--archive-small">Zarchiwizowany </div>}
-                <div className="box__item--inline box__item--full-width box__item button--edit-box">
+                {authContext.isAdmin && <div className="box__item--inline box__item--full-width box__item button--edit-box">
                     <Link to={`/admin/project/edit/${project.id}`} className="button">EDYTUJ</Link>
-                </div>
+                </div>}
                 <div className="box__text box__item ">
                     <span className="box__text--bold ">Projekt: </span>
                     <span className="box__text--bold ">{project.name}</span>

@@ -2,56 +2,69 @@ $normal-color:#00bffd;
 $normal-hover-color:#008bfd;
 $normal-remove-color:#c82814;
 $normal-remove-hover-color:#9c1907;
-$normal-save-color:#00fd1c;
-$normal-save-hover-color:#00bf15;
+$normal-save-color:#00b314;
+$normal-save-hover-color:#007e0f;
 $normal-diseble-color:#7d7d7d;
 
 
 .button {
 
 
-    background-color:  $normal-color;
+    background-color: $normal-color;
     position: relative;
     padding: 10px 10px;
-    width: 140px;
     text-align: center;
     box-shadow: -3px 0px 9px 0px rgba(0, 0, 0, 0.36);
     transition: background-color 0.3s ease;
     border: none;
-    color: white; 
+    color: white;
     text-decoration: none;
     font-size: 18px;
     cursor: pointer;
-    &--edit-box{
+    display: inline-block;
+
+    &--full-width {
+        width: 100%;
+    }
+
+    &--edit-box {
         margin: 20px 0px;
         justify-content: flex-end;
     }
+
     &:hover {
-       
-        background-color:  $normal-hover-color;
+
+        background-color: $normal-hover-color;
     }
-    &--gap{
+
+    &--gap {
         margin: 0 10px;
     }
-    &--remove{
-        background-color:  $normal-remove-color;
+
+    &--remove {
+        background-color: $normal-remove-color;
+
         &:hover {
-       
-            background-color:  $normal-remove-hover-color;
+
+            background-color: $normal-remove-hover-color;
         }
     }
-    &--save{
-        background-color:  $normal-save-color;
+
+    &--save {
+        background-color: $normal-save-color;
+
         &:hover {
-       
-            background-color:  $normal-save-hover-color;
+
+            background-color: $normal-save-hover-color;
         }
     }
-    &--disabled{
+
+    &--disabled {
         background-color: $normal-diseble-color;
-        cursor: default;
+        cursor: not-allowed;
+
         &:hover {
-         
+
             background-color: $normal-diseble-color;
         }
     }

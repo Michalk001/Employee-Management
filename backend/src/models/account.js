@@ -5,6 +5,31 @@ import database from "../database/models/database";
 import jwt_decode from 'jwt-decode';
 
 
+export const refreshToken = async (req, res) => {
+
+    if (!req.body.token) {
+        res.status(401).json({ succeeded: false });
+        return;
+    }
+    const jwtDecode = require('jwt-decode');
+    const decoded = jwtDecode(req.body.token);
+    const jwtOptions = {}
+    jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+    jwtOptions.secretOrKey = 'tasmanianDevil';
+    const user = await database.user.findOne({
+        where: {
+            username:
+                { [database.Sequelize.Op.iLike]: `%${decoded.sub}` }
+        }
+    });
+    const payload = { id: user.id, sub: user.username, firstname: user.firstname, lastname: user.lastname, isAdmin: user.isAdmin };
+    const token = jwt.sign(payload, jwtOptions.secretOrKey, { expiresIn: '3000m' });
+
+    res.json({ succeeded: true, token: token });
+
+
+}
+
 export const login = async (req, res) => {
 
     const bcrypt = require('bcryptjs');
@@ -26,18 +51,18 @@ export const login = async (req, res) => {
     });
 
     if (!user) {
-        res.status(401).json({ succeeded: false, error: ["no such user found"] });
+        res.status(401).json({ succeeded: false, error: [{ code: 2, msg: "no such user found" }] });
         return;
     }
 
     if (user.isRemove) {
-        res.status(401).json({ succeeded: false, error: ["account is removed"] });
+        res.status(401).json({ succeeded: false, error: [{ code: 1, msg: "account is removed" }] });
         return;
     }
 
     if (bcrypt.compareSync(password, user.password)) {
-
-        const payload = { id: user.id, sub: user.username, firstname: user.firstname, lastname: user.lastname };
+        console.log(user.isAdmin)
+        const payload = { id: user.id, sub: user.username, firstname: user.firstname, lastname: user.lastname, isAdmin: user.isAdmin };
         const token = jwt.sign(payload, jwtOptions.secretOrKey, { expiresIn: '3000m' });
 
         res.json({ succeeded: true, token: token });

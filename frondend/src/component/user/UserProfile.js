@@ -22,12 +22,13 @@ export const UserProfile = (props) => {
             .then(res => res.json())
             .then(res => {
                 if (res.succeeded) {
-
                     setUser(res.user)
+
                 }
 
             })
     }
+
 
 
 
@@ -44,9 +45,16 @@ export const UserProfile = (props) => {
     return (
         <>{user &&
             <div className="box box--large" >
-                {(authContext.isAdmin || authContext.userDate.username == user.username) &&
+                {(authContext.isAdmin && authContext.userDate.username != user.username) &&
                     <div className="box__item--inline box__item--full-width box__item button--edit-box">
-                        <Link to={`/admin/edit/project/${user.id}`} className="button">EDYTUJ</Link>
+                        <Link to={`/user/profile/${authContext.userDate.username == user.username ? `` : user.username}`} className="button button--gap">EDYTUJ PRACOWNIKA</Link>
+
+                    </div>
+                }
+                {(authContext.userDate.username == user.username) &&
+                    <div className="box__item--inline box__item--full-width box__item button--edit-box">
+                        <Link to="/user/profile" className="button button--gap">EDYTUJ</Link>
+
                     </div>
                 }
                 <div className="box__text box__item box__text--bold">
@@ -54,12 +62,12 @@ export const UserProfile = (props) => {
                 </div>
                 <div className=" box__item box__item--inline ">
                     <div className="box__text box__item--inline ">
-                        <div className=" box__text--bold">E-mail: </div>
-                        <div className=" box__text--text-item">{user.email}</div>
+                        <div className=" box__text--bold box__text--vertical-center">E-mail: </div>
+                        <div className=" box__text--text-item box__text--vertical-center">{user.email}</div>
                     </div>
                     <div className="box__text box__item--inline">
-                        <div className=" box__text--bold">Telefon: </div>
-                        <div className=" box__text--text-item ">{user.phone}</div>
+                        <div className=" box__text--bold box__text--vertical-center ">Telefon: </div>
+                        <div className=" box__text--text-item box__text--vertical-center ">{user.phone}</div>
                     </div>
                 </div>
 

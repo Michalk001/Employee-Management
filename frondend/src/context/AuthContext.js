@@ -7,7 +7,7 @@ import config from '../config.json'
 import { InfoBoxContext } from './InfoBox/InfoBoxContext';
 
 export const AuthContext = React.createContext({
-    isLogin: null,
+    isLogin: false,
     isAdmin: false,
     isConnecting: false,
     userDate: null,
@@ -16,6 +16,7 @@ export const AuthContext = React.createContext({
     onLogin: () => { },
     LogOut: () => { },
     checkIsLogin: () => { },
+    refreshToken: () => { },
     singUp: async () => { }
 
 })
@@ -33,20 +34,7 @@ export const AuthProvider = (props) => {
     const [isConnecting, setIsConnecting] = useState(false);
     const contextInfoBox = useContext(InfoBoxContext)
 
-    const checkIsAdmin = () => {
 
-        if (Cookies.get('token')) {
-            const jwtDecode = require('jwt-decode');
-            const decoded = jwtDecode(Cookies.get('token'));
-            const role = decoded.role.find((x) => { return x == "Admin" })
-            if (role == "Admin") {
-                setIsAdmin(true);
-            }
-            else
-                setIsAdmin(false)
-        }
-
-    }
 
     const checkIsLogin = () => {
 
@@ -60,7 +48,6 @@ export const AuthProvider = (props) => {
             }
             else {
                 setIsLogin(false)
-                console.log(4444)
 
             }
         }
@@ -79,11 +66,13 @@ export const AuthProvider = (props) => {
         }
         const jwtDecode = require('jwt-decode');
         const tokenDecode = jwtDecode(Cookies.get('token'));
+        if (tokenDecode.isAdmin)
+            setIsAdmin(true)
         setUserDate({
             username: tokenDecode.sub,
             firstname: tokenDecode.firstname,
             lastname: tokenDecode.lastname,
-            id: tokenDecode.id
+            id: tokenDecode.id,
         })
     }
 
@@ -157,10 +146,38 @@ export const AuthProvider = (props) => {
         return false
     }
 
+
+    const refreshToken = async () => {
+        let result = {};
+        if (!Cookies.get('token'))
+            LogOut();
+        await fetch(`${config.apiRoot}/refreshToken/`, {
+            method: "post",
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                'Authorization': 'Bearer ' + Cookies.get('token'),
+            },
+            body: JSON.stringify({ token: Cookies.get('token') })
+        })
+            .then(res => res.json())
+            .then(res => {
+                result = res
+
+            })
+
+        if (result.succeeded) {
+            Cookies.remove('token');
+            Cookies.set('token', result.token);
+            console.log(Cookies.get('token'))
+            getUserData();
+        }
+    }
+
+
     useEffect(() => {
         checkIsLogin();
 
-        //  checkIsAdmin();
+      
     }, []);
 
     useEffect(() => {
@@ -180,14 +197,14 @@ export const AuthProvider = (props) => {
                     userDate,
                     checkError,
                     checkIsLogin,
-                    checkIsAdmin,
                     LogOut,
                     singUp,
+                    refreshToken,
                     isConnecting
                 }
             }
         >
-            {!correctlogin && <Redirect to="/" />}
+
             {props.children}
         </AuthContext.Provider>
     );

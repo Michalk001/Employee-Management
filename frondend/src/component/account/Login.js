@@ -14,8 +14,6 @@ export const Login = (props) => {
     const authContext = useContext(AuthContext);
 
 
-
-
     return (
 
         <div className="box box--center box--login">
@@ -33,7 +31,7 @@ export const Login = (props) => {
 
 
                 <div className="box__item box__item--center">
-                    <input type="submit" className="button  box__text" value="Zaloguj" />
+                    <input type="submit" className="button button--full-width  box__text" value="Zaloguj" />
                 </div>
 
 

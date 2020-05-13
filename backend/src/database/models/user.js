@@ -21,10 +21,10 @@ export default (sequelize, type) => {
       type: type.BOOLEAN,
       defaultValue: false,
     },
-  /*  isAdmin: {
+    isAdmin: {
       type: type.BOOLEAN,
       defaultValue: false,
-    }*/
+    }
   })
 
 
