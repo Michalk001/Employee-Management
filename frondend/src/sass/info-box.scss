@@ -63,6 +63,10 @@
         text-align: center;
         position: relative;
         padding: 0 35px;
+        &--list{
+            padding: 0 5px;
+            text-align: left;
+        }
     }
 
     &__close {

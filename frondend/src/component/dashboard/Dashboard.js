@@ -25,7 +25,7 @@ export const Dashboard = () => {
             .then(res => {
                 console.log(res)
                 if (res.succeeded) {
-                    const activePro = res.user.projects.filter(x => x.userProjects != false)
+                    const activePro = res.user.projects.filter(x => (!x.userProjects.isRemove || !x.userProjects.isRetired))
                         .map(x => ({
                             name: x.name,
                             idProject: x.id,
@@ -50,16 +50,16 @@ export const Dashboard = () => {
     return (
         <div className="box">
             <div className="box__text box__text--center  ">Aktywne Projekty</div>
-            <div className="box__text box__text--normal box__active-project ">
-               <span className="box__active-project--name ">Nazwa</span> 
-               <span className="box__active-project--hours ">Godziny</span> 
-                
-                </div>
+            <div className="box__text box__text--normal box__project ">
+                <span className="box__project--name ">Nazwa</span>
+                <span className="box__project--hours ">Godziny</span>
+
+            </div>
             <div className="box__scroll">
                 {activeProject.map((x, index) => (
-                    <Link to={`/project/${x.idProject}`} key={`activP-${index}`} className="box__active-project box__active-project--hover">
-                        <span className="box__active-project--name ">{x.name}</span>
-                        <span className="box__active-project--hours ">{x.hours}</span>
+                    <Link to={`/project/${x.idProject}`} key={`activP-${index}`} className="box__project box__project--hover">
+                        <span className="box__project--name ">{x.name}</span>
+                        <span className="box__project--hours ">{x.hours}</span>
                     </Link>
                 ))}
             </div>

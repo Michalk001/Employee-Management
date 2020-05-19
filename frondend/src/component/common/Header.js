@@ -7,7 +7,7 @@ export const Header = () => {
     const authContext = useContext(AuthContext);
 
     useEffect(() => { }, [authContext.userDate])
-
+ 
     return (
 
         <div className="header">

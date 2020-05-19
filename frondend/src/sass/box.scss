@@ -7,6 +7,7 @@
     -webkit-box-shadow: -2px 4px 53px -7px rgba(0, 0, 0, 0.56);
     -moz-box-shadow: -2px 4px 53px -7px rgba(0, 0, 0, 0.56);
     box-shadow: -2px 4px 53px -7px rgba(0, 0, 0, 0.56);
+    position: relative;
 
     &--center {
         margin: 0 auto;
@@ -75,6 +76,10 @@
             font-size: 32px;
         }
 
+        &--sub-title {
+            font-size: 26px;
+        }
+
         &--normal {
             font-size: 18px;
         }
@@ -85,6 +90,18 @@
 
         &--bold {
             font-weight: 600;
+        }
+
+        &--require {
+            width: fit-content;
+
+            &::after {
+                content: "*";
+                font-size: 26px;
+                position: absolute;
+                right: -10px;
+                bottom: 0px;
+            }
         }
 
     }
@@ -158,20 +175,51 @@
         }
     }
 
-    &__active-project {
+    &__project {
         display: flex;
         padding: 10px 10px;
-
+        word-break: break-word;
 
         &--name {
             width: 250px;
-
         }
 
-        &--hours {
+        &--title-name {
+            width: 230px;
+        }
+
+        &--hours,
+        &--employe {
             position: relative;
-            width: 100px;
+            width: 130px;
             text-align: right;
+        }
+
+        &--title-hours {
+            width: 150px;
+            text-align: right;
+        }
+
+        &--employe {
+            width: 300px;
+            text-align: right;
+        }
+
+        &--employe-short {
+            width: 200px;
+            text-align: right;
+        }
+
+        &--status {
+            width: 150px;
+            text-align: right;
+        }
+
+        &--title-status {
+            width: 150px;
+            text-align: right;
+            padding-right: 10px;
+            box-sizing: border-box;
         }
 
         &--hover {
@@ -182,6 +230,9 @@
             &:hover {
                 background-color: #fbfbfb;
             }
+        }
+        &--radio{
+            visibility: hidden;
         }
     }
 
@@ -194,6 +245,7 @@
         border: 1px solid #cccccc;
         border-radius: 5px;
         height: 40px;
+        transition-duration: 0.5s;
 
         &--add-hours {
             width: 130px;
@@ -201,11 +253,16 @@
             text-align: left;
             padding: 0 5px;
         }
-        &--user-edit{
+
+        &--user-edit {
             text-align: left;
             padding: 0 10px;
             width: 300px;
             margin-top: 5px;
+        }
+
+        &--require {
+            background-color: #fd7373;
         }
 
     }

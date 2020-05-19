@@ -57,18 +57,18 @@ export const update = async (req, res) => {
         res.end();
         return
     }
-
-    if (req.body.isRetired) {
-        user.isRetired = req.body.isRetired;
+    console.log(req.body.user)
+    if (req.body.user.isRetired != undefined) {
+        user.isRetired = req.body.user.isRetired;
         await user.save();
-        res.status(200).json({ succeeded: true });
+        res.json({ succeeded: true });
         res.end();
         return
     }
-    user.firstname = req.body.user.firstname;
-    user.lastname = req.body.user.lastname;
-    user.email = req.body.user.email;
-    user.phone = req.body.user.phone;
+    user.firstname = req.body.user.firstname.trim();
+    user.lastname = req.body.user.lastname.trim();
+    user.email = req.body.user.email.trim();
+    user.phone = req.body.user.phone.trim();
     await user.save();
     res.status(200).json({ succeeded: true });
     res.end();

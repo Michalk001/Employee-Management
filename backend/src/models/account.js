@@ -42,6 +42,11 @@ export const login = async (req, res) => {
         name = req.body.username;
         password = req.body.password;
     }
+    else {
+        res.json({ succeeded: false, error: "not found user or password did not match", code: 2 });
+        res.end();
+        return;
+    }
 
     const user = await database.user.findOne({
         where: {
@@ -51,15 +56,22 @@ export const login = async (req, res) => {
     });
 
     if (!user) {
-        res.status(401).json({ succeeded: false, error: [{ code: 2, msg: "no such user found" }] });
+        res.json({ succeeded: false, error: "not found user or password did not match", code: 2 });
+        res.end();
         return;
     }
 
     if (user.isRemove) {
-        res.status(401).json({ succeeded: false, error: [{ code: 1, msg: "account is removed" }] });
+        res.json({ succeeded: false, error: "account is removed", code: 1 });
+        res.end();
         return;
     }
 
+    if (user.isRetired) {
+        res.json({ succeeded: false, error: "account is retired", code: 3 });
+        res.end();
+        return;
+    }
     if (bcrypt.compareSync(password, user.password)) {
         console.log(user.isAdmin)
         const payload = { id: user.id, sub: user.username, firstname: user.firstname, lastname: user.lastname, isAdmin: user.isAdmin };
@@ -68,9 +80,8 @@ export const login = async (req, res) => {
         res.json({ succeeded: true, token: token });
 
 
-    } else {
-        res.status(401).json({ succeeded: false, error: ["passwords did not match"] });
     }
+    res.json({ succeeded: false, error: "not found user or password did not match", code: 2 });
     res.end();
 }
 
@@ -78,19 +89,19 @@ export const login = async (req, res) => {
 export const register = async (req, res) => {
     const bcrypt = require('bcryptjs');
 
-    if (!req.body.username || !req.body.password) {
-        res.status(400).json({ succeeded: false, error: ["requare password and username"] })
+    if (!req.body.user.username || !req.body.user.password) {
+        res.status(400).json({ succeeded: false, error: "requare password and username", code: 1 })
         res.end();
         return
     }
-    const hashPassword = bcrypt.hashSync(req.body.password, 10);
+    const hashPassword = bcrypt.hashSync(req.body.user.password, 10);
     const user = {
-        username: req.body.username,
+        username: req.body.user.username,
         password: hashPassword,
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        email: req.body.email,
-        phone: req.body.phone,
+        firstname: req.body.user.firstname,
+        lastname: req.body.user.lastname,
+        email: req.body.user.email,
+        phone: req.body.user.phone,
     }
 
     const users = await database.user.findAll({
@@ -104,9 +115,46 @@ export const register = async (req, res) => {
         await database.user.create(user)
     }
     else {
-        res.status(400).json({ succeeded: false, error: ["username bussy"] })
+        res.json({ succeeded: false, error: "username bussy", code: 2 })
         res.end();
     }
-    res.status(201).json({ succeeded: true });
+    res.json({ succeeded: true });
+    res.end();
+}
+
+export const changePassword = async (req, res) => {
+
+    const bcrypt = require('bcryptjs');
+    const jwtOptions = {}
+    jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+    jwtOptions.secretOrKey = 'tasmanianDevil';
+    const oldPassword = req.body.password.oldPassword;
+    const newPassword = req.body.password.newPassword;
+    if (!(oldPassword && newPassword)) {
+        res.json({ succeeded: false, error: "require old password and new password", code: 1 });
+        res.end();
+        return;
+    }
+ 
+    const user = await database.user.findOne({
+        where: {
+            username:
+                { [database.Sequelize.Op.iLike]: `%${req.params.id}` }
+        }
+    });
+    if (!user) {
+        res.json({ succeeded: false, error: "not found user", code: 3 });
+        res.end();
+        return
+    }
+    if (!bcrypt.compareSync(oldPassword, user.password)) {
+        res.json({ succeeded: false, error: "old password is wrong", code: 2 });
+        res.end();
+        return
+    }
+    const hashPassword = bcrypt.hashSync(newPassword, 10);
+    user.password = hashPassword
+    await user.save();
+    res.json({ succeeded: true });
     res.end();
 }

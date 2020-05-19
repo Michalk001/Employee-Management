@@ -10,7 +10,7 @@ export const save = async (req, res) => {
     }
 
     const uP = await database.userProject.findOne({
-        where: { userId: req.body.idUser }
+        where: { userId: req.body.idUser, projectId: req.body.idProject }
     });
 
     if (uP) {
@@ -54,8 +54,11 @@ export const update = async (req, res) => {
         }
 
 
-        if (req.body.userProject.hours)
+        if (req.body.userProject.hours) {
             userProject.hours = req.body.userProject.hours
+            if (userProject.hours < 0)
+                userProject.hours = 0;
+        }
 
 
         await userProject.save();

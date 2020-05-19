@@ -45,11 +45,14 @@ export const Project = (props) => {
 
     const addHours = async () => {
         if (currentUserInfo && currentUserInfo.newHours != null) {
-            const newHours = +currentUserInfo.userProjects.hours + +currentUserInfo.newHours;
+            let newHours = +currentUserInfo.newHours + +currentUserInfo.userProjects.hours;
+            if (newHours < 0)
+                newHours = 0
             await updateUserHours(currentUserInfo.userProjects.id, newHours)
                 .then(res => res.json())
                 .then(res => {
                     if (res.succeeded) {
+
                         currentUserInfo.userProjects.hours = newHours
 
                         infoBoxContext.addInfo("Dodano godziny pracy");
@@ -65,14 +68,16 @@ export const Project = (props) => {
 
     const removeHours = async () => {
         if (currentUserInfo && currentUserInfo.newHours != null) {
-            const newHours = +currentUserInfo.userProjects.hours - +currentUserInfo.newHours;
+            let newHours = +currentUserInfo.userProjects.hours - +currentUserInfo.newHours;
+            if (newHours < 0)
+                newHours = 0
             await updateUserHours(currentUserInfo.userProjects.id, newHours)
                 .then(res => res.json())
                 .then(res => {
                     if (res.succeeded) {
                         currentUserInfo.userProjects.hours = newHours
 
-                        infoBoxContext.addInfo("Odjento godziny pracy");
+                        infoBoxContext.addInfo("Zmniejszono godziny pracy");
                     }
                     else {
                         infoBoxContext.addInfo("Wystąpił błąd");
@@ -173,6 +178,7 @@ export const Project = (props) => {
                         ))}
                     </div>
                 </>}
+
             </div>
         }</>
     )

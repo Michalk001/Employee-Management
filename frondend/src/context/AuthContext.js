@@ -17,7 +17,8 @@ export const AuthContext = React.createContext({
     LogOut: () => { },
     checkIsLogin: () => { },
     refreshToken: () => { },
-    singUp: async () => { }
+    singUp: async () => { },
+    register: async (user, setUser) =>{}
 
 })
 
@@ -32,7 +33,7 @@ export const AuthProvider = (props) => {
     const [correctlogin, setCorrectLogin] = useState(true)
 
     const [isConnecting, setIsConnecting] = useState(false);
-    const contextInfoBox = useContext(InfoBoxContext)
+    const infoBoxContext = useContext(InfoBoxContext)
 
 
 
@@ -83,27 +84,16 @@ export const AuthProvider = (props) => {
             username: loginValue.username,
             password: loginValue.password
         }
-        await fetch(`${config.apiRoot}/login`, {
+        await fetch(`${config.apiRoot}/account/login`, {
             method: "post",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
             },
             body: JSON.stringify(obj)
         })
+            .then(res => res.json())
             .then(res => {
-                if (res.ok) {
-
-                    return res.json()
-
-                }
-                else {
-
-                    throw (res);
-
-                }
-            })
-            .then(res => {
-                setIsConnecting(false);
+                console.log(res)
                 if (res.succeeded == true) {
                     Cookies.set('token', res.token);
                     checkIsLogin();
@@ -112,22 +102,45 @@ export const AuthProvider = (props) => {
                     setCorrectLogin(false);
                 }
                 else {
-
                     setCorrectLogin(true);
-
+                    if (res.code == 1) {
+                        infoBoxContext.addInfo("Konto usunięte");
+                    } else if (res.code == 3) {
+                        infoBoxContext.addInfo("Konto zablokowane");
+                    } else if (res.code == 2) {
+                        infoBoxContext.addInfo("Błędny login lub hasło");
+                    }
                 }
             })
-            .catch(error => {
-                setIsConnecting(false);
-                if (error.status == 401) {
-                    contextInfoBox.addInfo("Błędne hasło")
-                } else {
-                    contextInfoBox.addInfo("Nieznany błąd")
-                }
+        setIsConnecting(false)
+    }
+    const register = async (user, setUser) => {
 
+        await fetch(`${config.apiRoot}/account/register`, {
+            method: "post",
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                'Authorization': 'Bearer ' + Cookies.get('token'),
+            },
+            body: JSON.stringify({ user })
+        })
+            .then(res => res.json())
+            .then(res => {
+
+                if (res.succeeded) {
+                    infoBoxContext.addInfo("Utworzono pracownika");
+                    setUser({})
+
+                }
+                else {
+                    if (res.code == 2)
+                        infoBoxContext.addInfo("Login zajęty");
+                    else
+                        infoBoxContext.addInfo("Wystąpił błąd");
+                }
+                return { res }
             })
     }
-
     const LogOut = () => {
 
         setIsLogin(false);
@@ -151,7 +164,7 @@ export const AuthProvider = (props) => {
         let result = {};
         if (!Cookies.get('token'))
             LogOut();
-        await fetch(`${config.apiRoot}/refreshToken/`, {
+        await fetch(`${config.apiRoot}/account/refreshToken/`, {
             method: "post",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
@@ -168,7 +181,6 @@ export const AuthProvider = (props) => {
         if (result.succeeded) {
             Cookies.remove('token');
             Cookies.set('token', result.token);
-            console.log(Cookies.get('token'))
             getUserData();
         }
     }
@@ -177,7 +189,7 @@ export const AuthProvider = (props) => {
     useEffect(() => {
         checkIsLogin();
 
-      
+
     }, []);
 
     useEffect(() => {
@@ -200,7 +212,8 @@ export const AuthProvider = (props) => {
                     LogOut,
                     singUp,
                     refreshToken,
-                    isConnecting
+                    isConnecting,
+                    register
                 }
             }
         >

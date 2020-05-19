@@ -3,11 +3,11 @@
 import React, { useState, useEffect, state, useContext, useReducer } from "react";
 import { Link } from 'react-router-dom';
 
-import { AuthContext } from '../../context/AuthContext';
-import { InfoBoxContext } from '../../context/InfoBox/InfoBoxContext';
-import config from '../../config.json'
+import { AuthContext } from '../../../context/AuthContext';
+import { InfoBoxContext } from '../../../context/InfoBox/InfoBoxContext';
+import config from '../../../config.json'
 import Cookies from 'js-cookie';
-import { Project } from "../user/Project";
+import { Project } from "../../user/Project";
 import Select from 'react-select'
 
 
@@ -224,9 +224,9 @@ export const ProjectEditor = (props) => {
                     Przywróć
                 </div>}
             </div>
-            <div className="form-editor--inline">
-                <div className="form-editor__text form-editor__text--vertical-center">Nazwa </div>
-                <input className="form-editor__input" type="text" name="name" value={project ? project.name : ""} onChange={x => updateProjectData(x.target)} />
+            <div className="form-editor--inline-flex-wrap">
+                <div className="form-editor__text form-editor__text--vertical-center form-editor__text--require">Nazwa </div>
+                <input className="form-editor__input form-editor__input--large form-editor__input--editor " type="text" name="name" value={project ? project.name : ""} onChange={x => updateProjectData(x.target)} />
             </div>
             <div className="form-editor__text">Opis </div>
             <textarea className="form-editor__input form-editor__input--textarea" name="description" value={project ? project.description : ""} onChange={x => updateProjectData(x.target)} />

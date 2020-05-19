@@ -2,26 +2,59 @@ import database from "../database/models/database";
 
 export const save = async (req, res) => {
 
-    if (!req.body.name) {
+    if (!req.body.project.name) {
         res.status(400).json({ succeeded: false, error: ["requare name"] })
         res.end();
         return
     }
+    const transaction = await database.sequelize.transaction();
+    try {
+        const project = {
+            name: req.body.project.name.trim(),
+            description: req.body.project.description,
+        }
 
-    const project = {
-        name: req.body.name,
-        description: req.body.description,
+        const created = await database.project.create(project, { transaction: transaction });
+        console.log(created.id)
+        if (req.body.project.users) {
+            let users;
+            users = await req.body.project.users.map(async (x) => {
+                await database.userProject.create({
+                    userId: x.id,
+                    projectId: created.id,
+                }, { transaction: transaction })
+            })
+            await Promise.all(users)
+
+        }
+
+
+        await transaction.commit();
+        res.status(201).json({ succeeded: true });
+        res.end();
     }
-
-
-    await database.project.create(project)
-    res.status(201).json({ succeeded: true });
-    res.end();
-
+    catch
+    {
+        await transaction.rollback();
+        res.status(201).json({ succeeded: false });
+        res.end();
+    }
 }
 
 export const get = async (req, res) => {
     const projects = await database.project.findAll({
+        include: [
+            {
+                model: database.user,
+                required: false,
+                attributes: ["id", "firstname", "lastname", "username", "isRetired"],
+                through: {
+                    attributes: ["id", "hours", "isRemove", "isRetired"],
+                    where: {
+                        isRemove: false
+                    }
+                }
+            }]
     });
     res.status(200).json({ succeeded: true, projects });
     res.end();
@@ -39,7 +72,7 @@ export const getById = async (req, res) => {
                 attributes: ["id", "firstname", "lastname", "username", "isRetired"],
                 through: {
                     attributes: ["id", "hours", "isRemove", "isRetired"],
-                    where:{
+                    where: {
                         isRemove: false
                     }
                 }
@@ -78,7 +111,7 @@ export const update = async (req, res) => {
     }
 
     if (req.body.project.name)
-        project.name = req.body.project.name;
+        project.name = req.body.project.name.trim();
     if (req.body.project.description)
         project.description = req.body.project.description;
     await project.save();

@@ -4,7 +4,8 @@ import nextId from "react-id-generator";
 export const InfoBoxContext = React.createContext({
 
     addInfo: (text, time) => { },
-    Confirm: (msg, callback) => { }
+    Confirm: (msg, callback) => { },
+    addListInfo: (list, title, time) => { }
 })
 
 
@@ -49,6 +50,54 @@ export const RenderInfo = (props) => {
         )
 }
 
+export const RenderListInfo = (props) => {
+    const [isClose, setIsClose] = useState(false);
+    const [isRemove, setIsRemove] = useState(false);
+
+    const remove = () => {
+
+        setIsClose(true);
+        setTimeout(() => { { setIsRemove(true); props.callback(props.msg.id) } }, 800)
+
+
+    }
+
+
+    useState(() => {
+        if (props.msg.time || props.msg.time != 0)
+            setTimeout(() => { remove() }, props.msg.time)
+
+    }, [isClose, isRemove])
+
+    if (isRemove)
+        return (<></>);
+    if (!isRemove)
+        return (
+
+            <div className={`info-box ${isClose ? "info-box--close" : ""}`}  >
+                <div onClick={() => { remove() }} className={`info-box--wrap `}>
+
+                    <div className={`info-box__text `} >
+                        {console.log(props.msg)}
+                        {props.msg.title}
+                    </div>
+                  {props.msg.list && props.msg.list.length != 0 &&  <div className={`info-box__text `} >
+                        <ul>
+                            {props.msg.list.map((x, index) => (
+                                <li key={`li-${props.msg.id}-${index}`} className="info-box__text--list">
+                                    {x}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>}
+                    <div className={`info-box__close `}>
+                        <i className="fas fa-times"></i>
+                    </div>
+                </div>
+            </div >
+
+        )
+}
 
 export const RenderConfirm = (props) => {
 
@@ -78,13 +127,16 @@ export const RenderConfirm = (props) => {
 export const InfoBoxProvider = (props) => {
 
 
+    const [informations, setInformations] = useState([]);
     const [informationList, setInformationList] = useState([]);
     const [confirmData, setConfirmData] = useState(null)
 
     const addInfo = (text, time = 0) => {
-        setInformationList([...informationList, { msg: { text: text, id: nextId(), time }, isRemove: false }]);
+        setInformations([...informations, { msg: { text, id: nextId(), time }, isRemove: false }]);
     }
-
+    const addListInfo = (list, title, time = 0) => {
+        setInformationList([...informationList, { msg: { title, list, id: nextId(), time }, isRemove: false }]);
+    }
     const Confirm = (msg, callback) => {
         setConfirmData({ msg, callback });
     }
@@ -92,12 +144,19 @@ export const InfoBoxProvider = (props) => {
 
 
     useEffect(() => {
-        console.log(informationList)
     }, [informationList])
 
 
 
-    const removeFromList = (id) => {
+    const removeFromInformations = (id) => {
+        const item = informations.find((x) => { return x.msg.id == id })
+        if (item != null) {
+            item.isRemove = true;
+        }
+        setInformations(informations.filter((x) => { return x.isRemove != true }))
+    }
+
+    const removeFromInformationList = (id) => {
         const item = informationList.find((x) => { return x.msg.id == id })
         if (item != null) {
             item.isRemove = true;
@@ -115,13 +174,19 @@ export const InfoBoxProvider = (props) => {
             value={
                 {
                     addInfo,
-                    Confirm
+                    Confirm,
+                    addListInfo
                 }
             }>
             <>
+                {informations.length != 0 && informations.map((x, index) => (
+                    <span key={`error-${x.msg.id}`} >
+                        {!x.isRemove && < RenderInfo {...x} callback={removeFromInformations} />}
+                    </span>
+                ))}
                 {informationList.length != 0 && informationList.map((x, index) => (
                     <span key={`error-${x.msg.id}`} >
-                        {!x.isRemove && < RenderInfo {...x} callback={removeFromList} />}
+                        {!x.isRemove && < RenderListInfo {...x} callback={removeFromInformationList} />}
                     </span>
                 ))}
                 {confirmData &&
