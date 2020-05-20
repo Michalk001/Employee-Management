@@ -4,7 +4,17 @@ import database from "../database/models/database";
 export const get = async (req, res) => {
 
     const user = await database.user.findAll({
-        attributes: ['firstname', 'lastname', 'id', 'isRemove', 'isRetired', 'username']
+        include: [
+            {
+                model: database.project,
+                required: false,
+                through: {
+                    attributes: ["id", "hours", "isRemove", "isRetired"],
+                    where: {
+                        isRemove: false
+                    }
+                }
+            }]
     });
     res.status(200).json({ succeeded: true, user });
     res.end();

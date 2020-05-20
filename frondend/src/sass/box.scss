@@ -264,6 +264,11 @@
         &--require {
             background-color: #fd7373;
         }
+        &--search{
+            text-align: left;
+            padding: 0 15px;
+            margin: 5px 0;
+        }
 
     }
 
@@ -273,5 +278,25 @@
         max-height: 30vh;
 
     }
-
+    &__radio-button{
+        cursor: pointer;
+        font-size: 18px;
+        &--position{
+            display: inline-flex;
+            flex-direction: row-reverse;
+            justify-content: space-between;
+            width: 100%;
+        }
+        &:hover{
+            color:  #3a3838
+        }
+        &--active{
+            color: #31a8ff;
+            cursor: default;
+            &:hover{
+                color:  #31a8ff
+            }
+        }
+        
+    }
 }
