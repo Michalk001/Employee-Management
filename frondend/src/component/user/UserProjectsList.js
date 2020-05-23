@@ -23,11 +23,11 @@ export const UserProjectsList = (props) => {
             .then(res => res.json())
             .then(res => {
                 if (res.succeeded) {
-     
+
                     if (res.user != null) {
                         let projects = [];
                         res.user.projects.map((item) => {
-                         
+
                             if (item.userProjects.isRemove)
                                 return
                             let project = {};
@@ -79,7 +79,7 @@ export const UserProjectsList = (props) => {
                 }
 
             }).filter(item => item != undefined);
-       
+
             if (filterOptions.statusProject == "inactive")
                 list = list.filter(item => { return item.isRetired })
             else if (filterOptions.statusProject == "active")
@@ -99,7 +99,11 @@ export const UserProjectsList = (props) => {
 
 
     useEffect(() => {
-        getUser(props.match.params.id)
+        const asyncEffect = async () => {
+            getUser(props.match.params.id)
+        }
+        asyncEffect()
+
 
     }, [props.match.params.id])
 

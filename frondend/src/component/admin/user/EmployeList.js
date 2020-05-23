@@ -25,7 +25,6 @@ export const EmployeList = () => {
                 if (res.succeeded) {
 
                     let users = [];
-                    console.log(res)
                     res.user.filter(x => { return !x.isRemove })
                         .map(item => {
                             let user = {};
@@ -110,11 +109,10 @@ export const EmployeList = () => {
     useEffect(() => {
 
     }, [userList, filterUserList])
-    
+
     useEffect(() => {
-      
         const asyncEffect = async () =>{
-            await   getUsers()()
+            await   getUsers()
         }
         asyncEffect();
     }, [])

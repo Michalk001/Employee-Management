@@ -100,7 +100,10 @@ export const ProjectCreate = (props) => {
     }
 
     useEffect(() => {
-        getUser();
+        const asyncEffect = async () => {
+            getUser();
+        }
+        asyncEffect();
     }, [])
 
     useEffect(() => {

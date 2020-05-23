@@ -206,10 +206,14 @@ export const UserProfileEditor = (props) => {
     }
 
     useEffect(() => {
-        if (props.match.params.id)
-            getUser(props.match.params.id)
-        else if (authContext.userDate && authContext.userDate.username)
-            getUser(authContext.userDate.username)
+        const asyncEffect = async () => {
+            if (props.match.params.id)
+                getUser(props.match.params.id)
+            else if (authContext.userDate && authContext.userDate.username)
+                getUser(authContext.userDate.username)
+        }
+        asyncEffect()
+
 
     }, [authContext.userDate, props.match.params.id])
 

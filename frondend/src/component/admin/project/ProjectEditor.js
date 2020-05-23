@@ -201,8 +201,12 @@ export const ProjectEditor = (props) => {
 
 
     useEffect(() => {
-        if (props.match.params.id)
-            getProject(props.match.params.id);
+        const asyncEffect = async () => {
+            if (props.match.params.id)
+                getProject(props.match.params.id);
+        }
+        asyncEffect();
+
 
     }, [props.match.params.id])
 

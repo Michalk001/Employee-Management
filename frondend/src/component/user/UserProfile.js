@@ -33,7 +33,11 @@ export const UserProfile = (props) => {
 
 
     useEffect(() => {
-        getUser(props.match.params.id)
+        const asyncEffect = async () => {
+            getUser(props.match.params.id)
+        }
+        asyncEffect()
+      
 
     }, [props.match.params.id])
 

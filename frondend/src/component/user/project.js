@@ -111,7 +111,10 @@ export const Project = (props) => {
 
     }
     useEffect(() => {
-        getProject(props.match.params.id)
+        const asyncEffect = async () => {
+            getProject(props.match.params.id)
+        }
+        asyncEffect()
 
     }, [props.match.params.id])
 
@@ -121,7 +124,6 @@ export const Project = (props) => {
     }, [project])
 
     useEffect(() => {
-        console.log(authContext)
     }, [currentUserInfo])
 
 
