@@ -12,21 +12,17 @@ export const UserProfile = (props) => {
     const [user, setUser] = useState(null);
     const authContext = useContext(AuthContext);
     const getUser = async (id) => {
-        await fetch(`${config.apiRoot}/user/${id}`, {
+        const result = await fetch(`${config.apiRoot}/user/${id}`, {
             method: "get",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.succeeded) {
-                    setUser(res.user)
-                    console.log(res)
-                }
-
-            })
+        });
+        const data = result.json();
+        if (data.succeeded) {
+            setUser(data.user)
+        }
     }
 
 

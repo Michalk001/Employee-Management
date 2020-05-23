@@ -12,52 +12,53 @@ export const EmployeList = () => {
     const [userList, setUserList] = useState(null);
     const [filterUserList, setFilterUserList] = useState(null)
     const [filterOptions, setFilterOptions] = useState({ name: "", statusUser: "all" })
+
     const getUsers = async () => {
-        await fetch(`${config.apiRoot}/user`, {
+
+        const result = await fetch(`${config.apiRoot}/user`, {
             method: "get",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.succeeded) {
-
-                    let users = [];
-                    res.user.filter(x => { return !x.isRemove })
-                        .map(item => {
-                            let user = {};
-                            user.firstname = item.firstname;
-                            user.lastname = item.lastname;
-                            user.id = item.id;
-                            user.username = item.username
-                            user.isRetired = item.isRetired;
-                            let hoursActivProject = 0;
-                            let hoursRetireProject = 0;
-                            item.projects.map(project => {
-                                if (!project.userProjects.isRetired) {
-                                    hoursActivProject += project.userProjects.hours;
-                                }
-                                else if (project.userProjects.isRetired && !project.userProjects.isRemove) {
-                                    hoursRetireProject += project.userProjects.hours;
-                                }
-                            })
-                            user.hoursActivProject = hoursActivProject;
-                            user.hoursRetireProject = hoursRetireProject;
-                            user.hoursTotal = hoursRetireProject + hoursActivProject;
-                            user.activProjectQuantity = item.projects.filter((project) => !(project.userProjects.isRemove || project.userProjects.isRetired)).length
-                            user.totalProjectQuantity = item.projects.filter((project) => !(project.userProjects.isRemove)).length
-                            users.push(user);
-                        })
-
-                    setUserList(users)
-                    setFilterUserList(users)
-                }
-
-            })
+        });
+        const data = await result.json();
+        if (data.succeeded) {
+            const users = userData(data.user);
+            setUserList(users)
+            setFilterUserList(users)
+        }
     }
 
+    const userData = (data) => {
+        let users = [];
+        data.filter(x => { return !x.isRemove })
+            .map(item => {
+                let user = {};
+                user.firstname = item.firstname;
+                user.lastname = item.lastname;
+                user.id = item.id;
+                user.username = item.username
+                user.isRetired = item.isRetired;
+                let hoursActivProject = 0;
+                let hoursRetireProject = 0;
+                item.projects.map(project => {
+                    if (!project.userProjects.isRetired) {
+                        hoursActivProject += project.userProjects.hours;
+                    }
+                    else if (project.userProjects.isRetired && !project.userProjects.isRemove) {
+                        hoursRetireProject += project.userProjects.hours;
+                    }
+                })
+                user.hoursActivProject = hoursActivProject;
+                user.hoursRetireProject = hoursRetireProject;
+                user.hoursTotal = hoursRetireProject + hoursActivProject;
+                user.activProjectQuantity = item.projects.filter((project) => !(project.userProjects.isRemove || project.userProjects.isRetired)).length
+                user.totalProjectQuantity = item.projects.filter((project) => !(project.userProjects.isRemove)).length
+                users.push(user);
+            })
+        return users;
+    }
 
 
     const projectStatus = (status) => {
@@ -111,11 +112,10 @@ export const EmployeList = () => {
     }, [userList, filterUserList])
 
     useEffect(() => {
-        const asyncEffect = async () => {
-            await getUsers()
-        }
-        asyncEffect();
+        getUsers()
+
     }, [])
+
     return (
         <div className="box box--large">
 

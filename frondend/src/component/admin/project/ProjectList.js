@@ -13,50 +13,50 @@ export const ProjectList = () => {
     const [filterProjectList, setFilterProjectList] = useState(null)
     const [filterOptions, setFilterOptions] = useState({ name: "", statusProject: "all" })
     const getProjects = async () => {
-        await fetch(`${config.apiRoot}/project`, {
+
+       const result = await fetch(`${config.apiRoot}/project`, {
             method: "get",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
         })
-            .then(res => res.json())
-            .then(res => {
-                if (res.succeeded) {
+        const data = await result.json();
 
-                    let projects = [];
-
-                    res.projects.filter(x => { return !x.isRemove })
-                        .map(item => {
-                            let project = {};
-                            project.name = item.name;
-                            project.id = item.id;
-                            project.isRetired = item.isRetired;
-                            let hoursActivUser = 0;
-                            let hoursRetiredUser = 0;
-                            item.users.map(user => {
-                                if (!user.userProjects.isRetired) {
-                                    hoursActivUser += user.userProjects.hours;
-                                }
-                                else if (user.userProjects.isRetired && !user.userProjects.isRemove) {
-                                    hoursRetiredUser += user.userProjects.hours;
-                                }
-                            })
-                            project.hoursActivUser = hoursActivUser;
-                            project.hoursRetiredUser = hoursRetiredUser;
-                            project.hoursTotal = hoursRetiredUser + hoursActivUser;
-                            project.activUserQuantity = item.users.filter((user) => !(user.userProjects.isRemove || user.userProjects.isRetired)).length
-                            project.totalUserQuantity = item.users.filter((user) => !(user.userProjects.isRemove)).length
-                            projects.push(project);
-                        })
-
-                    setProjectList(projects)
-                    setFilterProjectList(projects)
-                }
-
-            })
+        if (data.succeeded){
+            const projects = projectData(data.projects)
+            setProjectList(projects)
+            setFilterProjectList(projects)
+        }
     }
 
+    const projectData = (data) => {
+        let projects = [];
+        data.filter(x => { return !x.isRemove })
+            .map(item => {
+                let project = {};
+                project.name = item.name;
+                project.id = item.id;
+                project.isRetired = item.isRetired;
+                let hoursActivUser = 0;
+                let hoursRetiredUser = 0;
+                item.users.map(user => {
+                    if (!user.userProjects.isRetired) {
+                        hoursActivUser += user.userProjects.hours;
+                    }
+                    else if (user.userProjects.isRetired && !user.userProjects.isRemove) {
+                        hoursRetiredUser += user.userProjects.hours;
+                    }
+                })
+                project.hoursActivUser = hoursActivUser;
+                project.hoursRetiredUser = hoursRetiredUser;
+                project.hoursTotal = hoursRetiredUser + hoursActivUser;
+                project.activUserQuantity = item.users.filter((user) => !(user.userProjects.isRemove || user.userProjects.isRetired)).length
+                project.totalUserQuantity = item.users.filter((user) => !(user.userProjects.isRemove)).length
+                projects.push(project);
+            })
+        return projects;
+    }
 
 
     const projectStatus = (status) => {
@@ -80,11 +80,9 @@ export const ProjectList = () => {
 
     }
 
-    useEffect( () => {
-        const asyncEffect = async () =>{
-            await getProjects()
-        }
-        asyncEffect();
+    useEffect(() => {
+        getProjects()
+    
     }, [])
 
     const filterList = () => {

@@ -19,19 +19,19 @@ export const UserCreate = (props) => {
 
     const infoBoxContext = useContext(InfoBoxContext);
     const authContext = useContext(AuthContext);
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState({ isAdmin: false });
     const [isValid, setIsValid] = useState({})
 
 
 
     const updateUserData = e => {
-        setUser({ ...user, [e.name]: e.value })
+        setUser({ ...user, [e.target.name]: e.target.value })
     }
 
-    
+
     const validPhone = (e, fun) => {
         const reg = /^\d+$/;
-        if ((e.value.length <= 9 && reg.test(e.value)) || e.value == "") {
+        if ((e.target.value.length <= 9 && reg.test(e.target.value)) || e.target.value == "") {
             fun(e);
         }
     }
@@ -39,6 +39,8 @@ export const UserCreate = (props) => {
     function validEmail(email) {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
     }
+
+
 
     const valid = () => {
         let isOK = true;
@@ -87,9 +89,38 @@ export const UserCreate = (props) => {
         if (!valid()) {
             return
         }
-        await authContext.register(user, setUser).then(res => console.log(res))
+        const result = await authContext.register(user)
+        const data = await result.json();
+
+        if (data.succeeded) {
+            infoBoxContext.addInfo("Utworzono pracownika");
+            setUser({})
+
+        }
+        else {
+            if (data.code == 2)
+                infoBoxContext.addInfo("Login zajęty");
+            else
+                infoBoxContext.addInfo("Wystąpił błąd");
+        }
+
     }
 
+    const isActiveRadio = (id) => {
+
+        if (id == "isAdminTrue" && user.isAdmin == true)
+            return "form-editor__radio-button--active"
+        else if (id == "isAdminFalse" && user.isAdmin == false)
+            return "form-editor__radio-button--active"
+
+    }
+
+    const updateIsAdmin = (event) => {
+        if (event.target.value === "true")
+            setUser({ ...user, "isAdmin": true })
+        else
+            setUser({ ...user, "isAdmin": false })
+    }
 
     useEffect(() => {
 
@@ -107,12 +138,20 @@ export const UserCreate = (props) => {
                 <div className="form-editor__item--input-box">
                     <div className="form-editor__text form-editor__text--vertical-center form-editor__text--require">Login </div>
                     <input className={`form-editor__input form-editor__input--editor ${isValid.username == false ? `form-editor__input--require` : ""}`}
-                        type="text" name="username" value={user.username ? user.username : ""} onChange={x => updateUserData(x.target)} />
+                        type="text" name="username" value={user.username ? user.username : ""} onChange={updateUserData} />
                 </div>
                 <div className="form-editor__item--input-box">
                     <div className="form-editor__text form-editor__text--vertical-center form-editor__text--require">Hasło </div>
                     <input className={`form-editor__input form-editor__input--editor ${isValid.password == false ? `form-editor__input--require` : ""}`}
-                        type="password" name="password" value={user.password ? user.password : ""} onChange={x => updateUserData(x.target)} />
+                        type="password" name="password" value={user.password ? user.password : ""} onChange={updateUserData} />
+                </div>
+                <div className="form-editor__item--input-box">
+                    <div className="form-editor__text form-editor__text--vertical-center ">Uprawnienie Administratora </div>
+                    <div className="form-editor--inline form-editor__item--center">
+                        <label className={`form-editor__radio-button ${isActiveRadio("isAdminTrue")}`} htmlFor={`isAdminTrue`}  >TAK</label><input className="form-editor__radio-button--input" id="isAdminTrue" onChange={updateIsAdmin} name="isAdmin" value={true} type="radio" />
+                        <label className={`form-editor__radio-button ${isActiveRadio("isAdminFalse")}`} htmlFor={`isAdminFalse`} >NIE</label><input className="form-editor__radio-button--input" id="isAdminFalse" onChange={updateIsAdmin} name="isAdmin" value={false} type="radio" />
+
+                    </div>
                 </div>
             </div>
             <div className="box__text box__text--sub-title form-editor__item--half-border-top ">Dane Pracownika</div>
@@ -120,21 +159,21 @@ export const UserCreate = (props) => {
                 <div className="form-editor__item--input-box">
                     <div className="form-editor__text form-editor__text--vertical-center form-editor__text--require">Imie </div>
                     <input className={`form-editor__input form-editor__input--editor ${isValid.firstname == false ? `form-editor__input--require` : ""}`}
-                        type="text" name="firstname" value={user.firstname ? user.firstname : ""} onChange={x => updateUserData(x.target)} />
+                        type="text" name="firstname" value={user.firstname ? user.firstname : ""} onChange={updateUserData} />
                 </div>
                 <div className="form-editor__item--input-box">
                     <div className="form-editor__text form-editor__text--vertical-center form-editor__text--require">Nazwisko </div>
                     <input className={`form-editor__input form-editor__input--editor ${isValid.lastname == false ? `form-editor__input--require` : ""} `}
-                        type="text" name="lastname" value={user.lastname ? user.lastname : ""} onChange={x => updateUserData(x.target)} />
+                        type="text" name="lastname" value={user.lastname ? user.lastname : ""} onChange={updateUserData} />
                 </div>
                 <div className="form-editor__item--input-box">
                     <div className="form-editor__text form-editor__text--vertical-center form-editor__text--require">E-mail: </div>
                     <input className={`form-editor__input form-editor__input--editor ${isValid.email == false ? `form-editor__input--require` : ""}`}
-                        type="text" name="email" value={user.email ? user.email : ""} onChange={x => updateUserData(x.target)} />
+                        type="text" name="email" value={user.email ? user.email : ""} onChange={updateUserData} />
                 </div>
                 <div className="form-editor__item--input-box">
                     <div className="form-editor__text form-editor__text--vertical-center">Telefon </div>
-                    <input className={`form-editor__input form-editor__input--editor`} type="text" name="phone" value={user.phone ? user.phone : ""} onChange={x => { validPhone(x.target, x => updateUserData(x)) }} />
+                    <input className={`form-editor__input form-editor__input--editor`} type="text" name="phone" value={user.phone ? user.phone : ""} onChange={x => { validPhone(x, updateUserData) }} />
                 </div>
             </div>
             <div className="form-editor__text form-editor__text--require-string">* Pole wymagane </div>

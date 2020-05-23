@@ -14,21 +14,18 @@ export const Project = (props) => {
     const infoBoxContext = useContext(InfoBoxContext);
     const authContext = useContext(AuthContext)
     const getProject = async (id) => {
-        await fetch(`${config.apiRoot}/project/${id}`, {
+        const result = await fetch(`${config.apiRoot}/project/${id}`, {
             method: "get",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.succeeded) {
+        });
+        const data = await result.json()
+        if (data.succeeded) {
 
-                    setProject(res.project)
-                }
-
-            })
+            setProject(data.project)
+        }
     }
 
     const getCurrentUserInfo = () => {
@@ -48,20 +45,19 @@ export const Project = (props) => {
             let newHours = +currentUserInfo.newHours + +currentUserInfo.userProjects.hours;
             if (newHours < 0)
                 newHours = 0
-            await updateUserHours(currentUserInfo.userProjects.id, newHours)
-                .then(res => res.json())
-                .then(res => {
-                    if (res.succeeded) {
 
-                        currentUserInfo.userProjects.hours = newHours
+            const result = await updateUserHours(currentUserInfo.userProjects.id, newHours);
+            const data = await result.json();
+            if (data.succeeded) {
 
-                        infoBoxContext.addInfo("Dodano godziny pracy");
-                    }
-                    else {
-                        infoBoxContext.addInfo("Wystąpił błąd");
-                    }
+                currentUserInfo.userProjects.hours = newHours
 
-                })
+                infoBoxContext.addInfo("Dodano godziny pracy");
+            }
+            else {
+                infoBoxContext.addInfo("Wystąpił błąd");
+            }
+
             setCurrentUserInfo({ ...currentUserInfo, newHours: null })
         }
     }
@@ -71,19 +67,19 @@ export const Project = (props) => {
             let newHours = +currentUserInfo.userProjects.hours - +currentUserInfo.newHours;
             if (newHours < 0)
                 newHours = 0
-            await updateUserHours(currentUserInfo.userProjects.id, newHours)
-                .then(res => res.json())
-                .then(res => {
-                    if (res.succeeded) {
-                        currentUserInfo.userProjects.hours = newHours
+            const result = await updateUserHours(currentUserInfo.userProjects.id, newHours);
 
-                        infoBoxContext.addInfo("Zmniejszono godziny pracy");
-                    }
-                    else {
-                        infoBoxContext.addInfo("Wystąpił błąd");
-                    }
+            const data = await result.json();
+            if (data.succeeded) {
+                currentUserInfo.userProjects.hours = newHours
 
-                })
+                infoBoxContext.addInfo("Zmniejszono godziny pracy");
+            }
+            else {
+                infoBoxContext.addInfo("Wystąpił błąd");
+            }
+
+
 
             setCurrentUserInfo({ ...currentUserInfo, newHours: 0 })
         }
@@ -112,7 +108,7 @@ export const Project = (props) => {
     }
     useEffect(() => {
         const asyncEffect = async () => {
-           await getProject(props.match.params.id)
+            await getProject(props.match.params.id)
         }
         asyncEffect()
 

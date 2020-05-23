@@ -13,37 +13,36 @@ export const UserProjectsList = (props) => {
     const [filterProjectList, setFilterProjectList] = useState([])
     const [filterOptions, setFilterOptions] = useState({ name: "", statusProject: "all" })
     const getUser = async (id) => {
-        await fetch(`${config.apiRoot}/user/${id}`, {
+        const result = await fetch(`${config.apiRoot}/user/${id}`, {
             method: "get",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.succeeded) {
+        });
 
-                    if (res.user != null) {
-                        let projects = [];
-                        res.user.projects.map((item) => {
+        const data = await result.json();
+        
+        if (data.succeeded) {
 
-                            if (item.userProjects.isRemove)
-                                return
-                            let project = {};
-                            project.name = item.name;
-                            project.id = item.id;
-                            project.hours = item.userProjects.hours
-                            project.isRetired = item.userProjects.isRetired
-                            projects.push(project)
-                        })
-                        setProjectList(projects);
-                        setFilterProjectList(projects)
-                    }
+            if (data.user != null) {
+                let projects = [];
+                data.user.projects.map((item) => {
 
-                }
+                    if (item.userProjects.isRemove)
+                        return
+                    let project = {};
+                    project.name = item.name;
+                    project.id = item.id;
+                    project.hours = item.userProjects.hours
+                    project.isRetired = item.userProjects.isRetired
+                    projects.push(project)
+                })
+                setProjectList(projects);
+                setFilterProjectList(projects)
+            }
 
-            })
+        }
     }
 
 
@@ -100,7 +99,7 @@ export const UserProjectsList = (props) => {
 
     useEffect(() => {
         const asyncEffect = async () => {
-           await getUser(props.match.params.id)
+            await getUser(props.match.params.id)
         }
         asyncEffect()
 

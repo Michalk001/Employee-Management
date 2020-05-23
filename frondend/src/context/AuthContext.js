@@ -15,10 +15,10 @@ export const AuthContext = React.createContext({
     onAdmin: () => { },
     onLogin: () => { },
     LogOut: () => { },
-    checkIsLogin: () => { },
     refreshToken: () => { },
     singUp: async () => { },
-    register: async (user, setUser) =>{}
+    createUserData: () => { },
+    register: async (user) => { }
 
 })
 
@@ -30,7 +30,7 @@ export const AuthProvider = (props) => {
     const [isLogin, setIsLogin] = useState(null);
     const [isAdmin, setIsAdmin] = useState(false);
     const [userDate, setUserDate] = useState(null)
-    const [correctlogin, setCorrectLogin] = useState(true)
+
 
     const [isConnecting, setIsConnecting] = useState(false);
     const infoBoxContext = useContext(InfoBoxContext)
@@ -79,67 +79,35 @@ export const AuthProvider = (props) => {
 
 
     const singUp = async (loginValue) => {
-        setIsConnecting(true);
+
         const obj = {
             username: loginValue.username,
             password: loginValue.password
         }
-        await fetch(`${config.apiRoot}/account/login`, {
+        const result = await fetch(`${config.apiRoot}/account/login`, {
             method: "post",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
             },
             body: JSON.stringify(obj)
         })
-            .then(res => res.json())
-            .then(res => {
-                if (res.succeeded == true) {
-                    Cookies.set('token', res.token);
-                    checkIsLogin();
+        return result;
 
-                    getUserData();
-                    setCorrectLogin(false);
-                }
-                else {
-                    setCorrectLogin(true);
-                    if (res.code == 1) {
-                        infoBoxContext.addInfo("Konto usunięte");
-                    } else if (res.code == 3) {
-                        infoBoxContext.addInfo("Konto zablokowane");
-                    } else if (res.code == 2) {
-                        infoBoxContext.addInfo("Błędny login lub hasło");
-                    }
-                }
-            })
-        setIsConnecting(false)
+
     }
-    const register = async (user, setUser) => {
 
-        await fetch(`${config.apiRoot}/account/register`, {
+    const register = async (user) => {
+        const result = await fetch(`${config.apiRoot}/account/register`, {
             method: "post",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
             body: JSON.stringify({ user })
-        })
-            .then(res => res.json())
-            .then(res => {
-
-                if (res.succeeded) {
-                    infoBoxContext.addInfo("Utworzono pracownika");
-                    setUser({})
-
-                }
-                else {
-                    if (res.code == 2)
-                        infoBoxContext.addInfo("Login zajęty");
-                    else
-                        infoBoxContext.addInfo("Wystąpił błąd");
-                }
-                return { res }
-            })
+        });
+        return result;
     }
+
     const LogOut = () => {
 
         setIsLogin(false);
@@ -185,6 +153,12 @@ export const AuthProvider = (props) => {
     }
 
 
+    const createUserData = () => {
+        checkIsLogin();
+        getUserData();
+
+    }
+
     useEffect(() => {
         checkIsLogin();
 
@@ -197,7 +171,7 @@ export const AuthProvider = (props) => {
 
     useEffect(() => {
 
-    }, [correctlogin, userDate]);
+    }, [userDate]);
 
     return (
         <AuthContext.Provider
@@ -207,10 +181,10 @@ export const AuthProvider = (props) => {
                     isAdmin,
                     userDate,
                     checkError,
-                    checkIsLogin,
                     LogOut,
                     singUp,
                     refreshToken,
+                    createUserData,
                     isConnecting,
                     register
                 }

@@ -14,37 +14,31 @@ export const Dashboard = () => {
     const getProject = async () => {
         if (!authContext.userDate)
             return;
-        await fetch(`${config.apiRoot}/user/${authContext.userDate.username}`, {
+        const result = await fetch(`${config.apiRoot}/user/${authContext.userDate.username}`, {
             method: "get",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
-        })
-            .then(res => res.json())
-            .then(res => {
-                console.log(res)
-                if (res.succeeded) {
-                    const activePro = res.user.projects.filter(x => (!x.userProjects.isRemove || !x.userProjects.isRetired))
-                        .map(x => ({
-                            name: x.name,
-                            idProject: x.id,
-                            hours: x.userProjects.hours
-                        })
-                        )
-                    console.log(activePro)
-                    setActiveProject(activePro)
-                }
-
-            })
+        });
+        const data = await result.json();
+        if (data.succeeded) {
+            const activePro = data.user.projects.filter(x => (!x.userProjects.isRemove || !x.userProjects.isRetired))
+                .map(x => ({
+                    name: x.name,
+                    idProject: x.id,
+                    hours: x.userProjects.hours
+                })
+                )
+            setActiveProject(activePro)
+        }
 
     }
 
     useEffect(() => {
-        const asyncEffect = async () => {
-            await getProject();
-        }
-        asyncEffect()
+
+        getProject();
+
 
 
     }, [authContext.userDate])

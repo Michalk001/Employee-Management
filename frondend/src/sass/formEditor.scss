@@ -24,14 +24,17 @@
             padding-right: 10px;
         }
 
-        &--archive-small,&--require-string {
+        &--archive-small,
+        &--require-string {
             font-size: 15px;
             color: #5f5f5f;
             position: absolute;
         }
-        &--require-string{
+
+        &--require-string {
             right: 10px;
         }
+
         &--require {
             width: fit-content;
 
@@ -51,10 +54,12 @@
             display: inline-block;
             position: relative;
         }
-        &--project-name{
+
+        &--project-name {
             width: 100%;
             margin: 0;
         }
+
         &--half-border-top {
             padding-top: 10px;
             position: relative;
@@ -68,6 +73,10 @@
                 left: 12.5%;
                 border-top: 1px solid #d6d6d6;
             }
+        }
+
+        &--center {
+            justify-content: center;
         }
     }
 
@@ -104,8 +113,39 @@
             width: 300px;
             margin-top: 5px;
         }
-        &--large{
+
+        &--large {
             width: 100%;
+        }
+    }
+
+    &__radio-button {
+        cursor: pointer;
+
+        font-size: 22px;
+        &--position {
+            display: inline-flex;
+            flex-direction: row-reverse;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        &:hover {
+            color: #3a3838
+        }
+
+        &--active {
+            color: #31a8ff;
+            cursor: default;
+
+            &:hover {
+                color: #31a8ff
+            }
+        }
+
+        &--input {
+
+            visibility: hidden;
         }
     }
 

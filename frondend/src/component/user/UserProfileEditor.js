@@ -23,22 +23,19 @@ export const UserProfileEditor = (props) => {
     const infoBoxContext = useContext(InfoBoxContext);
 
     const getUser = async (id) => {
-        await fetch(`${config.apiRoot}/user/${id}`, {
+        const result = await fetch(`${config.apiRoot}/user/${id}`, {
             method: "get",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.succeeded) {
-                    setEditUser(res.user)
-                    setUser(res.user)
+        });
+        const data = await result.json();
+        if (data.succeeded) {
+            setEditUser(data.user)
+            setUser(data.user)
 
-                }
-
-            })
+        }
     }
 
     const updateEditUser = (event) => {
@@ -97,26 +94,23 @@ export const UserProfileEditor = (props) => {
     const saveEdit = async () => {
         if (!valid())
             return
-        await fetch(`${config.apiRoot}/user/${user.username}`, {
+        const result = await fetch(`${config.apiRoot}/user/${user.username}`, {
             method: "put",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
             body: JSON.stringify({ user: { firstname: editUser.firstname, lastname: editUser.lastname, phone: editUser.phone, email: editUser.email } })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.succeeded) {
-                    setUser(editUser);
-                    authContext.refreshToken();
-                    infoBoxContext.addInfo("Zaktualizowano dane pracownika");
-                }
-                else {
-                    infoBoxContext.addInfo("Wystąpił błąd");
-                }
-
-            })
+        });
+        const data = await result.json();
+        if (data.succeeded) {
+            setUser(editUser);
+            authContext.refreshToken();
+            infoBoxContext.addInfo("Zaktualizowano dane pracownika");
+        }
+        else {
+            infoBoxContext.addInfo("Wystąpił błąd");
+        }
     }
 
     const validPassword = () => {
@@ -148,31 +142,29 @@ export const UserProfileEditor = (props) => {
         if (!validPassword())
             return
         setPassIsValid({ oldPassword: true, newPassword: true })
-        await fetch(`${config.apiRoot}/account/changePassword/${user.username}`, {
+        const result = await fetch(`${config.apiRoot}/account/changePassword/${user.username}`, {
             method: "put",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
             body: JSON.stringify({ password: { oldPassword: passEdit.oldPassword, newPassword: passEdit.oldPassword } })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.succeeded) {
-                    setPassEdit({ oldPassword: "", newPassword: "" })
-                    authContext.refreshToken();
-                    infoBoxContext.addInfo("Zmieniono hasło");
-                }
-                else {
-                    if (res.code == 2) {
-                        infoBoxContext.addInfo("Błędne Hasło");
-                        setPassIsValid({ ...passIsValid, oldPassword: false })
-                    }
-                    else
-                        infoBoxContext.addInfo("Wystąpił błąd");
-                }
+        });
 
-            })
+        const data = await result.json();
+        if (data.succeeded) {
+            setPassEdit({ oldPassword: "", newPassword: "" })
+            authContext.refreshToken();
+            infoBoxContext.addInfo("Zmieniono hasło");
+        }
+        else {
+            if (data.code == 2) {
+                infoBoxContext.addInfo("Błędne Hasło");
+                setPassIsValid({ ...passIsValid, oldPassword: false })
+            }
+            else
+                infoBoxContext.addInfo("Wystąpił błąd");
+        }
 
     }
 
@@ -180,39 +172,36 @@ export const UserProfileEditor = (props) => {
         if (!valid())
             return
 
-        await fetch(`${config.apiRoot}/user/${user.username}`, {
+        const result = await fetch(`${config.apiRoot}/user/${user.username}`, {
             method: "put",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
             body: JSON.stringify({ user: { isRetired } })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.succeeded) {
-                    setUser({ ...user, isRetired })
-                    setEditUser({ ...user, isRetired })
-                    if (isRetired)
-                        infoBoxContext.addInfo("Zarchiwizowano pracownika");
-                    else
-                        infoBoxContext.addInfo("Przywrócono pracownika");
-                }
-                else {
-                    infoBoxContext.addInfo("Wystąpił błąd");
-                }
+        });
 
-            })
+        const data = await result.json();
+        if (data.succeeded) {
+            setUser({ ...user, isRetired })
+            setEditUser({ ...user, isRetired })
+            if (isRetired)
+                infoBoxContext.addInfo("Zarchiwizowano pracownika");
+            else
+                infoBoxContext.addInfo("Przywrócono pracownika");
+        }
+        else {
+            infoBoxContext.addInfo("Wystąpił błąd");
+        }
+        
     }
 
     useEffect(() => {
-        const asyncEffect = async () => {
-            if (props.match.params.id)
-               await getUser(props.match.params.id)
-            else if (authContext.userDate && authContext.userDate.username)
-               await getUser(authContext.userDate.username)
-        }
-        asyncEffect()
+
+        if (props.match.params.id)
+            getUser(props.match.params.id)
+        else if (authContext.userDate && authContext.userDate.username)
+            getUser(authContext.userDate.username)
 
 
     }, [authContext.userDate, props.match.params.id])

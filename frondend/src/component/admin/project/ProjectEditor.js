@@ -20,193 +20,174 @@ export const ProjectEditor = (props) => {
     const [employeeToAdd, setEmployeeToAdd] = useState(null);
 
     const updateProjectData = e => {
-        setProject({ ...project, [e.name]: e.value })
+        setProject({ ...project, [e.target.name]: e.target.value })
     }
 
     const getProject = async (id) => {
-        await fetch(`${config.apiRoot}/project/${id}`, {
+        const result = await fetch(`${config.apiRoot}/project/${id}`, {
+            method: "get",
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                'Authorization': 'Bearer ' + Cookies.get('token'),
+            }
+        });
+
+        const data = await result.json();
+        if (data.succeeded) {
+            setProject(data.project);
+            await getUsersSelect(data.project.users);
+        }
+
+    }
+
+    const getUsersSelect = async (projectUsers) => {
+        const result = await fetch(`${config.apiRoot}/user/`, {
             method: "get",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.succeeded) {
+        });
 
-                    setProject(res.project)
+        const data = await result.json();
 
-                }
-                return res;
-            })
-            .then(
-                res => {
-                    getUser(res.project.users);
-                }
-            )
+        if (data.succeeded) {
+            console.log(projectUsers)
+            const usersTmp = data.user
+                .filter(x => { return (x.isRetired == false && x.isRemove == false) })
+                .filter(x => !projectUsers.find(z => x.id === z.id))
+                .map(x => {
+                    return { label: x.firstname + " " + x.lastname, value: x.id, username: x.username, firstname: x.firstname, lastname: x.lastname }
+
+                });
+            setUsers(usersTmp)
+        }
     }
 
-    const getUser = async (users) => {
-        await fetch(`${config.apiRoot}/user/`, {
-            method: "get",
-            headers: {
-                "Content-type": "application/json; charset=UTF-8",
-                'Authorization': 'Bearer ' + Cookies.get('token'),
-            },
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.succeeded) {
-                    const usersTmp = res.user
-                        .filter(x => { return (x.isRetired == false && x.isRemove == false) })
-                        .filter(x => !users.find(z => x.id === z.id))
-                        .map(x => {
-                            return { label: x.firstname + " " + x.lastname, value: x.id, username: x.username, firstname: x.firstname, lastname: x.lastname }
-
-                        });
-
-                    const a = usersTmp;// usersTmp.map(x => {return users.find(z => {return z.id != x.value})})
-
-                    setUsers(usersTmp)
-
-                }
-
-            })
-    }
 
     const updateProject = async () => {
-        await fetch(`${config.apiRoot}/project/${project.id}`, {
+        const result = await fetch(`${config.apiRoot}/project/${project.id}`, {
             method: "put",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
             body: JSON.stringify({ project: { name: project.name, description: project.description, id: project.id } })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.succeeded) {
-                    infoBoxContext.addInfo("Zaktualizowano");
-                }
-                else {
-                    infoBoxContext.addInfo("Wystąpił błąd");
-                }
+        });
 
-            })
+        const data = await result.json();
+        if (data.succeeded) {
+            infoBoxContext.addInfo("Zaktualizowano");
+        }
+        else {
+            infoBoxContext.addInfo("Wystąpił błąd");
+        }
 
     }
 
     const archiveProject = async (id, isRetired) => {
-        await fetch(`${config.apiRoot}/project/${id}`, {
+        const result = await fetch(`${config.apiRoot}/project/${id}`, {
             method: "put",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
             body: JSON.stringify({ project: { isRetired } })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.succeeded) {
-                    project.isRetired = isRetired;
-                    if (isRetired)
-                        infoBoxContext.addInfo("Zarchiwizowano projekt");
-                    else
-                        infoBoxContext.addInfo("Przywrócono projekt");
-                }
-                else {
-                    infoBoxContext.addInfo("Wystąpił błąd");
-                }
-            })
+        });
+
+        const data = await result.json();
+
+        if (data.succeeded) {
+            setProject({ ...project, isRetired })
+            if (isRetired)
+                infoBoxContext.addInfo("Zarchiwizowano projekt");
+            else
+                infoBoxContext.addInfo("Przywrócono projekt");
+        }
+        else {
+            infoBoxContext.addInfo("Wystąpił błąd");
+        }
+
     }
 
     const archiveUser = async (id, isRetired) => {
-        await fetch(`${config.apiRoot}/userproject/${id}`, {
+        const result = await fetch(`${config.apiRoot}/userproject/${id}`, {
             method: "put",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
             body: JSON.stringify({ userProject: { isRetired } })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.succeeded) {
+        });
+        const data = await result.json();
+        if (data.succeeded) {
 
-                    const a = project.users.find(x => { return x.userProjects.id == id })
-                    a.userProjects.isRetired = isRetired;
-                    if (isRetired)
-                        infoBoxContext.addInfo("Usunięto pracownika z projektu");
-                    else
-                        infoBoxContext.addInfo("Przywrócono pracownika do projektu");
-                }
-                else {
-                    infoBoxContext.addInfo("Wystąpił błąd");
-                }
-            })
+            const user = project.users.find(x => { return x.userProjects.id == id })
+            user.userProjects.isRetired = isRetired;
+            if (isRetired)
+                infoBoxContext.addInfo("Usunięto pracownika z projektu");
+            else
+                infoBoxContext.addInfo("Przywrócono pracownika do projektu");
+        }
+        else {
+            infoBoxContext.addInfo("Wystąpił błąd");
+        }
     }
 
     const addEmployee = async () => {
 
-        await fetch(`${config.apiRoot}/userproject/`, {
+        const result = await fetch(`${config.apiRoot}/userproject/`, {
             method: "post",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
             body: JSON.stringify({ idUser: employeeToAdd.value, idProject: project.id })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.succeeded) {
+        });
 
-                    const u = project.users;
-                    u.push({ firstname: employeeToAdd.firstname, lastname: employeeToAdd.lastname, id: employeeToAdd.value, username: employeeToAdd.username, userProjects: { isRetired: false, isRemove: false, id: res.idUserProject } })
-                    setProject({ ...project, users: u })
+        const data = await result.json();
+        if (data.succeeded) {
 
-                    setUsers(users.filter(x => { return x.value != employeeToAdd.value }))
+            const usersProject = project.users;
+            usersProject.push({ firstname: employeeToAdd.firstname, lastname: employeeToAdd.lastname, id: employeeToAdd.value, username: employeeToAdd.username, userProjects: { isRetired: false, isRemove: false, id: data.idUserProject } })
+            setProject({ ...project, users: usersProject })
 
-                    infoBoxContext.addInfo("Dodano pracownika do projektu");
-                }
-                else {
-                    infoBoxContext.addInfo("Wystąpił błąd");
-                }
-                setEmployeeToAdd(null)
-            })
+            setUsers(users.filter(x => { return x.value != employeeToAdd.value }))
+
+            infoBoxContext.addInfo("Dodano pracownika do projektu");
+        }
+        else {
+            infoBoxContext.addInfo("Wystąpił błąd");
+        }
+        setEmployeeToAdd(null)
     }
 
     const removeUser = async (id) => {
-        await fetch(`${config.apiRoot}/userproject/${id}`, {
+        const result = await fetch(`${config.apiRoot}/userproject/${id}`, {
             method: "delete",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             }
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.succeeded) {
-                    const user = project.users.find(x => { return x.userProjects.id == id });
-                    setUsers([...users, { label: user.firstname + " " + user.lastname, firstname: user.firstname, lastname: user.lastname, value: user.id, username: user.username, userProjects: { isRetired: false, isRemove: false, id: id } }])
-                    project.users = project.users.filter(x => { return x.userProjects.id != id })
-                    infoBoxContext.addInfo("Usunięto pracownika z projektu");
-                }
-                else {
-                    infoBoxContext.addInfo("Wystąpił błąd");
-                }
-            })
+        });
+
+        const data = await result.json();
+        if (data.succeeded) {
+
+            const user = project.users.find(x => { return x.userProjects.id == id });
+            setUsers([...users, { label: user.firstname + " " + user.lastname, firstname: user.firstname, lastname: user.lastname, value: user.id, username: user.username, userProjects: { isRetired: false, isRemove: false, id: id } }])
+            project.users = project.users.filter(x => { return x.userProjects.id != id })
+            infoBoxContext.addInfo("Usunięto pracownika z projektu");
+        }
+        else {
+            infoBoxContext.addInfo("Wystąpił błąd");
+        }
     }
 
-
-
     useEffect(() => {
-        const asyncEffect = async () => {
-            if (props.match.params.id)
-            await  getProject(props.match.params.id);
-        }
-        asyncEffect();
 
+        if (props.match.params.id)
+            getProject(props.match.params.id);
 
     }, [props.match.params.id])
 
@@ -230,10 +211,10 @@ export const ProjectEditor = (props) => {
             </div>
             <div className="form-editor--inline-flex-wrap">
                 <div className="form-editor__text form-editor__text--vertical-center form-editor__text--require">Nazwa </div>
-                <input className="form-editor__input form-editor__input--large form-editor__input--editor " type="text" name="name" value={project ? project.name : ""} onChange={x => updateProjectData(x.target)} />
+                <input className="form-editor__input form-editor__input--large form-editor__input--editor " type="text" name="name" value={project ? project.name : ""} onChange={updateProjectData} />
             </div>
             <div className="form-editor__text">Opis </div>
-            <textarea className="form-editor__input form-editor__input--textarea" name="description" value={project ? project.description : ""} onChange={x => updateProjectData(x.target)} />
+            <textarea className="form-editor__input form-editor__input--textarea" name="description" value={project ? project.description : ""} onChange={updateProjectData} />
             {project && !project.isRetired && <div className="form-editor--inline">
                 <div className="form-editor__text form-editor__text--vertical-center">Dodaj nowego pracownika: </div>
                 <Select value={employeeToAdd} onChange={(x) => setEmployeeToAdd(x)} placeholder="Wybierz" noOptionsMessage={() => { return "Brak pracowników" }} options={users} className="form-editor__input form-editor__input--select " />

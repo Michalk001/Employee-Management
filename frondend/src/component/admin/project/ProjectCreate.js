@@ -26,55 +26,56 @@ export const ProjectCreate = (props) => {
 
 
     const getUser = async () => {
-        await fetch(`${config.apiRoot}/user/`, {
+        const result = await fetch(`${config.apiRoot}/user/`, {
             method: "get",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.succeeded) {
-                    const usersTmp = res.user
-                        .filter(x => { return (x.isRetired == false && x.isRemove == false) })
-                        .map(x => {
-                            return { label: x.firstname + " " + x.lastname, value: x.id, username: x.username, firstname: x.firstname, lastname: x.lastname }
+        });
+        const data = await result.json();
+        if (data.succeeded) {
+            const usersTmp = data.user
+                .filter(x => { return (x.isRetired == false && x.isRemove == false) })
+                .map(x => {
+                    return { label: x.firstname + " " + x.lastname, value: x.id, username: x.username, firstname: x.firstname, lastname: x.lastname }
 
-                        });
-
-                    setUsers(usersTmp)
-
-                }
-
-            })
+                });
+            setUsers(usersTmp)
+        }
     }
-    const createProject = async () => {
 
+    const valid = () => {
         if (!project.name || project.name.replace(/ /g, '') == '') {
             setIsValidName(false)
             infoBoxContext.addInfo("Wymagana nazwa projektu");
-            return
+            return false
         }
-        await fetch(`${config.apiRoot}/project/`, {
+        return true;
+    }
+
+    const createProject = async () => {
+        if (!valid())
+            return
+
+        const result = await fetch(`${config.apiRoot}/project/`, {
             method: "post",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
             body: JSON.stringify({ project })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.succeeded) {
-                    infoBoxContext.addInfo("Utworzono projekt");
-                    setProject(null)
-                    setIsValidName(true)
-                }
-                else {
-                    infoBoxContext.addInfo("Wystąpił błąd");
-                }
-            })
+        });
+        const response = await result.json();
+
+        if (response.succeeded) {
+            infoBoxContext.addInfo("Utworzono projekt");
+            setProject({})
+            setIsValidName(true)
+        }
+        else {
+            infoBoxContext.addInfo("Wystąpił błąd");
+        }
     }
 
     const addEmployee = () => {
@@ -100,10 +101,8 @@ export const ProjectCreate = (props) => {
     }
 
     useEffect(() => {
-        const asyncEffect = async () => {
-            await getUser();
-        }
-        asyncEffect();
+        getUser();
+
     }, [])
 
     useEffect(() => {

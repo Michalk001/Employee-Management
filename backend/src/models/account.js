@@ -102,6 +102,7 @@ export const register = async (req, res) => {
         lastname: req.body.user.lastname,
         email: req.body.user.email,
         phone: req.body.user.phone,
+        isAdmin: req.body.user.isAdmin
     }
 
     const users = await database.user.findAll({
