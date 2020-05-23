@@ -1,19 +1,19 @@
 import React, { useState, useEffect, state, useContext, useReducer } from "react";
 import { Link } from 'react-router-dom';
 
-import { AuthContext } from '../../../context/AuthContext';
-import config from '../../../config.json'
+import { AuthContext } from '../../context/AuthContext';
+import config from '../../config.json'
 import Cookies from 'js-cookie';
 
 
 
-export const ProjectList = () => {
+export const UserProjectsList = (props) => {
 
-    const [projectList, setProjectList] = useState(null);
-    const [filterProjectList, setFilterProjectList] = useState(null)
+    const [projectList, setProjectList] = useState([]);
+    const [filterProjectList, setFilterProjectList] = useState([])
     const [filterOptions, setFilterOptions] = useState({ name: "", statusProject: "all" })
-    const getProjects = async () => {
-        await fetch(`${config.apiRoot}/project`, {
+    const getUser = async (id) => {
+        await fetch(`${config.apiRoot}/user/${id}`, {
             method: "get",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
@@ -23,35 +23,24 @@ export const ProjectList = () => {
             .then(res => res.json())
             .then(res => {
                 if (res.succeeded) {
-
-                    let projects = [];
-
-                    res.projects.filter(x => { return !x.isRemove })
-                        .map(item => {
+     
+                    if (res.user != null) {
+                        let projects = [];
+                        res.user.projects.map((item) => {
+                         
+                            if (item.userProjects.isRemove)
+                                return
                             let project = {};
                             project.name = item.name;
                             project.id = item.id;
-                            project.isRetired = item.isRetired;
-                            let hoursActivUser = 0;
-                            let hoursRetiredUser = 0;
-                            item.users.map(user => {
-                                if (!user.userProjects.isRetired) {
-                                    hoursActivUser += user.userProjects.hours;
-                                }
-                                else if (user.userProjects.isRetired && !user.userProjects.isRemove) {
-                                    hoursRetiredUser += user.userProjects.hours;
-                                }
-                            })
-                            project.hoursActivUser = hoursActivUser;
-                            project.hoursRetiredUser = hoursRetiredUser;
-                            project.hoursTotal = hoursRetiredUser + hoursActivUser;
-                            project.activUserQuantity = item.users.filter((user) => !(user.userProjects.isRemove || user.userProjects.isRetired)).length
-                            project.totalUserQuantity = item.users.filter((user) => !(user.userProjects.isRemove)).length
-                            projects.push(project);
+                            project.hours = item.userProjects.hours
+                            project.isRetired = item.userProjects.isRetired
+                            projects.push(project)
                         })
+                        setProjectList(projects);
+                        setFilterProjectList(projects)
+                    }
 
-                    setProjectList(projects)
-                    setFilterProjectList(projects)
                 }
 
             })
@@ -80,12 +69,6 @@ export const ProjectList = () => {
 
     }
 
-    useEffect( () => {
-        const asyncEffect = async () =>{
-            await getProjects()
-        }
-        asyncEffect();
-    }, [])
 
     const filterList = () => {
 
@@ -96,7 +79,7 @@ export const ProjectList = () => {
                 }
 
             }).filter(item => item != undefined);
-
+       
             if (filterOptions.statusProject == "inactive")
                 list = list.filter(item => { return item.isRetired })
             else if (filterOptions.statusProject == "active")
@@ -114,8 +97,14 @@ export const ProjectList = () => {
 
     }, [projectList, filterProjectList])
 
+
+    useEffect(() => {
+        getUser(props.match.params.id)
+
+    }, [props.match.params.id])
+
     return (
-        <div className="box box--large">
+        <div className="box box--center box--medium ">
 
             {filterProjectList && <>
                 <div className="box__item">
@@ -132,8 +121,6 @@ export const ProjectList = () => {
                 <div className="box__text box__text--normal box__project">
                     <span className="box__project--title-name ">Nazwa</span>
                     <span className="box__project--title-hours ">Liczba godzin </span>
-                    <span className="box__project--employe ">Liczba aktywnych pracowników</span>
-                    <span className="box__project--employe-short ">Liczba pracowników</span>
                     <span className="box__project--title-status ">Status</span>
                 </div>
                 {projectList.length == 0 && <div className="box__item">
@@ -142,12 +129,11 @@ export const ProjectList = () => {
                 {projectList.length != 0 && filterProjectList.length == 0 && <div className="box__item">
                     <div className="box__text box__text--center">Nie znaleziono Projektów</div>
                 </div>}
-                {projectList.length != 0 && filterProjectList.map((item) => (
+                {filterProjectList.length != 0 && filterProjectList.map((item) => (
                     <Link to={`/project/${item.id}`} key={`activP-${item.id}`} className="box__project box__project--hover">
                         <span className="box__project--name ">{item.name}</span>
-                        <span className="box__project--hours">{item.hoursTotal}</span>
-                        <span className="box__project--employe">{item.activUserQuantity}</span>
-                        <span className="box__project--employe-short">{item.totalUserQuantity}</span>
+                        <span className="box__project--hours">{item.hours}</span>
+
                         <span className="box__project--status ">{projectStatus(item.isRetired)}</span>
 
                     </Link>

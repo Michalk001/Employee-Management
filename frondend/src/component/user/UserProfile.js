@@ -23,7 +23,7 @@ export const UserProfile = (props) => {
             .then(res => {
                 if (res.succeeded) {
                     setUser(res.user)
-
+                    console.log(res)
                 }
 
             })
@@ -38,7 +38,7 @@ export const UserProfile = (props) => {
     }, [props.match.params.id])
 
     useEffect(() => {
-        console.log(user)
+      
     }, [user])
 
 

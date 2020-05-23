@@ -222,6 +222,13 @@ export const UserProfileEditor = (props) => {
     }
 
 
+    const getValueOrOther = (value, other = "") => {
+        if (value)
+            return value;
+        return other;
+    }
+
+
     return (
         <>{user &&
             <div className="box box--large" >
@@ -240,25 +247,25 @@ export const UserProfileEditor = (props) => {
                 <div className="box__item">
                     <div className="box__item--inline box__item--user-edit-mode  ">
                         <div className="box__text box__text--require">Imie </div>
-                        <input className={`box__input box__input--user-edit ${validInput(isValid.email)}`} name="firstname"
-                            onChange={updateEditUser} value={editUser.firstname} />
+                        <input className={`box__input box__input--user-edit ${validInput(isValid.firstname)}`} name="firstname"
+                            onChange={updateEditUser} value={getValueOrOther(editUser.firstname)} />
                     </div>
 
                     <div className=" box__item--inline box__item--user-edit-mode">
                         <div className="box__text box__text--require">Nazwisko </div>
-                        <input className={`box__input box__input--user-edit ${validInput(isValid.email)}`} name="lastname"
-                            onChange={updateEditUser} value={editUser.lastname} />
+                        <input className={`box__input box__input--user-edit ${validInput(isValid.lastname)}`} name="lastname"
+                            onChange={updateEditUser} value={getValueOrOther(editUser.lastname)} />
                     </div>
 
                     <div className=" box__item--inline box__item--user-edit-mode ">
                         <div className="box__text  box__text--require">E-mail</div>
                         <input className={`box__input box__input--user-edit  ${validInput(isValid.email)}`} name="email"
-                            onChange={updateEditUser} value={editUser.email} />
+                            onChange={updateEditUser} value={getValueOrOther(editUser.email)} />
                     </div>
 
                     <div className=" box__item--inline box__item--user-edit-mode">
                         <div className=" box__text ">Telefon </div>
-                        <input className="box__input box__input--user-edit" name="phone" onChange={validPhone} value={editUser.phone} />
+                        <input className="box__input box__input--user-edit" name="phone" onChange={validPhone} value={getValueOrOther(editUser.phone)} />
                     </div>
                 </div>
                 {authContext.userDate.username == user.username && <>
@@ -268,12 +275,12 @@ export const UserProfileEditor = (props) => {
                             <div className="box__item box__item--user-edit-mode">
                                 <div className="box__text  box__text--require">Stare Hasła</div>
                                 <input className={`box__input box__input--user-edit ${validInput(passIsValid.oldPassword)}`} type="password" name="oldPassword"
-                                    value={passEdit.oldPassword} onChange={updatePassEdit} />
+                                    value={getValueOrOther(passEdit.oldPassword)} onChange={updatePassEdit} />
                             </div>
                             <div className="box__item  box__item--user-edit-mode">
                                 <div className="box__text  box__text--require">Nowe Hasła</div>
                                 <input className={`box__input box__input--user-edit ${validInput(passIsValid.newPassword)}`} type="password" name="newPassword"
-                                    value={passEdit.newPassword} onChange={updatePassEdit} />
+                                    value={getValueOrOther(passEdit.newPassword)} onChange={updatePassEdit} />
                             </div>
                         </div>
                     </div>

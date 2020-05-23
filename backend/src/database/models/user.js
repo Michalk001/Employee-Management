@@ -27,8 +27,6 @@ export default (sequelize, type) => {
     }
   })
 
-
-
   return User
 
 

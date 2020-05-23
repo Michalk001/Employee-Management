@@ -4,6 +4,7 @@ import { Sequelize } from "sequelize"
 import UserModel from "./user"
 import ProjectModel from "./project"
 import UserProjectModel from "./userProject"
+import MessageModel from "./message"
 
 
 const env = process.env.NODE_ENV || 'development';
@@ -22,20 +23,24 @@ if (config.use_env_variable) {
 const User = UserModel(sequelize, Sequelize)
 const Project = ProjectModel(sequelize, Sequelize)
 const UserProject = UserProjectModel(sequelize, Sequelize)
+const Message = MessageModel(sequelize, Sequelize)
+
+
+User.belongsToMany(Project, { through: UserProject });
+Project.belongsToMany(User, { through: UserProject });
+
+
+
+
 database.sequelize = sequelize;
 database.Sequelize = Sequelize;
 database.user = User;
 database.project = Project;
 database.userProject = UserProject;
+database.message = Message;
 
-User.belongsToMany(Project, { through: UserProject });
-Project.belongsToMany(User, { through: UserProject });
 
-sequelize.sync({ force: false })
-  .then(() => {
-    console.log(`Database & tables created!`)
-  })
-
+  
 
 module.exports = database;
  

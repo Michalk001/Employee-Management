@@ -25,8 +25,17 @@ export const NavBar = () => {
     }, [])
 
     useEffect(() => {
-
+      
     }, [hiddeMenu])
+
+
+    const getUsername = () =>{
+        if(authContext.userDate)
+        {
+            return authContext.userDate.username
+        }
+        return null;
+    }
 
     return (
         hiddeMenu != null &&
@@ -44,10 +53,10 @@ export const NavBar = () => {
                     <Link to="/" className={`navBar__menu--text navBar__menu--link`} >Kokpit</Link>
                 </div>
                 <div className={`navBar__menu--item`}>
-                    <Link to="#" className={`navBar__menu--text navBar__menu--link`} >Projekty</Link>
+                    <Link to={`/user/project/${getUsername()}`} className={`navBar__menu--text navBar__menu--link`} >Projekty</Link>
                 </div>
                 <div className={`navBar__menu--item`}>
-                    <Link to={`${authContext.userDate ? `/user/${authContext.userDate.username}` : "#" }`} className={`navBar__menu--text navBar__menu--link`} >Profil</Link>
+                    <Link to={`/user/${getUsername()}`}  className={`navBar__menu--text navBar__menu--link`} >Profil</Link>
             </div>
             <div className={`navBar__menu--item`}>
                 <div className={`navBar__menu--text navBar__menu--title `}>Panel Administratora</div>

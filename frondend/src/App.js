@@ -25,6 +25,7 @@ import { ProjectCreate } from './component/admin/project/ProjectCreate'
 import { UserCreate } from './component/admin/user/UserCreate'
 import { ProjectList} from './component/admin/project/ProjectList'
 import { EmployeList } from './component/admin/user/EmployeList'
+import { UserProjectsList } from './component/user/UserProjectsList'
 
 
 
@@ -52,8 +53,8 @@ export const App = () => {
                         <RequireLogin path="/Project/:id" component={Project} />
                         <RequireLogin path="/User/Profile/:id" component={UserProfileEditor} />
                         <RequireLogin path="/User/Profile" component={UserProfileEditor} />
-                      
-                        
+                        <RequireLogin path="/User/Project/:id" component={UserProjectsList} />
+                             
                         <RequireLogin path="/User/:id" component={UserProfile} />
 
                     </Switch>

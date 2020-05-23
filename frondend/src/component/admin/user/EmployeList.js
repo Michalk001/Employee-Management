@@ -48,7 +48,7 @@ export const EmployeList = () => {
                             user.hoursRetireProject = hoursRetireProject;
                             user.hoursTotal = hoursRetireProject + hoursActivProject;
                             user.activProjectQuantity = item.projects.filter((project) => !(project.userProjects.isRemove || project.userProjects.isRetired)).length
-                            user.totalProjectQuantity = item.projects.filter((project) => !(project.userProjects.isRetired)).length
+                            user.totalProjectQuantity = item.projects.filter((project) => !(project.userProjects.isRemove)).length
                             users.push(user);
                         })
 
@@ -82,9 +82,7 @@ export const EmployeList = () => {
 
     }
 
-    useEffect(() => {
-        getUsers()
-    }, [])
+  
 
     const filterList = () => {
 
@@ -112,7 +110,14 @@ export const EmployeList = () => {
     useEffect(() => {
 
     }, [userList, filterUserList])
-
+    
+    useEffect(() => {
+      
+        const asyncEffect = async () =>{
+            await   getUsers()()
+        }
+        asyncEffect();
+    }, [])
     return (
         <div className="box box--large">
 
@@ -135,7 +140,15 @@ export const EmployeList = () => {
                     <span className="box__project--employe-short ">Liczba projektów</span>
                     <span className="box__project--title-status ">Status</span>
                 </div>
-                {filterUserList.map((item) => (
+                {userList.length == 0 && <div className="box__item">
+                    <div className="box__text box__text--center">Brak Pracowników</div>
+                </div>}
+                {userList.length != 0 && filterUserList.length == 0 && <div className="box__item">
+                    <div className="box__text box__text--center">Nie znaleziono Pracowników</div>
+                </div>}
+
+                
+                {userList.length != 0 && filterUserList.map((item) => (
                     <Link to={`/user/${item.username}`} key={`activU-${item.username}`} className="box__project box__project--hover">
                         <span className="box__project--name ">{item.firstname} {item.lastname}</span>
                         <span className="box__project--hours">{item.hoursTotal}</span>
