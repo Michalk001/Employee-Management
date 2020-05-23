@@ -112,7 +112,7 @@ export const Project = (props) => {
     }
     useEffect(() => {
         const asyncEffect = async () => {
-            getProject(props.match.params.id)
+           await getProject(props.match.params.id)
         }
         asyncEffect()
 

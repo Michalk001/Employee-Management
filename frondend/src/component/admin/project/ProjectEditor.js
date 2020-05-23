@@ -203,7 +203,7 @@ export const ProjectEditor = (props) => {
     useEffect(() => {
         const asyncEffect = async () => {
             if (props.match.params.id)
-                getProject(props.match.params.id);
+            await  getProject(props.match.params.id);
         }
         asyncEffect();
 

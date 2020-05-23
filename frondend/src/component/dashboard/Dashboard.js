@@ -41,7 +41,12 @@ export const Dashboard = () => {
     }
 
     useEffect(() => {
-        getProject();
+        const asyncEffect = async () => {
+            await getProject();
+        }
+        asyncEffect()
+
+
     }, [authContext.userDate])
 
     useEffect(() => {
@@ -50,19 +55,25 @@ export const Dashboard = () => {
     return (
         <div className="box">
             <div className="box__text box__text--center  ">Aktywne Projekty</div>
-            <div className="box__text box__text--normal box__project ">
-                <span className="box__project--name ">Nazwa</span>
-                <span className="box__project--hours ">Godziny</span>
+            {activeProject.length == 0 && <div className="box__item">
+                <div className="box__text box__text--center">Brak</div>
+            </div>
+            }
+            {activeProject.length != 0 && <div className="box__item">
+                <div className="box__text box__text--normal box__project ">
+                    <span className="box__project--name ">Nazwa</span>
+                    <span className="box__project--hours ">Godziny</span>
 
-            </div>
-            <div className="box__scroll">
-                {activeProject.map((x, index) => (
-                    <Link to={`/project/${x.idProject}`} key={`activP-${index}`} className="box__project box__project--hover">
-                        <span className="box__project--name ">{x.name}</span>
-                        <span className="box__project--hours ">{x.hours}</span>
-                    </Link>
-                ))}
-            </div>
+                </div>
+                <div className="box__scroll">
+                    {activeProject.map((x, index) => (
+                        <Link to={`/project/${x.idProject}`} key={`activP-${index}`} className="box__project box__project--hover">
+                            <span className="box__project--name ">{x.name}</span>
+                            <span className="box__project--hours ">{x.hours}</span>
+                        </Link>
+                    ))}
+                </div>
+            </div>}
         </div>
 
     )

@@ -25,7 +25,7 @@ export const ProjectCreate = (props) => {
 
 
 
-    const getUser = async (users) => {
+    const getUser = async () => {
         await fetch(`${config.apiRoot}/user/`, {
             method: "get",
             headers: {
@@ -101,7 +101,7 @@ export const ProjectCreate = (props) => {
 
     useEffect(() => {
         const asyncEffect = async () => {
-            getUser();
+            await getUser();
         }
         asyncEffect();
     }, [])

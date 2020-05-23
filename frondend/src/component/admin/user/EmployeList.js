@@ -81,13 +81,13 @@ export const EmployeList = () => {
 
     }
 
-  
+
 
     const filterList = () => {
 
         if (userList != null) {
             let list = userList.map((item) => {
-                if ((item.firstname.toUpperCase() + " " + item.lastname.toUpperCase()) .includes(filterOptions.name.toUpperCase())) {
+                if ((item.firstname.toUpperCase() + " " + item.lastname.toUpperCase()).includes(filterOptions.name.toUpperCase())) {
                     return item
                 }
 
@@ -111,8 +111,8 @@ export const EmployeList = () => {
     }, [userList, filterUserList])
 
     useEffect(() => {
-        const asyncEffect = async () =>{
-            await   getUsers()
+        const asyncEffect = async () => {
+            await getUsers()
         }
         asyncEffect();
     }, [])
@@ -145,7 +145,7 @@ export const EmployeList = () => {
                     <div className="box__text box__text--center">Nie znaleziono Pracowników</div>
                 </div>}
 
-                
+
                 {userList.length != 0 && filterUserList.map((item) => (
                     <Link to={`/user/${item.username}`} key={`activU-${item.username}`} className="box__project box__project--hover">
                         <span className="box__project--name ">{item.firstname} {item.lastname}</span>

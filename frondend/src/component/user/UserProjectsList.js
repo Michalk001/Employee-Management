@@ -100,7 +100,7 @@ export const UserProjectsList = (props) => {
 
     useEffect(() => {
         const asyncEffect = async () => {
-            getUser(props.match.params.id)
+           await getUser(props.match.params.id)
         }
         asyncEffect()
 

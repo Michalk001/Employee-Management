@@ -208,9 +208,9 @@ export const UserProfileEditor = (props) => {
     useEffect(() => {
         const asyncEffect = async () => {
             if (props.match.params.id)
-                getUser(props.match.params.id)
+               await getUser(props.match.params.id)
             else if (authContext.userDate && authContext.userDate.username)
-                getUser(authContext.userDate.username)
+               await getUser(authContext.userDate.username)
         }
         asyncEffect()
 
