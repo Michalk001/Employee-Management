@@ -93,7 +93,6 @@ export const AuthProvider = (props) => {
         })
             .then(res => res.json())
             .then(res => {
-                console.log(res)
                 if (res.succeeded == true) {
                     Cookies.set('token', res.token);
                     checkIsLogin();

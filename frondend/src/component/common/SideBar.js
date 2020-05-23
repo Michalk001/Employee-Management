@@ -3,7 +3,7 @@ import React, { useState, useEffect, state, useReducer, useContext } from "react
 import { Link } from 'react-router-dom';
 import { AuthContext } from "../../context/AuthContext";
 import Cookies from 'js-cookie';
-export const NavBar = () => {
+export const SideBar = () => {
 
 
     const authContext = useContext(AuthContext);
@@ -25,13 +25,12 @@ export const NavBar = () => {
     }, [])
 
     useEffect(() => {
-      
+
     }, [hiddeMenu])
 
 
-    const getUsername = () =>{
-        if(authContext.userDate)
-        {
+    const getUsername = () => {
+        if (authContext.userDate) {
             return authContext.userDate.username
         }
         return null;
@@ -56,18 +55,21 @@ export const NavBar = () => {
                     <Link to={`/user/project/${getUsername()}`} className={`navBar__menu--text navBar__menu--link`} >Projekty</Link>
                 </div>
                 <div className={`navBar__menu--item`}>
-                    <Link to={`/user/${getUsername()}`}  className={`navBar__menu--text navBar__menu--link`} >Profil</Link>
+                    <Link to={`/user/${getUsername()}`} className={`navBar__menu--text navBar__menu--link`} >Profil</Link>
+                </div>
+
+                {authContext.isAdmin && <>
+                    <div className={`navBar__menu--item`}>
+                        <div className={`navBar__menu--text navBar__menu--title `}>Panel Administratora</div>
+                    </div>
+                    <div className={`navBar__menu--item`}>
+                        <Link to="/admin/project/new" className={`navBar__menu--text navBar__menu--link  `}>Nowy Projekt</Link>
+                        <Link to="/admin/user/new" className={`navBar__menu--text navBar__menu--link  `}>Nowy Pracownik</Link>
+                        <Link to="/admin/project" className={`navBar__menu--text navBar__menu--link  `}>Lista Projektów</Link>
+                        <Link to="/admin/user" className={`navBar__menu--text navBar__menu--link  `}>Lista Pracowników</Link>
+                    </div>
+                </>}
             </div>
-            <div className={`navBar__menu--item`}>
-                <div className={`navBar__menu--text navBar__menu--title `}>Panel Administratora</div>
-            </div>
-            <div className={`navBar__menu--item`}>
-                <Link to="/admin/project/new" className={`navBar__menu--text navBar__menu--link  `}>Nowy Projekt</Link>
-                <Link to="/admin/user/new" className={`navBar__menu--text navBar__menu--link  `}>Nowy Pracownik</Link>
-                <Link to="/admin/project" className={`navBar__menu--text navBar__menu--link  `}>Lista Projektów</Link>
-                <Link to="/admin/user" className={`navBar__menu--text navBar__menu--link  `}>Lista Pracowników</Link>
-            </div>
-        </div>
         </div >
     )
 
