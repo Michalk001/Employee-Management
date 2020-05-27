@@ -7,7 +7,7 @@ import Cookies from 'js-cookie';
 
 export const Dashboard = () => {
 
-
+    const [isLoading, setIsLoading] = useState(true)
     const [activeProject, setActiveProject] = useState([]);
     const authContext = useContext(AuthContext)
 
@@ -32,7 +32,7 @@ export const Dashboard = () => {
                 )
             setActiveProject(activePro)
         }
-
+        setIsLoading(false)
     }
 
     useEffect(() => {
@@ -44,30 +44,33 @@ export const Dashboard = () => {
     }, [authContext.userDate])
 
     useEffect(() => {
-    }, [activeProject, authContext.userDate])
+    }, [activeProject, authContext.userDate, isLoading])
 
     return (
         <div className="box">
             <div className="box__text box__text--center  ">Aktywne Projekty</div>
-            {activeProject.length == 0 && <div className="box__item">
-                <div className="box__text box__text--center">Brak</div>
-            </div>
-            }
-            {activeProject.length != 0 && <div className="box__item">
-                <div className="box__text box__text--normal box__project ">
-                    <span className="box__project--name ">Nazwa</span>
-                    <span className="box__project--hours ">Godziny</span>
+            {isLoading && <div className="box__loading">  <i className="fas fa-spinner load-ico load-ico--center load-ico__spin "></i></div>}
+            {!isLoading && <>
+                {activeProject.length == 0 && <div className="box__item">
+                    <div className="box__text box__text--center">Brak</div>
+                </div>
+                }
+                {activeProject.length != 0 && <div className="box__item">
+                    <div className="box__text box__text--normal box__project ">
+                        <span className="box__project--name ">Nazwa</span>
+                        <span className="box__project--hours ">Godziny</span>
 
-                </div>
-                <div className="box__scroll">
-                    {activeProject.map((x, index) => (
-                        <Link to={`/project/${x.idProject}`} key={`activP-${index}`} className="box__project box__project--hover">
-                            <span className="box__project--name ">{x.name}</span>
-                            <span className="box__project--hours ">{x.hours}</span>
-                        </Link>
-                    ))}
-                </div>
-            </div>}
+                    </div>
+                    <div className="box__scroll">
+                        {activeProject.map((x, index) => (
+                            <Link to={`/project/${x.idProject}`} key={`activP-${index}`} className="box__project box__project--hover">
+                                <span className="box__project--name ">{x.name}</span>
+                                <span className="box__project--hours ">{x.hours}</span>
+                            </Link>
+                        ))}
+                    </div>
+                </div>}
+            </>}
         </div>
 
     )

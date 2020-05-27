@@ -19,21 +19,21 @@ export const UserProfile = (props) => {
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
         });
-        const data = result.json();
+        const data = await result.json();
         if (data.succeeded) {
             setUser(data.user)
         }
+
     }
 
 
-
+    const canEdit = () => {
+        return authContext.isAdmin || authContext.userDate.username == user.username
+    }
 
     useEffect(() => {
-        const asyncEffect = async () => {
-            await getUser(props.match.params.id)
-        }
-        asyncEffect()
 
+        getUser(props.match.params.id)
 
     }, [props.match.params.id])
 
@@ -45,18 +45,15 @@ export const UserProfile = (props) => {
     return (
         <>{user &&
             <div className="box box--large" >
-                {(authContext.isAdmin && authContext.userDate.username != user.username) &&
-                    <div className="box__item--inline box__item--full-width box__item button--edit-box">
-                        <Link to={`/user/profile/${authContext.userDate.username == user.username ? `` : user.username}`} className="button button--gap">EDYTUJ PRACOWNIKA</Link>
 
-                    </div>
-                }
-                {(authContext.userDate.username == user.username) &&
-                    <div className="box__item--inline box__item--full-width box__item button--edit-box">
-                        <Link to="/user/profile" className="button button--gap">EDYTUJ</Link>
 
-                    </div>
-                }
+                <div className="box__item--inline box__item--full-width box__item button--edit-box">
+                    {authContext.userDate.username != user.username &&
+                        <Link to={{ pathname: '/message/new', reply: { user: user } }} className="button button--gap">Napisz Wiadomość</Link>}
+                    {canEdit() && <Link to="/user/profile" className="button button--gap">EDYTUJ</Link>}
+
+                </div>
+
                 <div className="box__text box__item box__text--bold">
                     {user.firstname} {user.lastname}
                 </div>

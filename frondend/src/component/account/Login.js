@@ -35,7 +35,7 @@ export const Login = (props) => {
             } else if (data.code == 3) {
                 infoBoxContext.addInfo("Konto zablokowane");
             } else if (data.code == 2) {
-                infoBoxContext.addInfo("Błędny login lub hasło");
+                infoBoxContext.addInfo("Błędny login lub hasło",1);
             }
         }
 

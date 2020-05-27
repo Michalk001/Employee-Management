@@ -12,8 +12,12 @@ export const UserProjectsList = (props) => {
     const [projectList, setProjectList] = useState([]);
     const [filterProjectList, setFilterProjectList] = useState([])
     const [filterOptions, setFilterOptions] = useState({ name: "", statusProject: "all" })
-    const getUser = async (id) => {
-        const result = await fetch(`${config.apiRoot}/user/${id}`, {
+    const [isLoading, setIsLoading] = useState(true)
+    const authContext = useContext(AuthContext)
+
+    const getProjectList = async (name) => {
+
+        const result = await fetch(`${config.apiRoot}/user/${name}`, {
             method: "get",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
@@ -22,7 +26,7 @@ export const UserProjectsList = (props) => {
         });
 
         const data = await result.json();
-        
+
         if (data.succeeded) {
 
             if (data.user != null) {
@@ -43,6 +47,7 @@ export const UserProjectsList = (props) => {
             }
 
         }
+        setIsLoading(false)
     }
 
 
@@ -98,34 +103,33 @@ export const UserProjectsList = (props) => {
 
 
     useEffect(() => {
-        const asyncEffect = async () => {
-            await getUser(props.match.params.id)
-        }
-        asyncEffect()
-
-
-    }, [props.match.params.id])
+        if (authContext.userDate)
+            getProjectList(authContext.userDate.username)
+    }, [authContext.userDate])
 
     return (
         <div className="box box--center box--medium ">
 
-            {filterProjectList && <>
-                <div className="box__item">
-                    <div className=" box__radio-button--position">
-                        <div className="box__item--inline">
-                            <label className={`box__radio-button ${isActiveRadio("filtr-all")}`} htmlFor={`filtr-all`}  >Wszystkie</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-all" name="statusProject" value="all" type="radio" />
-                            <label className={`box__radio-button ${isActiveRadio("filtr-active")}`} htmlFor={`filtr-active`} >Aktywne</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-active" name="statusProject" value="active" type="radio" />
-                            <label className={`box__radio-button ${isActiveRadio("filtr-inactive")}`} htmlFor={`filtr-inactive`} >Nieaktywne</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-inactive" name="statusProject" value="inactive" type="radio" />
-                        </div>
-                        <div className="box__text"> Wyszukaj po nazwie</div>
+
+            <div className="box__item">
+                <div className=" box__radio-button--position">
+                    <div className="box__item--inline">
+                        <label className={`box__radio-button ${isActiveRadio("filtr-all")}`} htmlFor={`filtr-all`}  >Wszystkie</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-all" name="statusProject" value="all" type="radio" />
+                        <label className={`box__radio-button ${isActiveRadio("filtr-active")}`} htmlFor={`filtr-active`} >Aktywne</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-active" name="statusProject" value="active" type="radio" />
+                        <label className={`box__radio-button ${isActiveRadio("filtr-inactive")}`} htmlFor={`filtr-inactive`} >Nieaktywne</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-inactive" name="statusProject" value="inactive" type="radio" />
                     </div>
-                    <input placeholder="Wyszukaj..." type="text" className="box__input box__input--search" id="name" name="name" value={filterOptions.name} onChange={updateFilterOptions} />
+                    <div className="box__text"> Wyszukaj po nazwie</div>
                 </div>
-                <div className="box__text box__text--normal box__project">
-                    <span className="box__project--title-name ">Nazwa</span>
-                    <span className="box__project--title-hours ">Liczba godzin </span>
-                    <span className="box__project--title-status ">Status</span>
-                </div>
+                <input placeholder="Wyszukaj..." type="text" className="box__input box__input--search" id="name" name="name" value={filterOptions.name} onChange={updateFilterOptions} />
+            </div>
+
+            <div className="box__text box__text--normal box__project">
+                <span className="box__project--title-name ">Nazwa</span>
+                <span className="box__project--title-hours ">Liczba godzin </span>
+                <span className="box__project--title-status ">Status</span>
+            </div>
+            {isLoading && <div className="box__loading">  <i className="fas fa-spinner load-ico load-ico--center load-ico__spin "></i></div>}
+            {!isLoading && filterProjectList && <>
                 {projectList.length == 0 && <div className="box__item">
                     <div className="box__text box__text--center">Brak Projektów</div>
                 </div>}
@@ -136,7 +140,6 @@ export const UserProjectsList = (props) => {
                     <Link to={`/project/${item.id}`} key={`activP-${item.id}`} className="box__project box__project--hover">
                         <span className="box__project--name ">{item.name}</span>
                         <span className="box__project--hours">{item.hours}</span>
-
                         <span className="box__project--status ">{projectStatus(item.isRetired)}</span>
 
                     </Link>

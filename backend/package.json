@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack --mode production",
     "start-dev": "nodemon --exec babel-node ./src/index.js",
-    "start": "node ./build/app.js"
+    "start": "node ./dist/app.js"
   },
   "author": "",
   "license": "ISC",

@@ -96,13 +96,15 @@
             margin: 10px 0;
         }
 
-        &--select {
+        &--select, &--select-receiver {
             padding: 0;
             border: none;
             width: 250px;
+            
+        }
+        &--select{
             margin-right: 15px;
         }
-
         &--require {
             background-color: #fd7373;
         }

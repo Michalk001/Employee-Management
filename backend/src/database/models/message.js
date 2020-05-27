@@ -6,7 +6,7 @@ export default (sequelize, type) => {
             type: type.DataTypes.UUID,
             defaultValue: type.UUIDV4,
         },
-        sender: {
+        senderId: {
             type: type.UUID,
             allowNull: false,
             foreignKey:true,
@@ -15,7 +15,7 @@ export default (sequelize, type) => {
                 key: 'id'
             }
         },
-        recipient : {
+        recipientId : {
             type: type.UUID,
             allowNull: false,
             foreignKey:true,

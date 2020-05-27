@@ -21,10 +21,14 @@ if (config.use_env_variable) {
 
 
 const User = UserModel(sequelize, Sequelize)
-const Project = ProjectModel(sequelize, Sequelize)
+const Project = ProjectModel(sequelize, Sequelize) 
 const UserProject = UserProjectModel(sequelize, Sequelize)
-const Message = MessageModel(sequelize, Sequelize)
+const Message = MessageModel(sequelize, Sequelize) 
 
+  
+Message.belongsTo(User, { as: "sender", foreignKey: 'senderId' }); 
+
+Message.belongsTo(User, { as: "recipient" , foreignKey: 'recipientId' });
 
 User.belongsToMany(Project, { through: UserProject });
 Project.belongsToMany(User, { through: UserProject });
@@ -40,7 +44,6 @@ database.userProject = UserProject;
 database.message = Message;
 
 
-  
 
-module.exports = database;
- 
+
+export default database;

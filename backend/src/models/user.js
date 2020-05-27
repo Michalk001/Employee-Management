@@ -67,7 +67,7 @@ export const update = async (req, res) => {
         res.end();
         return
     }
-    console.log(req.body.user)
+
     if (req.body.user.isRetired != undefined) {
         user.isRetired = req.body.user.isRetired;
         await user.save();

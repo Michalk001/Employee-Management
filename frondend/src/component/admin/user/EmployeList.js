@@ -12,6 +12,7 @@ export const EmployeList = () => {
     const [userList, setUserList] = useState(null);
     const [filterUserList, setFilterUserList] = useState(null)
     const [filterOptions, setFilterOptions] = useState({ name: "", statusUser: "all" })
+    const [isLoading, setIsLoading] = useState(true)
 
     const getUsers = async () => {
 
@@ -28,6 +29,8 @@ export const EmployeList = () => {
             setUserList(users)
             setFilterUserList(users)
         }
+
+        setIsLoading(false)
     }
 
     const userData = (data) => {
@@ -118,26 +121,27 @@ export const EmployeList = () => {
 
     return (
         <div className="box box--large">
+            {isLoading && <div className="box__loading">  <i className="fas fa-spinner load-ico load-ico--center load-ico__spin "></i></div>}
 
-            {filterUserList && <>
-                <div className="box__item">
-                    <div className=" box__radio-button--position">
-                        <div className="box__item--inline">
-                            <label className={`box__radio-button ${isActiveRadio("filtr-all")}`} htmlFor={`filtr-all`}  >Wszystkie</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-all" name="statusUser" value="all" type="radio" />
-                            <label className={`box__radio-button ${isActiveRadio("filtr-active")}`} htmlFor={`filtr-active`} >Aktywne</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-active" name="statusUser" value="active" type="radio" />
-                            <label className={`box__radio-button ${isActiveRadio("filtr-inactive")}`} htmlFor={`filtr-inactive`} >Nieaktywne</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-inactive" name="statusUser" value="inactive" type="radio" />
-                        </div>
-                        <div className="box__text"> Wyszukaj po nazwie</div>
+            <div className="box__item">
+                <div className=" box__radio-button--position">
+                    <div className="box__item--inline">
+                        <label className={`box__radio-button ${isActiveRadio("filtr-all")}`} htmlFor={`filtr-all`}  >Wszystkie</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-all" name="statusUser" value="all" type="radio" />
+                        <label className={`box__radio-button ${isActiveRadio("filtr-active")}`} htmlFor={`filtr-active`} >Aktywne</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-active" name="statusUser" value="active" type="radio" />
+                        <label className={`box__radio-button ${isActiveRadio("filtr-inactive")}`} htmlFor={`filtr-inactive`} >Nieaktywne</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-inactive" name="statusUser" value="inactive" type="radio" />
                     </div>
-                    <input placeholder="Wyszukaj..." type="text" className="box__input box__input--search" id="name" name="name" value={filterOptions.name} onChange={updateFilterOptions} />
+                    <div className="box__text"> Wyszukaj po nazwie</div>
                 </div>
-                <div className="box__text box__text--normal box__project">
-                    <span className="box__project--title-name ">Nazwa</span>
-                    <span className="box__project--title-hours ">Liczba godzin </span>
-                    <span className="box__project--employe ">Liczba aktywnych projektów</span>
-                    <span className="box__project--employe-short ">Liczba projektów</span>
-                    <span className="box__project--title-status ">Status</span>
-                </div>
+                <input placeholder="Wyszukaj..." type="text" className="box__input box__input--search" id="name" name="name" value={filterOptions.name} onChange={updateFilterOptions} />
+            </div>
+            <div className="box__text box__text--normal box__project">
+                <span className="box__project--title-name ">Nazwa</span>
+                <span className="box__project--title-hours ">Liczba godzin </span>
+                <span className="box__project--employe ">Liczba aktywnych projektów</span>
+                <span className="box__project--employe-short ">Liczba projektów</span>
+                <span className="box__project--title-status ">Status</span>
+            </div>
+            {filterUserList && <>
                 {userList.length == 0 && <div className="box__item">
                     <div className="box__text box__text--center">Brak Pracowników</div>
                 </div>}

@@ -23,10 +23,12 @@ import { UserProfileEditor } from './component/user/UserProfileEditor'
 import { ProjectEditor } from './component/admin/project/ProjectEditor'
 import { ProjectCreate } from './component/admin/project/ProjectCreate'
 import { UserCreate } from './component/admin/user/UserCreate'
-import { ProjectList} from './component/admin/project/ProjectList'
+import { ProjectList } from './component/admin/project/ProjectList'
 import { EmployeList } from './component/admin/user/EmployeList'
 import { UserProjectsList } from './component/user/UserProjectsList'
-
+import { Message } from './component/user/messenge/Message'
+import { MessageNew } from './component/user/messenge/MessageNew'
+import { MessageView } from './component/user/messenge/MessageView'
 
 
 export const App = () => {
@@ -43,19 +45,23 @@ export const App = () => {
                     <Switch>
                         <RequireLogin path="/" exact component={Dashboard} />
                         <UserRoute path="/login" component={Login} />
-                        
+
                         <RequireLogin path="/Admin/Project/New" component={ProjectCreate} />
                         <RequireLogin path="/Admin/Project/Edit/:id" component={ProjectEditor} />
                         <RequireLogin path="/Admin/Project/" component={ProjectList} />
                         <RequireLogin path="/admin/user/new" component={UserCreate} />
                         <RequireLogin path="/Admin/User" component={EmployeList} />
-                        
+
                         <RequireLogin path="/Project/:id" component={Project} />
                         <RequireLogin path="/User/Profile/:id" component={UserProfileEditor} />
                         <RequireLogin path="/User/Profile" component={UserProfileEditor} />
-                        <RequireLogin path="/User/Project/:id" component={UserProjectsList} />
-                             
+                        <RequireLogin path="/User/Project/" component={UserProjectsList} />
+
                         <RequireLogin path="/User/:id" component={UserProfile} />
+
+                        <RequireLogin path="/message/new" component={MessageNew} />
+                        <RequireLogin path="/message/:id" component={MessageView} />
+                        <RequireLogin path="/message/" component={Message} />
 
                     </Switch>
 

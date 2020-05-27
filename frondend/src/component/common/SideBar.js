@@ -52,12 +52,17 @@ export const SideBar = () => {
                     <Link to="/" className={`navBar__menu--text navBar__menu--link`} >Kokpit</Link>
                 </div>
                 <div className={`navBar__menu--item`}>
-                    <Link to={`/user/project/${getUsername()}`} className={`navBar__menu--text navBar__menu--link`} >Projekty</Link>
+                    <Link to={`/user/project`} className={`navBar__menu--text navBar__menu--link`} >Projekty</Link>
                 </div>
                 <div className={`navBar__menu--item`}>
                     <Link to={`/user/${getUsername()}`} className={`navBar__menu--text navBar__menu--link`} >Profil</Link>
                 </div>
-
+                <div className={`navBar__menu--item`}>
+                    <Link to={`/message`} className={`navBar__menu--text navBar__menu--link`} >Wiadomości</Link>
+                </div>
+                <div className={`navBar__menu--item`}>
+                    <Link to={`/message/new`} className={`navBar__menu--text navBar__menu--link`} >Napisz Wiadomość</Link>
+                </div>
                 {authContext.isAdmin && <>
                     <div className={`navBar__menu--item`}>
                         <div className={`navBar__menu--text navBar__menu--title `}>Panel Administratora</div>

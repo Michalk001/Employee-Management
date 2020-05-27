@@ -1,4 +1,4 @@
 {
-    "apiRoot2": "https://rkwbackend.uc.r.appspot.com",
-    "apiRoot": "http://localhost:4006"
+    "apiRoot": "https://empbackend.ew.r.appspot.com/",
+    "apiRoot2": "http://localhost:4006"
 } 

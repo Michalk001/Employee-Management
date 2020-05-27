@@ -19,7 +19,25 @@ database.sequelize.authenticate()
 database.sequelize.sync().then(function () {
 
   console.log('Database looks fine')
+  const user = {
+    username: config.DBADMIN.username,
+    password: bcrypt.hashSync(config.DBADMIN.password, 10),
+    isAdmin: true,
+    firstname: config.DBADMIN.firstname,
+    lastname: config.DBADMIN.lastname,
+    email: config.DBADMIN.email
+  }
 
+  database.user.findOne({
+    where: {
+      username:
+        { [database.Sequelize.Op.iLike]: `%${user.username}` }
+    }
+  }).then(result => {
+    if (result == null) {
+      database.user.create(user)
+    }
+  });
 
 }).catch(function (err) {
 
@@ -28,25 +46,7 @@ database.sequelize.sync().then(function () {
 });
 
 
-const user = {
-  username: config.DBADMIN.username,
-  password:  bcrypt.hashSync(config.DBADMIN.password, 10),
-  isAdmin: true,
-  firstname: config.DBADMIN.firstname,
-  lastname: config.DBADMIN.lastname,
-  email: config.DBADMIN.email
-}
- 
-database.user.findOne({
-  where: {
-    username:
-      { [database.Sequelize.Op.iLike]: `%${user.username}` } 
-  }
-}).then(result => {
-  if(result == null){ 
-    database.user.create(user)
-  }
-});
+
 
 
 const express = require('express');

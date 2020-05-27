@@ -94,7 +94,7 @@ export const UserCreate = (props) => {
 
         if (data.succeeded) {
             infoBoxContext.addInfo("Utworzono pracownika");
-            setUser({})
+            setUser({isAdmin: false})
 
         }
         else {
@@ -117,9 +117,9 @@ export const UserCreate = (props) => {
 
     const updateIsAdmin = (event) => {
         if (event.target.value === "true")
-            setUser({ ...user, "isAdmin": true })
+            setUser({ ...user, isAdmin: true })
         else
-            setUser({ ...user, "isAdmin": false })
+            setUser({ ...user, isAdmin: false })
     }
 
     useEffect(() => {
