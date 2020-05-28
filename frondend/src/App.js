@@ -29,6 +29,7 @@ import { UserProjectsList } from './component/user/UserProjectsList'
 import { Message } from './component/user/messenge/Message'
 import { MessageNew } from './component/user/messenge/MessageNew'
 import { MessageView } from './component/user/messenge/MessageView'
+import { ErrorPage } from './component/common/ErrorPage';
 
 
 export const App = () => {
@@ -50,7 +51,7 @@ export const App = () => {
                         <RequireLogin path="/Admin/Project/Edit/:id" component={ProjectEditor} />
                         <RequireLogin path="/Admin/Project/" component={ProjectList} />
                         <RequireLogin path="/admin/user/new" component={UserCreate} />
-                        <RequireLogin path="/Admin/User" component={EmployeList} />
+                        <RequireLogin path="/Admin/User/" component={EmployeList} />
 
                         <RequireLogin path="/Project/:id" component={Project} />
                         <RequireLogin path="/User/Profile/:id" component={UserProfileEditor} />
@@ -62,6 +63,7 @@ export const App = () => {
                         <RequireLogin path="/message/new" component={MessageNew} />
                         <RequireLogin path="/message/:id" component={MessageView} />
                         <RequireLogin path="/message/" component={Message} />
+                        <RequireLogin component={ErrorPage} />
 
                     </Switch>
 

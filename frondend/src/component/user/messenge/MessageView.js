@@ -6,6 +6,7 @@ import { InfoBoxContext } from "../../../context/InfoBox/InfoBoxContext";
 
 import Cookies from 'js-cookie';
 import config from '../../../config.json'
+import { ErrorPage } from "../../common/ErrorPage";
 
 
 
@@ -13,7 +14,7 @@ export const MessageView = (props) => {
 
     const [message, setMessage] = useState(null);
     const [isLoading, setIsLoading] = useState(true)
-
+    const [error, setError] = useState(null);
     const authContext = useContext(AuthContext)
 
     const getMessage = async (id) => {
@@ -24,6 +25,9 @@ export const MessageView = (props) => {
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
         });
+        if (result.status == 404) {
+            setError({ code: 404, text: "Message Not Found" })
+        }
         const data = await result.json();
         setMessage(data.message)
         readMessage(data.message);
@@ -84,31 +88,34 @@ export const MessageView = (props) => {
     useEffect(() => {
 
 
-    }, [message, authContext.userDate,isLoading])
+    }, [message, authContext.userDate, isLoading])
 
 
     return (
-        <div className="box box--large">
-            {isLoading && <div className="box__loading">  <i className="fas fa-spinner load-ico load-ico--center load-ico__spin "></i></div>}
-            {!isLoading && message && <>
-                <div className="message-view__text--date">{convertDate(message.createdAt)}</div>
-                {getHeader()}
-                <div className="message-view__topic">
-                    <div className="message-view__text">
-                        <span className="">Temat:</span>
-                        <span className="message-view__text--topic">{message.topic}</span>
+        <>
+            {error != null && <ErrorPage text={error.text} code={error.code} />}
+            <div className="box box--large">
+                {isLoading && <div className="box__loading">  <i className="fas fa-spinner load-ico load-ico--center load-ico__spin "></i></div>}
+                {!isLoading && message && <>
+                    <div className="message-view__text--date">{convertDate(message.createdAt)}</div>
+                    {getHeader()}
+                    <div className="message-view__topic">
+                        <div className="message-view__text">
+                            <span className="">Temat:</span>
+                            <span className="message-view__text--topic">{message.topic}</span>
+                        </div>
+
                     </div>
 
-                </div>
-
-                <div className="message-view__description">
-                    <div className="message-view__text">Wiadomość:</div>
-                    <div className="message-view__description--content">
-                        {message.description}
+                    <div className="message-view__description">
+                        <div className="message-view__text">Wiadomość:</div>
+                        <div className="message-view__description--content">
+                            {message.description}
+                        </div>
                     </div>
-                </div>
 
-            </>}
-        </div >
+                </>}
+            </div >
+        </>
     )
 }

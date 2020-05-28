@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import config from '../../config.json'
 import Cookies from 'js-cookie';
+import { PDFDownloadLink,BlobProvider } from "@react-pdf/renderer";
+import { ProjectListPDF } from "../reportCreation/ProjectListPDF";
 
 
 
@@ -14,7 +16,8 @@ export const UserProjectsList = (props) => {
     const [filterOptions, setFilterOptions] = useState({ name: "", statusProject: "all" })
     const [isLoading, setIsLoading] = useState(true)
     const authContext = useContext(AuthContext)
-
+    const [reloadPDF, setReloadPDF] = useState(true);
+    
     const getProjectList = async (name) => {
 
         const result = await fetch(`${config.apiRoot}/user/${name}`, {
@@ -95,17 +98,26 @@ export const UserProjectsList = (props) => {
     }
     useEffect(() => {
         filterList();
+        setReloadPDF(false)
     }, [filterOptions])
 
     useEffect(() => {
 
     }, [projectList, filterProjectList])
-
+    useEffect(() => {
+        setReloadPDF(true)
+       
+    }, [reloadPDF])
 
     useEffect(() => {
         if (authContext.userDate)
             getProjectList(authContext.userDate.username)
     }, [authContext.userDate])
+
+
+    const pdfDownload = (data) =>{
+
+    }
 
     return (
         <div className="box box--center box--medium ">
@@ -145,6 +157,19 @@ export const UserProjectsList = (props) => {
                     </Link>
                 ))}
             </>}
+            <div className="box__text ">Raport:</div>
+            <div className="box__item">
+                {!isLoading && reloadPDF && filterProjectList != null && <PDFDownloadLink
+                    document={<ProjectListPDF data={filterProjectList} />}
+                    fileName={`Project-List-Report.pdf`}
+                    className="button"
+                >
+                    {({ blob, url, loading, error }) =>
+                       (loading ? "Ładowanie" : "Pobierz")
+                    }
+                </PDFDownloadLink>}
+
+            </div>
         </div>
     )
 

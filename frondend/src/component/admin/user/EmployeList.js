@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../../../context/AuthContext';
 import config from '../../../config.json'
 import Cookies from 'js-cookie';
-
+import { UserListPDF } from "../../reportCreation/UserListPDF";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 
 
 export const EmployeList = () => {
@@ -13,6 +14,7 @@ export const EmployeList = () => {
     const [filterUserList, setFilterUserList] = useState(null)
     const [filterOptions, setFilterOptions] = useState({ name: "", statusUser: "all" })
     const [isLoading, setIsLoading] = useState(true)
+    const [reloadPDF, setReloadPDF] = useState(true);
 
     const getUsers = async () => {
 
@@ -108,17 +110,21 @@ export const EmployeList = () => {
     }
     useEffect(() => {
         filterList();
+        setReloadPDF(true)
     }, [filterOptions])
 
     useEffect(() => {
-
+     
     }, [userList, filterUserList])
 
     useEffect(() => {
         getUsers()
 
     }, [])
+    useEffect(() => {
+        setReloadPDF(false)
 
+    }, [reloadPDF])
     return (
         <div className="box box--large">
             {isLoading && <div className="box__loading">  <i className="fas fa-spinner load-ico load-ico--center load-ico__spin "></i></div>}
@@ -160,8 +166,24 @@ export const EmployeList = () => {
 
                     </Link>
                 ))}
+                <div className="box__text box--half-border-top">Raport:</div>
+                <div className="box__item">
+                    {!isLoading && !reloadPDF && filterUserList != null && <PDFDownloadLink
+                        document={<UserListPDF data={filterUserList} />}
+                        fileName={`Employe-List-Report.pdf`}
+                        className="button"
+                    >
+                        {({ blob, url, loading, error }) =>
+                            loading ? "Ładowanie" : "Pobierz"
+                        }
+                    </PDFDownloadLink>}
+
+                </div>
+
             </>}
         </div>
+
+
     )
 
 

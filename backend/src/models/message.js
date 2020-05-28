@@ -125,25 +125,28 @@ export const get = async (req, res) => {
 
 export const getByID = async (req, res) => {
 
+    try {
+        const message = await database.message.findOne({
+            where: {
+                id: req.params.id,
+                isRemove: false
+            },
+            attributes: ['topic', 'description', 'isRead', 'createdAt', 'id'],
+            include: [{
+                model: database.user,
+                as: "sender",
+                attributes: ['firstname', 'lastname', 'username'],
 
-    const message = await database.message.findOne({
-        where: {
-            id: req.params.id,
-            isRemove: false
-        },
-        attributes: ['topic', 'description', 'isRead', 'createdAt', 'id'],
-        include: [{
-            model: database.user,
-            as: "sender",
-            attributes: ['firstname', 'lastname', 'username'],
-
-        },{
-            model: database.user,
-            as: "recipient",
-            attributes: ['firstname', 'lastname', 'username'],
-        }]
-    });
+            }, {
+                model: database.user,
+                as: "recipient",
+                attributes: ['firstname', 'lastname', 'username'],
+            }]
+        });
 
 
-    res.status(200).json({ succeeded: true, message });
+        res.status(200).json({ succeeded: true, message });
+    } catch (err) {
+        res.status(404).json({ succeeded: false, error: "not found", code: 1 });
+    }
 }

@@ -78,7 +78,7 @@ export const RenderListInfo = (props) => {
                 <div onClick={() => { remove() }} className={`info-box--wrap `}>
 
                     <div className={`info-box__text `} >
-                        {console.log(props.msg)}
+                    
                         {props.msg.title}
                     </div>
                   {props.msg.list && props.msg.list.length != 0 &&  <div className={`info-box__text `} >

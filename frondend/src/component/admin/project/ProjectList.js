@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../../../context/AuthContext';
 import config from '../../../config.json'
 import Cookies from 'js-cookie';
+import { ProjectListPDF } from "../../reportCreation/ProjectListPDF";
+import { PDFDownloadLink,BlobProvider } from "@react-pdf/renderer";
 
 
 
@@ -13,6 +15,7 @@ export const ProjectList = () => {
     const [filterProjectList, setFilterProjectList] = useState(null)
     const [filterOptions, setFilterOptions] = useState({ name: "", statusProject: "all" })
     const [isLoading, setIsLoading] = useState(true)
+    const [reloadPDF, setReloadPDF] = useState(true);
 
     const getProjects = async () => {
 
@@ -109,11 +112,18 @@ export const ProjectList = () => {
     }
     useEffect(() => {
         filterList();
+        setReloadPDF(false)
     }, [filterOptions])
 
     useEffect(() => {
 
-    }, [projectList, filterProjectList,isLoading])
+      
+    }, [projectList, filterProjectList, isLoading])
+
+    useEffect(() => {
+        setReloadPDF(true)
+       
+    }, [reloadPDF])
 
     return (
         <div className="box box--large">
@@ -155,6 +165,19 @@ export const ProjectList = () => {
                     </Link>
                 ))}
             </>}
+            <div className="box__text box--half-border-top">Raport:</div>
+            <div className="box__item">
+                {!isLoading && reloadPDF && filterProjectList != null && <PDFDownloadLink
+                    document={<ProjectListPDF data={filterProjectList} />}
+                    fileName={`Project-List-Report.pdf`}
+                    className="button"
+                >
+                    {({ blob, url, loading, error }) =>
+                        loading ? "Ładowanie" : "Pobierz"
+                    }
+                </PDFDownloadLink>}
+
+            </div>
         </div>
     )
 

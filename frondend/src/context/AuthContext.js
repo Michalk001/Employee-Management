@@ -9,7 +9,6 @@ import { InfoBoxContext } from './InfoBox/InfoBoxContext';
 export const AuthContext = React.createContext({
     isLogin: false,
     isAdmin: false,
-    isConnecting: false,
     userDate: null,
     checkError: (error) => { },
     onAdmin: () => { },
@@ -32,7 +31,7 @@ export const AuthProvider = (props) => {
     const [userDate, setUserDate] = useState(null)
 
 
-    const [isConnecting, setIsConnecting] = useState(false);
+
     const infoBoxContext = useContext(InfoBoxContext)
 
 
@@ -185,7 +184,7 @@ export const AuthProvider = (props) => {
                     singUp,
                     refreshToken,
                     createUserData,
-                    isConnecting,
+                   
                     register
                 }
             }

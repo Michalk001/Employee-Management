@@ -6,14 +6,22 @@ import config from '../../config.json'
 import Cookies from 'js-cookie';
 
 import { InfoBoxContext } from '../../context/InfoBox/InfoBoxContext';
+import { ProjectReportPDF } from "../reportCreation/ProjectReportPDF";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { ErrorPage } from "../common/ErrorPage"
+
 
 export const Project = (props) => {
 
     const [project, setProject] = useState(null);
     const [currentUserInfo, setCurrentUserInfo] = useState(null);
+    const [error, setError] = useState(null);
     const infoBoxContext = useContext(InfoBoxContext);
     const authContext = useContext(AuthContext)
+
+
     const getProject = async (id) => {
+
         const result = await fetch(`${config.apiRoot}/project/${id}`, {
             method: "get",
             headers: {
@@ -21,11 +29,18 @@ export const Project = (props) => {
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
         });
+        if(result.status == 404){
+            setError({ code: 404, text: "Project Not Found" })
+        }
+
+
         const data = await result.json()
         if (data.succeeded) {
 
             setProject(data.project)
         }
+
+
     }
 
     const getCurrentUserInfo = () => {
@@ -107,10 +122,8 @@ export const Project = (props) => {
 
     }
     useEffect(() => {
-        const asyncEffect = async () => {
-            await getProject(props.match.params.id)
-        }
-        asyncEffect()
+        getProject(props.match.params.id)
+
 
     }, [props.match.params.id])
 
@@ -124,61 +137,76 @@ export const Project = (props) => {
 
 
     return (
-        <>{project &&
-            <div className="box box--large" >
-                {project && project.isRetired && <div className="form-editor__text form-editor__text--archive-small">Zarchiwizowany </div>}
-                {authContext.isAdmin && <div className="box__item--inline box__item--full-width box__item button--edit-box">
-                    <Link to={`/admin/project/edit/${project.id}`} className="button">EDYTUJ</Link>
-                </div>}
-                <div className="box__text box__item ">
-                    <span className="box__text--bold ">Projekt: </span>
-                    <span className="box__text--bold ">{project.name}</span>
-                </div>
-                {currentUserInfo && <div className="box__item box--half-border-top">
-                    <div className="box__item--inline">
-                        <div className="box__text box__text--bold box__text--vertical-center  ">Ilość twoich godzin łącznie: </div>
-                        <div className="box__text box__text--vertical-center "> {currentUserInfo && currentUserInfo.userProjects.hours}</div>
+        <>
+            {error != null && <ErrorPage text={error.text} code={error.code} />}
+            {project &&
+                <div className="box box--large" >
+                    {project && project.isRetired && <div className="form-editor__text form-editor__text--archive-small">Zarchiwizowany </div>}
+                    {authContext.isAdmin && <div className="box__item--inline box__item--full-width box__item button--edit-box">
+                        <Link to={`/admin/project/edit/${project.id}`} className="button">EDYTUJ</Link>
+                    </div>}
+                    <div className="box__text box__item ">
+                        <span className="box__text--bold ">Projekt: </span>
+                        <span className="box__text--bold ">{project.name}</span>
                     </div>
-                </div>
-                }
-                {project && !project.isRetired && currentUserInfo && !currentUserInfo.userProjects.isRemove && !currentUserInfo.userProjects.isRetired &&
-                    <div className="box__item">
+                    {currentUserInfo && <div className="box__item box--half-border-top">
                         <div className="box__item--inline">
-                            <div className="box__text box__text--bold box__text--vertical-center  ">Nowe godziny</div>
-                            <input className="box__input box__input--add-hours" type="text" name="newHours" value={currentUserInfo && currentUserInfo.newHours ? currentUserInfo.newHours : ""} onChange={(x) => validHoursField(x.target, x => setCurrentUserInfo({ ...currentUserInfo, [x.name]: x.value }))} />
-                            <div className={`button button--gap ${!currentUserInfo || !currentUserInfo.newHours ? `button--disabled` : ``}`} onClick={() => addHours()}>Dodaj</div>
-                            <div className={`button button--gap ${!currentUserInfo || !currentUserInfo.newHours ? `button--disabled` : ``}`} onClick={() => removeHours()}>Odejmnij</div>
+                            <div className="box__text box__text--bold box__text--vertical-center  ">Ilość twoich godzin łącznie: </div>
+                            <div className="box__text box__text--vertical-center "> {currentUserInfo && currentUserInfo.userProjects.hours}</div>
                         </div>
                     </div>
-                }
-                {project.description && <>
-                    <div className="box__text box--half-border-top ">Opis: </div>
-                    <div className="box__text box__item box__item--description ">
-                        {project.description}
-                    </div>
-                </>}
-                {!project.description && <div className="box__text  box__item box--half-border-bottom   ">
-                    Brak Opisu
+                    }
+                    {project && !project.isRetired && currentUserInfo && !currentUserInfo.userProjects.isRemove && !currentUserInfo.userProjects.isRetired &&
+                        <div className="box__item">
+                            <div className="box__item--inline">
+                                <div className="box__text box__text--bold box__text--vertical-center  ">Nowe godziny</div>
+                                <input className="box__input box__input--add-hours" type="text" name="newHours" value={currentUserInfo && currentUserInfo.newHours ? currentUserInfo.newHours : ""} onChange={(x) => validHoursField(x.target, x => setCurrentUserInfo({ ...currentUserInfo, [x.name]: x.value }))} />
+                                <div className={`button button--gap ${!currentUserInfo || !currentUserInfo.newHours ? `button--disabled` : ``}`} onClick={() => addHours()}>Dodaj</div>
+                                <div className={`button button--gap ${!currentUserInfo || !currentUserInfo.newHours ? `button--disabled` : ``}`} onClick={() => removeHours()}>Odejmnij</div>
+                            </div>
+                        </div>
+                    }
+                    {project.description && <>
+                        <div className="box__text box--half-border-top ">Opis: </div>
+                        <div className="box__text box__item box__item--description ">
+                            {project.description}
+                        </div>
+                    </>}
+                    {!project.description && <div className="box__text  box__item box--half-border-bottom   ">
+                        Brak Opisu
                 </div>}
-                {project.users && project.users.find(x => { return (x.userProjects.isRetired == false && x.userProjects.isRemove == false) }) && <>
-                    <div className="box__text ">Przydzieleni pracownicy: </div>
-                    <div className="box--employe-list ">
-                        {project.users.filter(x => { return x.userProjects.isRetired == false && x.userProjects.isRemove == false }).map((x) => (
-                            <Link className="box__text  box__item box__item--employe" key={`emploact-${x.username}`} to={`/user/${x.username}`}>{x.firstname} {x.lastname}</Link>
-                        ))}
-                    </div>
-                </>}
-                {project.users && project.users.find(x => { return (x.userProjects.isRetired == true && x.userProjects.isRemove == false) }) && <>
-                    <div className="box__text box--half-border-bottom">Byli pracownicy: </div>
-                    <div className="box--employe-list ">
-                        {(project.users.filter(x => { return (x.userProjects.isRetired == true && x.userProjects.isRemove == false) })).map((x) => (
-                            <Link className="box__text  box__item box__item--employe" key={`emploact-${x.username}`} to={`/user/${x.username}`}>{x.firstname} {x.lastname}</Link>
-                        ))}
-                    </div>
-                </>}
+                    {project.users && project.users.find(x => { return (x.userProjects.isRetired == false && x.userProjects.isRemove == false) }) && <>
+                        <div className="box__text ">Przydzieleni pracownicy: </div>
+                        <div className="box--employe-list ">
+                            {project.users.filter(x => { return x.userProjects.isRetired == false && x.userProjects.isRemove == false }).map((x) => (
+                                <Link className="box__text  box__item box__item--employe" key={`emploact-${x.username}`} to={`/user/${x.username}`}>{x.firstname} {x.lastname}</Link>
+                            ))}
+                        </div>
+                    </>}
+                    {project.users && project.users.find(x => { return (x.userProjects.isRetired == true && x.userProjects.isRemove == false) }) && <>
+                        <div className="box__text box--half-border-top">Byli pracownicy: </div>
+                        <div className="box--employe-list ">
+                            {(project.users.filter(x => { return (x.userProjects.isRetired == true && x.userProjects.isRemove == false) })).map((x) => (
+                                <Link className="box__text  box__item box__item--employe" key={`emploact-${x.username}`} to={`/user/${x.username}`}>{x.firstname} {x.lastname}</Link>
+                            ))}
+                        </div>
+                    </>}
+                    <div className="box__text box--half-border-top">Raport:</div>
+                    <div className="box__item">
 
-            </div>
-        }</>
+                        {project != null && <PDFDownloadLink
+                            document={<ProjectReportPDF data={project} />}
+                            fileName={`${project.name}.pdf`}
+                            className="button"
+                        >
+                            {({ blob, url, loading, error }) =>
+                                loading ? "Ładowanie" : "Pobierz"
+                            }
+                        </PDFDownloadLink>}
+
+                    </div>
+                </div>
+            }</>
     )
 
 

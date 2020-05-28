@@ -37,6 +37,11 @@ export const getByLogin = async (req, res) => {
             }
         }]
     });
+    if(user == null){
+        res.status(404).json({ succeeded: false, error: "Not Found" });
+        res.end();
+        return
+    }
     res.status(200).json({ succeeded: true, user });
     res.end();
 }

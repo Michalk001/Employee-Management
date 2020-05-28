@@ -8,11 +8,12 @@ import { InfoBoxContext } from '../../context/InfoBox/InfoBoxContext';
 import { AuthContext } from '../../context/AuthContext';
 import config from '../../config.json'
 import Cookies from 'js-cookie';
+import { ErrorPage } from "../common/ErrorPage";
 
 export const UserProfileEditor = (props) => {
 
     const passCharCount = 3;
-
+    const [error, setError] = useState(null);
     const [user, setUser] = useState(null);
     const [editUser, setEditUser] = useState([]);
     const [isValid, setIsValid] = useState({})
@@ -30,6 +31,9 @@ export const UserProfileEditor = (props) => {
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
         });
+        if (result.status == 404) {
+            setError({ code: 404, text: "User Not Found" })
+        }
         const data = await result.json();
         if (data.succeeded) {
             setEditUser(data.user)
@@ -70,7 +74,6 @@ export const UserProfileEditor = (props) => {
 
         if (!editUser.email || editUser.email.replace(/ /g, '') == '') {
             valid.email = false;
-            console.log(1111)
             isOK = false;
         }
         if (editUser.email) {
@@ -193,7 +196,7 @@ export const UserProfileEditor = (props) => {
         else {
             infoBoxContext.addInfo("Wystąpił błąd");
         }
-        
+
     }
 
     useEffect(() => {
@@ -223,66 +226,67 @@ export const UserProfileEditor = (props) => {
 
 
     return (
-        <>{user &&
-            <div className="box box--large" >
-                {user.isRetired && <div className="form-editor__text form-editor__text--archive-small">Zarchiwizowany </div>}
-                <div className="box__item--inline box__item--full-width box__item button--edit-box">
-                    {authContext.isAdmin && <>
-                        {!user.isRetired && <button className="button button--gap button--remove" onClick={() => archiveUser(true)}>Zarchiwizuj</button>}
-                        {user.isRetired && <button className="button button--gap button--remove" onClick={() => archiveUser(false)}>Przywróć</button>}
-                    </>}
-                    <button onClick={() => infoBoxContext.Confirm("Czy napewno chcesz zapisać?", () => (saveEdit()))} className="button button--gap button--save">Zapisz</button>
-                    <button onClick={() => infoBoxContext.Confirm("Czy napewno chcesz anulować edycje?", () => (cancelEdit()))} className="button button--gap button--remove">Anuluj</button>
-                    <Link to={`/user/${user.username}`} className="button button--gap">Profil</Link>
-                </div>
-
-
-                <div className="box__item">
-                    <div className="box__item--inline box__item--user-edit-mode  ">
-                        <div className="box__text box__text--require">Imie </div>
-                        <input className={`box__input box__input--user-edit ${validInput(isValid.firstname)}`} name="firstname"
-                            onChange={updateEditUser} value={getValueOrOther(editUser.firstname)} />
+        <> {error != null && <ErrorPage text={error.text} code={error.code} />}
+            {user &&
+                <div className="box box--large" >
+                    {user.isRetired && <div className="form-editor__text form-editor__text--archive-small">Zarchiwizowany </div>}
+                    <div className="box__item--inline box__item--full-width box__item button--edit-box">
+                        {authContext.isAdmin && <>
+                            {!user.isRetired && <button className="button button--gap button--remove" onClick={() => archiveUser(true)}>Zarchiwizuj</button>}
+                            {user.isRetired && <button className="button button--gap button--remove" onClick={() => archiveUser(false)}>Przywróć</button>}
+                        </>}
+                        <button onClick={() => infoBoxContext.Confirm("Czy napewno chcesz zapisać?", () => (saveEdit()))} className="button button--gap button--save">Zapisz</button>
+                        <button onClick={() => infoBoxContext.Confirm("Czy napewno chcesz anulować edycje?", () => (cancelEdit()))} className="button button--gap button--remove">Anuluj</button>
+                        <Link to={`/user/${user.username}`} className="button button--gap">Profil</Link>
                     </div>
 
-                    <div className=" box__item--inline box__item--user-edit-mode">
-                        <div className="box__text box__text--require">Nazwisko </div>
-                        <input className={`box__input box__input--user-edit ${validInput(isValid.lastname)}`} name="lastname"
-                            onChange={updateEditUser} value={getValueOrOther(editUser.lastname)} />
-                    </div>
 
-                    <div className=" box__item--inline box__item--user-edit-mode ">
-                        <div className="box__text  box__text--require">E-mail</div>
-                        <input className={`box__input box__input--user-edit  ${validInput(isValid.email)}`} name="email"
-                            onChange={updateEditUser} value={getValueOrOther(editUser.email)} />
-                    </div>
+                    <div className="box__item">
+                        <div className="box__item--inline box__item--user-edit-mode  ">
+                            <div className="box__text box__text--require">Imie </div>
+                            <input className={`box__input box__input--user-edit ${validInput(isValid.firstname)}`} name="firstname"
+                                onChange={updateEditUser} value={getValueOrOther(editUser.firstname)} />
+                        </div>
 
-                    <div className=" box__item--inline box__item--user-edit-mode">
-                        <div className=" box__text ">Telefon </div>
-                        <input className="box__input box__input--user-edit" name="phone" onChange={validPhone} value={getValueOrOther(editUser.phone)} />
-                    </div>
-                </div>
-                {authContext.userDate.username == user.username && <>
-                    <div className=" box__item ">
-                        <div className="box__text  box__text--bold box--half-border-top">Zmiana Hasła</div>
-                        <div className="box__item--inline ">
-                            <div className="box__item box__item--user-edit-mode">
-                                <div className="box__text  box__text--require">Stare Hasła</div>
-                                <input className={`box__input box__input--user-edit ${validInput(passIsValid.oldPassword)}`} type="password" name="oldPassword"
-                                    value={getValueOrOther(passEdit.oldPassword)} onChange={updatePassEdit} />
-                            </div>
-                            <div className="box__item  box__item--user-edit-mode">
-                                <div className="box__text  box__text--require">Nowe Hasła</div>
-                                <input className={`box__input box__input--user-edit ${validInput(passIsValid.newPassword)}`} type="password" name="newPassword"
-                                    value={getValueOrOther(passEdit.newPassword)} onChange={updatePassEdit} />
-                            </div>
+                        <div className=" box__item--inline box__item--user-edit-mode">
+                            <div className="box__text box__text--require">Nazwisko </div>
+                            <input className={`box__input box__input--user-edit ${validInput(isValid.lastname)}`} name="lastname"
+                                onChange={updateEditUser} value={getValueOrOther(editUser.lastname)} />
+                        </div>
+
+                        <div className=" box__item--inline box__item--user-edit-mode ">
+                            <div className="box__text  box__text--require">E-mail</div>
+                            <input className={`box__input box__input--user-edit  ${validInput(isValid.email)}`} name="email"
+                                onChange={updateEditUser} value={getValueOrOther(editUser.email)} />
+                        </div>
+
+                        <div className=" box__item--inline box__item--user-edit-mode">
+                            <div className=" box__text ">Telefon </div>
+                            <input className="box__input box__input--user-edit" name="phone" onChange={validPhone} value={getValueOrOther(editUser.phone)} />
                         </div>
                     </div>
-                    <div className="box__item">
-                        <button className="button button--gap button--save" onClick={() => { changePassword() }}>Zmień hasło</button>
-                    </div>
-                </>}
-                <div className="form-editor__text form-editor__text--require-string">* Pole wymagane </div>
-            </div>
-        }</>
+                    {authContext.userDate.username == user.username && <>
+                        <div className=" box__item ">
+                            <div className="box__text  box__text--bold box--half-border-top">Zmiana Hasła</div>
+                            <div className="box__item--inline ">
+                                <div className="box__item box__item--user-edit-mode">
+                                    <div className="box__text  box__text--require">Stare Hasła</div>
+                                    <input className={`box__input box__input--user-edit ${validInput(passIsValid.oldPassword)}`} type="password" name="oldPassword"
+                                        value={getValueOrOther(passEdit.oldPassword)} onChange={updatePassEdit} />
+                                </div>
+                                <div className="box__item  box__item--user-edit-mode">
+                                    <div className="box__text  box__text--require">Nowe Hasła</div>
+                                    <input className={`box__input box__input--user-edit ${validInput(passIsValid.newPassword)}`} type="password" name="newPassword"
+                                        value={getValueOrOther(passEdit.newPassword)} onChange={updatePassEdit} />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="box__item">
+                            <button className="button button--gap button--save" onClick={() => { changePassword() }}>Zmień hasło</button>
+                        </div>
+                    </>}
+                    <div className="form-editor__text form-editor__text--require-string">* Pole wymagane </div>
+                </div>
+            }</>
     )
 }

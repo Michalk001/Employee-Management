@@ -60,7 +60,7 @@ export const MessageNew = (props) => {
         });
 
         const data = await result.json();
-        console.log(data)
+   
         if (data.succeeded) {
             infoBoxContext.addInfo("Wysłano wiadomość");
             setMessage({ topic: "", description: "" })

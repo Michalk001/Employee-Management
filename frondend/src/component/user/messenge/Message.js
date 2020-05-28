@@ -55,7 +55,7 @@ export const Message = (props) => {
     }, [])
 
     useEffect(() => {
-        console.log(messages)
+      
     }, [messages])
 
     const chooseMessageType = () => {
