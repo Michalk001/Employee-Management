@@ -30,6 +30,10 @@ $normal-diseble-color:#7d7d7d;
     &--edit-box {
         margin: 20px 0px;
         justify-content: flex-end;
+
+        @media (max-width:768px) {
+            justify-content: space-evenly;
+        }
     }
 
     &:hover {

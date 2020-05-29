@@ -1,8 +1,30 @@
-.user{
+.user {
     width: 1200px;
     height: 100%;
     background-color: #f5f6f8;
     margin: 0 auto;
     display: flex;
     padding-top: 120px;
-} 
+
+    @media (max-width:1700px) {
+        width: 900px;
+    }
+
+    @media (max-width:1440px) {
+        width: 900px;
+    }
+
+    @media (max-width:1180px) {
+        width: 700px;
+    }
+
+    @media (max-width:768px) {
+        width: 100%;
+        padding-left: 6px;
+        box-sizing: border-box;
+        padding-right: 6px;
+    }
+
+
+
+}

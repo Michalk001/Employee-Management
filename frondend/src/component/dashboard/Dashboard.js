@@ -60,14 +60,14 @@ export const Dashboard = () => {
                 {activeProject.length != 0 && <div className="box__item">
                     <div className="box__text box__text--normal box__project ">
                         <span className="box__project--name ">{t('dashboard.name')}</span>
-                        <span className="box__project--hours ">{t('dashboard.hours')}</span>
+                        <span className="box__project--hours-dashboard ">{t('dashboard.hours')}</span>
 
                     </div>
                     <div className="box__scroll">
                         {activeProject.map((x, index) => (
                             <Link to={`/project/${x.idProject}`} key={`activP-${index}`} className="box__project box__project--hover">
                                 <span className="box__project--name ">{x.name}</span>
-                                <span className="box__project--hours ">{x.hours}</span>
+                                <span className="box__project--hours-dashboard ">{x.hours}</span>
                             </Link>
                         ))}
                     </div>

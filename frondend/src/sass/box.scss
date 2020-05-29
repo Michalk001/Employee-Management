@@ -9,6 +9,13 @@
     box-shadow: -2px 4px 53px -7px rgba(0, 0, 0, 0.56);
     position: relative;
 
+    
+
+    @media (max-width:768px) {
+        width: 100%;
+        padding: 5px 30px;
+    }
+
     &--center {
         margin-left: auto;
         margin-right: auto;
@@ -16,6 +23,13 @@
 
     &--medium {
         width: 600px;
+
+        @media (max-width:768px) {
+            width: 100%;
+
+        }
+
+
     }
 
     &--login {
@@ -24,6 +38,11 @@
 
     &--large {
         width: 100%;
+
+        @media (max-width:768px) {
+            width: 100%;
+
+        }
     }
 
     &--employe-list {
@@ -166,6 +185,11 @@
         &--user-edit-mode {
             margin-right: 25px;
             display: inline-block;
+            margin-top: 10px;
+
+            @media (max-width:768px) {
+                width: 100%;
+            }
         }
 
         &--employe {
@@ -194,25 +218,51 @@
         display: flex;
         padding: 10px 10px;
         word-break: break-word;
+        justify-content: space-between;
 
         &--name {
             width: 250px;
+            @media (max-width:501px) {
+                width: 100%;
+
+            }
         }
 
         &--title-name {
             width: 230px;
+
+            @media (max-width:501px) {
+                width: 100%;
+
+            }
         }
 
         &--hours,
+        &--hours-dashboard,
         &--employe {
             position: relative;
             width: 130px;
             text-align: right;
+            @media (max-width:501px) {
+                width: 120px;
+
+            }
+        }
+
+        &--hours {
+            @media (max-width:720px) {
+                display: none;
+
+            }
         }
 
         &--title-hours {
             width: 150px;
             text-align: right;
+
+            @media (max-width:720px) {
+                display: none;
+            }
         }
 
         &--employe {
@@ -275,6 +325,9 @@
             padding: 0 10px;
             width: 300px;
             margin-top: 5px;
+            @media (max-width:768px) {
+                width: 100%;
+            }
         }
 
         &--require {
@@ -305,6 +358,13 @@
             flex-direction: row-reverse;
             justify-content: space-between;
             width: 100%;
+
+            @media (max-width:720px) {
+                flex-wrap: wrap;
+                display: flex;
+                flex-direction: column;
+            }
+
         }
 
         &:hover {

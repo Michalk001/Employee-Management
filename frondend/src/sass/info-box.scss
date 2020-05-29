@@ -39,6 +39,9 @@
         position: relative;
         cursor: pointer;
         height: fit-content;
+        @media (max-width:768px) {
+            width: 300px;
+        }
     }
 
     &__button-inline {
