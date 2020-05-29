@@ -9,6 +9,7 @@ import { AuthContext } from '../../context/AuthContext';
 import config from '../../config.json'
 import Cookies from 'js-cookie';
 import { ErrorPage } from "../common/ErrorPage";
+import { useTranslation } from "react-i18next";
 
 export const UserProfileEditor = (props) => {
 
@@ -20,7 +21,7 @@ export const UserProfileEditor = (props) => {
     const [passEdit, setPassEdit] = useState({ oldPassword: "", newPassword: "" })
     const [passIsValid, setPassIsValid] = useState({ oldPassword: true, newPassword: true })
     const authContext = useContext(AuthContext);
-
+    const { t, i18n } = useTranslation('common');
     const infoBoxContext = useContext(InfoBoxContext);
 
     const getUser = async (id) => {
@@ -32,7 +33,7 @@ export const UserProfileEditor = (props) => {
             },
         });
         if (result.status == 404) {
-            setError({ code: 404, text: "User Not Found" })
+            setError({ code: 404, text: t('infoBox.userNotFound') })
         }
         const data = await result.json();
         if (data.succeeded) {
@@ -85,7 +86,7 @@ export const UserProfileEditor = (props) => {
         }
         setIsValid(valid);
         if (!isOK)
-            infoBoxContext.addListInfo(errorList, "Zaznaczone pola są wymagane");
+            infoBoxContext.addListInfo(errorList,  t('infoBox.require'));
         return isOK
     }
 
@@ -109,10 +110,10 @@ export const UserProfileEditor = (props) => {
         if (data.succeeded) {
             setUser(editUser);
             authContext.refreshToken();
-            infoBoxContext.addInfo("Zaktualizowano dane pracownika");
+            infoBoxContext.addInfo( t('infoBox.updated'));
         }
         else {
-            infoBoxContext.addInfo("Wystąpił błąd");
+            infoBoxContext.addInfo(t('infoBox.error'));
         }
     }
 
@@ -131,13 +132,13 @@ export const UserProfileEditor = (props) => {
         else if (passEdit.newPassword.length <= passCharCount) {
             valid.newPassword = false
             isOK = false;
-            errorList.push(`Hasło wymaga minimum ${passCharCount} znaki`)
+            errorList.push(`${t('infoBox.errorPass')} ${passCharCount} ${t('infoBox.errorChar')}`)
 
         }
 
         setPassIsValid(valid)
         if (!isOK)
-            infoBoxContext.addListInfo(errorList, "Zaznaczone pola są wymagane");
+            infoBoxContext.addListInfo(errorList, t('infoBox.require'));
         return isOK;
     }
 
@@ -158,15 +159,15 @@ export const UserProfileEditor = (props) => {
         if (data.succeeded) {
             setPassEdit({ oldPassword: "", newPassword: "" })
             authContext.refreshToken();
-            infoBoxContext.addInfo("Zmieniono hasło");
+            infoBoxContext.addInfo(t('infoBox.changePass'));
         }
         else {
             if (data.code == 2) {
-                infoBoxContext.addInfo("Błędne Hasło");
+                infoBoxContext.addInfo(t('infoBox.wrongPass'));
                 setPassIsValid({ ...passIsValid, oldPassword: false })
             }
             else
-                infoBoxContext.addInfo("Wystąpił błąd");
+                infoBoxContext.addInfo(t('infoBox.error'));
         }
 
     }
@@ -189,12 +190,12 @@ export const UserProfileEditor = (props) => {
             setUser({ ...user, isRetired })
             setEditUser({ ...user, isRetired })
             if (isRetired)
-                infoBoxContext.addInfo("Zarchiwizowano pracownika");
+                infoBoxContext.addInfo(t('infoBox.archiveUser'));
             else
-                infoBoxContext.addInfo("Przywrócono pracownika");
+                infoBoxContext.addInfo(t('infoBox.restoreUser'));
         }
         else {
-            infoBoxContext.addInfo("Wystąpił błąd");
+            infoBoxContext.addInfo(t('infoBox.error'));
         }
 
     }
@@ -229,63 +230,63 @@ export const UserProfileEditor = (props) => {
         <> {error != null && <ErrorPage text={error.text} code={error.code} />}
             {user &&
                 <div className="box box--large" >
-                    {user.isRetired && <div className="form-editor__text form-editor__text--archive-small">Zarchiwizowany </div>}
+                    {user.isRetired && <div className="form-editor__text form-editor__text--archive-small">{t('infoBox.archive')} </div>}
                     <div className="box__item--inline box__item--full-width box__item button--edit-box">
                         {authContext.isAdmin && <>
-                            {!user.isRetired && <button className="button button--gap button--remove" onClick={() => archiveUser(true)}>Zarchiwizuj</button>}
-                            {user.isRetired && <button className="button button--gap button--remove" onClick={() => archiveUser(false)}>Przywróć</button>}
+                            {!user.isRetired && <button className="button button--gap button--remove" onClick={() => archiveUser(true)}>{t('button.archive')}</button>}
+                            {user.isRetired && <button className="button button--gap button--remove" onClick={() => archiveUser(false)}>{t('button.restore')}</button>}
                         </>}
-                        <button onClick={() => infoBoxContext.Confirm("Czy napewno chcesz zapisać?", () => (saveEdit()))} className="button button--gap button--save">Zapisz</button>
-                        <button onClick={() => infoBoxContext.Confirm("Czy napewno chcesz anulować edycje?", () => (cancelEdit()))} className="button button--gap button--remove">Anuluj</button>
-                        <Link to={`/user/${user.username}`} className="button button--gap">Profil</Link>
+                        <button onClick={() => infoBoxContext.Confirm("Czy napewno chcesz zapisać?", () => (saveEdit()))} className="button button--gap button--save">{t('button.save')}</button>
+                        <button onClick={() => infoBoxContext.Confirm("Czy napewno chcesz anulować edycje?", () => (cancelEdit()))} className="button button--gap button--remove">{t('button.cancel')}</button>
+                        <Link to={`/user/${user.username}`} className="button button--gap">{t('button.profile')}</Link>
                     </div>
 
 
                     <div className="box__item">
                         <div className="box__item--inline box__item--user-edit-mode  ">
-                            <div className="box__text box__text--require">Imie </div>
+                            <div className="box__text box__text--require">{t('user.firstname')} </div>
                             <input className={`box__input box__input--user-edit ${validInput(isValid.firstname)}`} name="firstname"
                                 onChange={updateEditUser} value={getValueOrOther(editUser.firstname)} />
                         </div>
 
                         <div className=" box__item--inline box__item--user-edit-mode">
-                            <div className="box__text box__text--require">Nazwisko </div>
+                            <div className="box__text box__text--require">{t('user.lastname')} </div>
                             <input className={`box__input box__input--user-edit ${validInput(isValid.lastname)}`} name="lastname"
                                 onChange={updateEditUser} value={getValueOrOther(editUser.lastname)} />
                         </div>
 
                         <div className=" box__item--inline box__item--user-edit-mode ">
-                            <div className="box__text  box__text--require">E-mail</div>
+                            <div className="box__text  box__text--require">{t('user.email')}</div>
                             <input className={`box__input box__input--user-edit  ${validInput(isValid.email)}`} name="email"
                                 onChange={updateEditUser} value={getValueOrOther(editUser.email)} />
                         </div>
 
                         <div className=" box__item--inline box__item--user-edit-mode">
-                            <div className=" box__text ">Telefon </div>
+                            <div className=" box__text ">{t('user.phone')} </div>
                             <input className="box__input box__input--user-edit" name="phone" onChange={validPhone} value={getValueOrOther(editUser.phone)} />
                         </div>
                     </div>
                     {authContext.userDate.username == user.username && <>
                         <div className=" box__item ">
-                            <div className="box__text  box__text--bold box--half-border-top">Zmiana Hasła</div>
+                            <div className="box__text  box__text--bold box--half-border-top">{t('user.changePass')}</div>
                             <div className="box__item--inline ">
                                 <div className="box__item box__item--user-edit-mode">
-                                    <div className="box__text  box__text--require">Stare Hasła</div>
+                                    <div className="box__text  box__text--require">{t('user.oldPass')}</div>
                                     <input className={`box__input box__input--user-edit ${validInput(passIsValid.oldPassword)}`} type="password" name="oldPassword"
                                         value={getValueOrOther(passEdit.oldPassword)} onChange={updatePassEdit} />
                                 </div>
                                 <div className="box__item  box__item--user-edit-mode">
-                                    <div className="box__text  box__text--require">Nowe Hasła</div>
+                                    <div className="box__text  box__text--require">{t('user.newPass')}</div>
                                     <input className={`box__input box__input--user-edit ${validInput(passIsValid.newPassword)}`} type="password" name="newPassword"
                                         value={getValueOrOther(passEdit.newPassword)} onChange={updatePassEdit} />
                                 </div>
                             </div>
                         </div>
                         <div className="box__item">
-                            <button className="button button--gap button--save" onClick={() => { changePassword() }}>Zmień hasło</button>
+                            <button className="button button--gap button--save" onClick={() => { changePassword() }}>{t('button.changePass')}</button>
                         </div>
                     </>}
-                    <div className="form-editor__text form-editor__text--require-string">* Pole wymagane </div>
+                    <div className="form-editor__text form-editor__text--require-string">* {t('common.require')} </div>
                 </div>
             }</>
     )

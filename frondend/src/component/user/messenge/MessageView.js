@@ -8,10 +8,11 @@ import Cookies from 'js-cookie';
 import config from '../../../config.json'
 import { ErrorPage } from "../../common/ErrorPage";
 
-
+import { useTranslation } from 'react-i18next';
 
 export const MessageView = (props) => {
 
+    const { t, i18n } = useTranslation('common');
     const [message, setMessage] = useState(null);
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState(null);
@@ -26,7 +27,7 @@ export const MessageView = (props) => {
             },
         });
         if (result.status == 404) {
-            setError({ code: 404, text: "Message Not Found" })
+            setError({ code: 404, text: t('infoBox.messageNotFound') })
         }
         const data = await result.json();
         setMessage(data.message)
@@ -59,7 +60,7 @@ export const MessageView = (props) => {
             return (
                 <div className="message-view__header message-view__header--sender">
                     <div className="message-view__text">
-                        <span className="message-view__text--vertical-center">Odbiora:</span>
+                        <span className="message-view__text--vertical-center">{ t('message.recipient')}:</span>
                         <Link to={`/user/${message.recipient.username}`} className="message-view__text--vertical-center message-view__text--author-name">
                             {message.recipient.firstname} {message.recipient.lastname}
                         </Link>
@@ -71,12 +72,12 @@ export const MessageView = (props) => {
             return (
                 <div className="message-view__header ">
                     <div className="message-view__text">
-                        <span className="message-view__text--vertical-center">Autor:</span>
+                        <span className="message-view__text--vertical-center">{ t('message.author')}:</span>
                         <Link to={`/user/${message.sender.username}`} className="message-view__text--vertical-center message-view__text--author-name">
                             {message.sender.firstname} {message.sender.lastname}
                         </Link>
                     </div>
-                    <Link to={{ pathname: '/message/new', reply: { topic: message.topic, user: message.sender } }} className="button">Odpowiedz</Link>
+                    <Link to={{ pathname: '/message/new', reply: { topic: message.topic, user: message.sender } }} className="button">{ t('button.reply')}</Link>
                 </div>
             )
     }
@@ -101,14 +102,14 @@ export const MessageView = (props) => {
                     {getHeader()}
                     <div className="message-view__topic">
                         <div className="message-view__text">
-                            <span className="">Temat:</span>
+                            <span className="">{ t('message.topic')}:</span>
                             <span className="message-view__text--topic">{message.topic}</span>
                         </div>
 
                     </div>
 
                     <div className="message-view__description">
-                        <div className="message-view__text">Wiadomość:</div>
+                        <div className="message-view__text">{ t('message.message')}:</div>
                         <div className="message-view__description--content">
                             {message.description}
                         </div>

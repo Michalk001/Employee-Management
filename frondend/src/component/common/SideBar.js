@@ -3,9 +3,11 @@ import React, { useState, useEffect, state, useReducer, useContext } from "react
 import { Link } from 'react-router-dom';
 import { AuthContext } from "../../context/AuthContext";
 import Cookies from 'js-cookie';
+import { useTranslation } from 'react-i18next';
+
 export const SideBar = () => {
 
-
+    const { t, i18n } = useTranslation('common');
     const authContext = useContext(AuthContext);
     const [hiddeMenu, setHiddeMenu] = useState(null);
 
@@ -46,32 +48,32 @@ export const SideBar = () => {
             </div>
             <div className={`navBar__menu ${hiddeMenu ? ` navBar__menu--close` : ``} `}>
                 <div className={`navBar__menu--item`}>
-                    <div className={`navBar__menu--text navBar__menu--title `}>Panel Użytkownika</div>
+                    <div className={`navBar__menu--text navBar__menu--title `}> {t('common.userPanel')}</div>
                 </div>
                 <div className={`navBar__menu--item`}>
-                    <Link to="/" className={`navBar__menu--text navBar__menu--link`} >Kokpit</Link>
+                    <Link to="/" className={`navBar__menu--text navBar__menu--link`} > {t('sideBar.dashboard')}</Link>
                 </div>
                 <div className={`navBar__menu--item`}>
-                    <Link to={`/user/project`} className={`navBar__menu--text navBar__menu--link`} >Projekty</Link>
+                    <Link to={`/user/project`} className={`navBar__menu--text navBar__menu--link`} >{t('sideBar.projects')} </Link>
                 </div>
                 <div className={`navBar__menu--item`}>
-                    <Link to={`/user/${getUsername()}`} className={`navBar__menu--text navBar__menu--link`} >Profil</Link>
+                    <Link to={`/user/${getUsername()}`} className={`navBar__menu--text navBar__menu--link`} >{t('sideBar.profil')}</Link>
                 </div>
                 <div className={`navBar__menu--item`}>
-                    <Link to={`/message`} className={`navBar__menu--text navBar__menu--link`} >Wiadomości</Link>
+                    <Link to={`/message`} className={`navBar__menu--text navBar__menu--link`} >{t('message.messages')}</Link>
                 </div>
                 <div className={`navBar__menu--item`}>
-                    <Link to={`/message/new`} className={`navBar__menu--text navBar__menu--link`} >Napisz Wiadomość</Link>
+                    <Link to={`/message/new`} className={`navBar__menu--text navBar__menu--link`}> {t('message.write')} </Link>
                 </div>
                 {authContext.isAdmin && <>
                     <div className={`navBar__menu--item`}>
-                        <div className={`navBar__menu--text navBar__menu--title `}>Panel Administratora</div>
+                        <div className={`navBar__menu--text navBar__menu--title `}> {t('common.adminPanel')}</div>
                     </div>
                     <div className={`navBar__menu--item`}>
-                        <Link to="/admin/project/new" className={`navBar__menu--text navBar__menu--link  `}>Nowy Projekt</Link>
-                        <Link to="/admin/user/new" className={`navBar__menu--text navBar__menu--link  `}>Nowy Pracownik</Link>
-                        <Link to="/admin/project" className={`navBar__menu--text navBar__menu--link  `}>Lista Projektów</Link>
-                        <Link to="/admin/user" className={`navBar__menu--text navBar__menu--link  `}>Lista Pracowników</Link>
+                        <Link to="/admin/project/new" className={`navBar__menu--text navBar__menu--link  `}>{t('sideBar.newProject')}</Link>
+                        <Link to="/admin/user/new" className={`navBar__menu--text navBar__menu--link  `}>{t('sideBar.newEmploye')}</Link>
+                        <Link to="/admin/project" className={`navBar__menu--text navBar__menu--link  `}>{t('sideBar.projectsList')}</Link>
+                        <Link to="/admin/user" className={`navBar__menu--text navBar__menu--link  `}>{t('sideBar.employeeList')}</Link>
                     </div>
                 </>}
             </div>

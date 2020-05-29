@@ -4,12 +4,14 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import config from '../../config.json'
 import Cookies from 'js-cookie';
+import { useTranslation } from 'react-i18next';
 
 export const Dashboard = () => {
 
     const [isLoading, setIsLoading] = useState(true)
     const [activeProject, setActiveProject] = useState([]);
     const authContext = useContext(AuthContext)
+    const { t, i18n } = useTranslation('common');
 
     const getProject = async () => {
         if (!authContext.userDate)
@@ -48,17 +50,17 @@ export const Dashboard = () => {
 
     return (
         <div className="box">
-            <div className="box__text box__text--center  ">Aktywne Projekty</div>
+            <div className="box__text box__text--center  ">{t('dashboard.activProject')}</div>
             {isLoading && <div className="box__loading">  <i className="fas fa-spinner load-ico load-ico--center load-ico__spin "></i></div>}
             {!isLoading && <>
                 {activeProject.length == 0 && <div className="box__item">
-                    <div className="box__text box__text--center">Brak</div>
+                    <div className="box__text box__text--center">{t('dashboard.non')}</div>
                 </div>
                 }
                 {activeProject.length != 0 && <div className="box__item">
                     <div className="box__text box__text--normal box__project ">
-                        <span className="box__project--name ">Nazwa</span>
-                        <span className="box__project--hours ">Godziny</span>
+                        <span className="box__project--name ">{t('dashboard.name')}</span>
+                        <span className="box__project--hours ">{t('dashboard.hours')}</span>
 
                     </div>
                     <div className="box__scroll">

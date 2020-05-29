@@ -1,4 +1,4 @@
-import React, { useState, useEffect, state, useContext, useReducer } from "react";
+import React, { useState, useEffect, state, useContext, useReducer, lazy } from "react";
 import { Link } from 'react-router-dom';
 
 import { AuthContext } from '../../context/AuthContext';
@@ -6,9 +6,9 @@ import config from '../../config.json'
 import Cookies from 'js-cookie';
 
 import { InfoBoxContext } from '../../context/InfoBox/InfoBoxContext';
-import { ProjectReportPDF } from "../reportCreation/ProjectReportPDF";
-import { PDFDownloadLink } from "@react-pdf/renderer";
 import { ErrorPage } from "../common/ErrorPage"
+import { useTranslation } from 'react-i18next';
+const ProjectReportPDF = lazy(() => import('../reportCreation/ProjectReportPDF'));
 
 
 export const Project = (props) => {
@@ -18,7 +18,9 @@ export const Project = (props) => {
     const [error, setError] = useState(null);
     const infoBoxContext = useContext(InfoBoxContext);
     const authContext = useContext(AuthContext)
+    const { t, i18n } = useTranslation('common');
 
+    const [generatePDF, setGeneratePDF] = useState(false)
 
     const getProject = async (id) => {
 
@@ -29,8 +31,8 @@ export const Project = (props) => {
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
         });
-        if(result.status == 404){
-            setError({ code: 404, text: "Project Not Found" })
+        if (result.status == 404) {
+            setError({ code: 404, text: t('infoBox.projectNotFound') })
         }
 
 
@@ -67,10 +69,10 @@ export const Project = (props) => {
 
                 currentUserInfo.userProjects.hours = newHours
 
-                infoBoxContext.addInfo("Dodano godziny pracy");
+                infoBoxContext.addInfo(t('project.addHoursInfo'));
             }
             else {
-                infoBoxContext.addInfo("Wystąpił błąd");
+                infoBoxContext.addInfo(t('infoBox.error'));
             }
 
             setCurrentUserInfo({ ...currentUserInfo, newHours: null })
@@ -88,10 +90,10 @@ export const Project = (props) => {
             if (data.succeeded) {
                 currentUserInfo.userProjects.hours = newHours
 
-                infoBoxContext.addInfo("Zmniejszono godziny pracy");
+                infoBoxContext.addInfo(t('project.subHoursInfo'));
             }
             else {
-                infoBoxContext.addInfo("Wystąpił błąd");
+                infoBoxContext.addInfo(t('infoBox.error'));
             }
 
 
@@ -129,7 +131,7 @@ export const Project = (props) => {
 
     useEffect(() => {
         getCurrentUserInfo();
-
+        setGeneratePDF(false)
     }, [project])
 
     useEffect(() => {
@@ -141,17 +143,17 @@ export const Project = (props) => {
             {error != null && <ErrorPage text={error.text} code={error.code} />}
             {project &&
                 <div className="box box--large" >
-                    {project && project.isRetired && <div className="form-editor__text form-editor__text--archive-small">Zarchiwizowany </div>}
+                    {project && project.isRetired && <div className="form-editor__text form-editor__text--archive-small">{t('common.archive')} </div>}
                     {authContext.isAdmin && <div className="box__item--inline box__item--full-width box__item button--edit-box">
-                        <Link to={`/admin/project/edit/${project.id}`} className="button">EDYTUJ</Link>
+                        <Link to={`/admin/project/edit/${project.id}`} className="button">{t('button.edit')}</Link>
                     </div>}
                     <div className="box__text box__item ">
-                        <span className="box__text--bold ">Projekt: </span>
+                        <span className="box__text--bold ">{t('project.title')}: </span>
                         <span className="box__text--bold ">{project.name}</span>
                     </div>
                     {currentUserInfo && <div className="box__item box--half-border-top">
                         <div className="box__item--inline">
-                            <div className="box__text box__text--bold box__text--vertical-center  ">Ilość twoich godzin łącznie: </div>
+                            <div className="box__text box__text--bold box__text--vertical-center  ">{t('project.yoursQuantityHours')}: </div>
                             <div className="box__text box__text--vertical-center "> {currentUserInfo && currentUserInfo.userProjects.hours}</div>
                         </div>
                     </div>
@@ -159,24 +161,24 @@ export const Project = (props) => {
                     {project && !project.isRetired && currentUserInfo && !currentUserInfo.userProjects.isRemove && !currentUserInfo.userProjects.isRetired &&
                         <div className="box__item">
                             <div className="box__item--inline">
-                                <div className="box__text box__text--bold box__text--vertical-center  ">Nowe godziny</div>
+                                <div className="box__text box__text--bold box__text--vertical-center  ">{t('project.addHours')}</div>
                                 <input className="box__input box__input--add-hours" type="text" name="newHours" value={currentUserInfo && currentUserInfo.newHours ? currentUserInfo.newHours : ""} onChange={(x) => validHoursField(x.target, x => setCurrentUserInfo({ ...currentUserInfo, [x.name]: x.value }))} />
-                                <div className={`button button--gap ${!currentUserInfo || !currentUserInfo.newHours ? `button--disabled` : ``}`} onClick={() => addHours()}>Dodaj</div>
-                                <div className={`button button--gap ${!currentUserInfo || !currentUserInfo.newHours ? `button--disabled` : ``}`} onClick={() => removeHours()}>Odejmnij</div>
+                                <div className={`button button--gap ${!currentUserInfo || !currentUserInfo.newHours ? `button--disabled` : ``}`} onClick={() => addHours()}>{t('button.add')}</div>
+                                <div className={`button button--gap ${!currentUserInfo || !currentUserInfo.newHours ? `button--disabled` : ``}`} onClick={() => removeHours()}>{t('button.sub')}</div>
                             </div>
                         </div>
                     }
                     {project.description && <>
-                        <div className="box__text box--half-border-top ">Opis: </div>
+                        <div className="box__text box--half-border-top ">{t('project.description')}: </div>
                         <div className="box__text box__item box__item--description ">
                             {project.description}
                         </div>
                     </>}
                     {!project.description && <div className="box__text  box__item box--half-border-bottom   ">
-                        Brak Opisu
-                </div>}
+                        {t('project.noDescription')}
+                    </div>}
                     {project.users && project.users.find(x => { return (x.userProjects.isRetired == false && x.userProjects.isRemove == false) }) && <>
-                        <div className="box__text ">Przydzieleni pracownicy: </div>
+                        <div className="box__text ">{t('project.activeEmployee')}: </div>
                         <div className="box--employe-list ">
                             {project.users.filter(x => { return x.userProjects.isRetired == false && x.userProjects.isRemove == false }).map((x) => (
                                 <Link className="box__text  box__item box__item--employe" key={`emploact-${x.username}`} to={`/user/${x.username}`}>{x.firstname} {x.lastname}</Link>
@@ -184,25 +186,22 @@ export const Project = (props) => {
                         </div>
                     </>}
                     {project.users && project.users.find(x => { return (x.userProjects.isRetired == true && x.userProjects.isRemove == false) }) && <>
-                        <div className="box__text box--half-border-top">Byli pracownicy: </div>
+                        <div className="box__text box--half-border-top">{t('project.inactiveEmployee')}: </div>
                         <div className="box--employe-list ">
                             {(project.users.filter(x => { return (x.userProjects.isRetired == true && x.userProjects.isRemove == false) })).map((x) => (
                                 <Link className="box__text  box__item box__item--employe" key={`emploact-${x.username}`} to={`/user/${x.username}`}>{x.firstname} {x.lastname}</Link>
                             ))}
                         </div>
                     </>}
-                    <div className="box__text box--half-border-top">Raport:</div>
+                    <div className="box__text box--half-border-top">{t('common.report')}:</div>
                     <div className="box__item">
 
-                        {project != null && <PDFDownloadLink
-                            document={<ProjectReportPDF data={project} />}
-                            fileName={`${project.name}.pdf`}
-                            className="button"
-                        >
-                            {({ blob, url, loading, error }) =>
-                                loading ? "Ładowanie" : "Pobierz"
-                            }
-                        </PDFDownloadLink>}
+
+                        {!generatePDF && <div className="button" onClick={() => setGeneratePDF(true)}> {t('button.generatePDF')}</div>}
+
+                        {generatePDF && user != null && <Suspense fallback={<div className="button">{t('common.loading')}</div>}>
+                            <ProjectReportPDF Doc={ProjectReportPDF} data={project} name={`${project.name}`} />
+                        </Suspense>}
 
                     </div>
                 </div>

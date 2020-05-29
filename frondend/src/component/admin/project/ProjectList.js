@@ -1,21 +1,23 @@
-import React, { useState, useEffect, state, useContext, useReducer } from "react";
+import React, { useState, useEffect, state, useContext, useReducer, lazy, Suspense } from "react";
 import { Link } from 'react-router-dom';
 
-import { AuthContext } from '../../../context/AuthContext';
+
 import config from '../../../config.json'
 import Cookies from 'js-cookie';
-import { ProjectListPDF } from "../../reportCreation/ProjectListPDF";
-import { PDFDownloadLink,BlobProvider } from "@react-pdf/renderer";
 
+import { useTranslation } from "react-i18next";
+
+const ProjectListPDF = lazy(() => import('../../reportCreation/ProjectListPDF'));
 
 
 export const ProjectList = () => {
 
+    const { t, i18n } = useTranslation('common');
     const [projectList, setProjectList] = useState(null);
     const [filterProjectList, setFilterProjectList] = useState(null)
     const [filterOptions, setFilterOptions] = useState({ name: "", statusProject: "all" })
     const [isLoading, setIsLoading] = useState(true)
-    const [reloadPDF, setReloadPDF] = useState(true);
+    const [generatePDF, setGeneratePDF] = useState(false);
 
     const getProjects = async () => {
 
@@ -65,13 +67,13 @@ export const ProjectList = () => {
     }
 
 
-    const projectStatus = (status) => {
-        if (!status)
-            return "Aktywny"
-        else {
-            return "Nieaktywny"
-        }
+    const projectStatus = (isRetired) => {
+        if (isRetired)
+            return t('list.statusInactive')
+        return t('list.statusActive')
+
     }
+
     const updateFilterOptions = (event) => {
 
         setFilterOptions({ ...filterOptions, [event.target.name]: event.target.value })
@@ -112,18 +114,15 @@ export const ProjectList = () => {
     }
     useEffect(() => {
         filterList();
-        setReloadPDF(false)
+      
     }, [filterOptions])
 
     useEffect(() => {
 
-      
+        setGeneratePDF(false)
     }, [projectList, filterProjectList, isLoading])
 
-    useEffect(() => {
-        setReloadPDF(true)
-       
-    }, [reloadPDF])
+
 
     return (
         <div className="box box--large">
@@ -132,27 +131,27 @@ export const ProjectList = () => {
             <div className="box__item">
                 <div className=" box__radio-button--position">
                     <div className="box__item--inline">
-                        <label className={`box__radio-button ${isActiveRadio("filtr-all")}`} htmlFor={`filtr-all`}  >Wszystkie</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-all" name="statusProject" value="all" type="radio" />
-                        <label className={`box__radio-button ${isActiveRadio("filtr-active")}`} htmlFor={`filtr-active`} >Aktywne</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-active" name="statusProject" value="active" type="radio" />
-                        <label className={`box__radio-button ${isActiveRadio("filtr-inactive")}`} htmlFor={`filtr-inactive`} >Nieaktywne</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-inactive" name="statusProject" value="inactive" type="radio" />
+                        <label className={`box__radio-button ${isActiveRadio("filtr-all")}`} htmlFor={`filtr-all`}  >{t('list.all')}</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-all" name="statusProject" value="all" type="radio" />
+                        <label className={`box__radio-button ${isActiveRadio("filtr-active")}`} htmlFor={`filtr-active`} >{t('list.active')}</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-active" name="statusProject" value="active" type="radio" />
+                        <label className={`box__radio-button ${isActiveRadio("filtr-inactive")}`} htmlFor={`filtr-inactive`} >{t('list.inactive')}</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-inactive" name="statusProject" value="inactive" type="radio" />
                     </div>
-                    <div className="box__text"> Wyszukaj po nazwie</div>
+                    <div className="box__text"> {t('list.searchByName')}</div>
                 </div>
-                <input placeholder="Wyszukaj..." type="text" className="box__input box__input--search" id="name" name="name" value={filterOptions.name} onChange={updateFilterOptions} />
+                <input placeholder={`${t('list.search')}...`} type="text" className="box__input box__input--search" id="name" name="name" value={filterOptions.name} onChange={updateFilterOptions} />
             </div>
             <div className="box__text box__text--normal box__project">
-                <span className="box__project--title-name ">Nazwa</span>
-                <span className="box__project--title-hours ">Liczba godzin </span>
-                <span className="box__project--employe ">Liczba aktywnych pracowników</span>
-                <span className="box__project--employe-short ">Liczba pracowników</span>
-                <span className="box__project--title-status ">Status</span>
+                <span className="box__project--title-name ">{t('list.name')}</span>
+                <span className="box__project--title-hours ">{t('list.hours')} </span>
+                <span className="box__project--employe ">{t('list.activeEmployee')}</span>
+                <span className="box__project--employe-short ">{t('list.totalEmployee')}</span>
+                <span className="box__project--title-status ">{t('list.status')}</span>
             </div>
             {!isLoading && filterProjectList && <>
                 {projectList.length == 0 && <div className="box__item">
-                    <div className="box__text box__text--center">Brak Projektów</div>
+                    <div className="box__text box__text--center">{t('list.nonProject')}</div>
                 </div>}
                 {projectList.length != 0 && filterProjectList.length == 0 && <div className="box__item">
-                    <div className="box__text box__text--center">Nie znaleziono Projektów</div>
+                    <div className="box__text box__text--center">{t('list.noFoundProject')}</div>
                 </div>}
                 {projectList.length != 0 && filterProjectList.map((item) => (
                     <Link to={`/project/${item.id}`} key={`activP-${item.id}`} className="box__project box__project--hover">
@@ -165,17 +164,15 @@ export const ProjectList = () => {
                     </Link>
                 ))}
             </>}
-            <div className="box__text box--half-border-top">Raport:</div>
+            <div className="box__text box--half-border-top">{t('common.report')}:</div>
             <div className="box__item">
-                {!isLoading && reloadPDF && filterProjectList != null && <PDFDownloadLink
-                    document={<ProjectListPDF data={filterProjectList} />}
-                    fileName={`Project-List-Report.pdf`}
-                    className="button"
-                >
-                    {({ blob, url, loading, error }) =>
-                        loading ? "Ładowanie" : "Pobierz"
-                    }
-                </PDFDownloadLink>}
+
+
+                {!generatePDF && <div className="button" onClick={() => setGeneratePDF(true)}> {t('button.generatePDF')}</div>}
+
+                {generatePDF && filterProjectList != null && <Suspense fallback={<div className="button">{t('common.loading')}</div>}>
+                    <ProjectListPDF Doc={null} data={filterProjectList} name={`Project-List-Report`} />
+                </Suspense>}
 
             </div>
         </div>

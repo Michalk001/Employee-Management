@@ -1,22 +1,26 @@
 
 
-import React, { useState, useEffect, state, useContext, useReducer } from "react";
+import React, { useState, useEffect, state, useContext, useReducer, lazy, Suspense } from "react";
 import { Link } from 'react-router-dom';
 
 import { AuthContext } from '../../context/AuthContext';
 import config from '../../config.json'
 import Cookies from 'js-cookie';
-import { PDFDownloadLink } from "@react-pdf/renderer";
-import { UserReportPDF } from "../reportCreation/UserReportPDF"
 import { ErrorPage } from "../common/ErrorPage";
+import { useTranslation } from 'react-i18next';
 
+const UserReportPDF = lazy(() => import('../reportCreation/UserReportPDF'));
 
 export const UserProfile = (props) => {
 
+    const { t, i18n } = useTranslation('common');
+
     const [error, setError] = useState(null);
-    const [isLoaded, setIsLoaded] = useState(false)
     const [user, setUser] = useState(null);
     const authContext = useContext(AuthContext);
+
+    const [generatePDF, setGeneratePDF] = useState(false)
+
     const getUser = async (id) => {
         const result = await fetch(`${config.apiRoot}/user/${id}`, {
             method: "get",
@@ -27,7 +31,7 @@ export const UserProfile = (props) => {
         });
         const data = await result.json();
         if (result.status == 404) {
-            setError({ code: 404, text: "User Not Found" })
+            setError({ code: 404, text: t('common.noUserFound') })
         }
         if (data.succeeded) {
             setUser(data.user)
@@ -38,7 +42,7 @@ export const UserProfile = (props) => {
     const getPhone = (phone) => {
         if (phone != null)
             return phone
-        return "Brak"
+        return t('common.nonPhone')
     }
     const canEditByUser = () => {
 
@@ -46,7 +50,7 @@ export const UserProfile = (props) => {
     }
     const canEditByAdmin = () => {
 
-        return authContext.isAdmin  && authContext.userDate.username != user.username
+        return authContext.isAdmin && authContext.userDate.username != user.username
     }
     useEffect(() => {
 
@@ -55,7 +59,7 @@ export const UserProfile = (props) => {
     }, [props.match.params.id])
 
     useEffect(() => {
-        setIsLoaded(true)
+        setGeneratePDF(false)
     }, [user])
 
 
@@ -67,9 +71,9 @@ export const UserProfile = (props) => {
 
                     <div className="box__item--inline box__item--full-width box__item button--edit-box">
                         {authContext.userDate.username != user.username &&
-                            <Link to={{ pathname: '/message/new', reply: { user: user } }} className="button button--gap">Napisz Wiadomość</Link>}
-                        {canEditByUser() && <Link to="/user/profile" className="button button--gap">EDYTUJ</Link>}
-                        {canEditByAdmin() && <Link to={`/user/profile/${user.username}`} className="button button--gap">EDYTUJ</Link>}
+                            <Link to={{ pathname: '/message/new', reply: { user: user } }} className="button button--gap">{t('message.write')}</Link>}
+                        {canEditByUser() && <Link to="/user/profile" className="button button--gap">{t('button.edit')}</Link>}
+                        {canEditByAdmin() && <Link to={`/user/profile/${user.username}`} className="button button--gap">{t('button.edit')}</Link>}
                     </div>
 
                     <div className="box__text box__item box__text--bold">
@@ -77,17 +81,17 @@ export const UserProfile = (props) => {
                     </div>
                     <div className=" box__item box__item--inline ">
                         <div className="box__text box__item--inline ">
-                            <div className=" box__text--bold box__text--vertical-center">E-mail: </div>
+                            <div className=" box__text--bold box__text--vertical-center">{t('user.email')}: </div>
                             <div className=" box__text--text-item box__text--vertical-center">{user.email}</div>
                         </div>
                         <div className="box__text box__item--inline">
-                            <div className=" box__text--bold box__text--vertical-center ">Telefon: </div>
+                            <div className=" box__text--bold box__text--vertical-center ">{t('user.phone')}: </div>
                             <div className=" box__text--text-item box__text--vertical-center ">{getPhone(user.phone)}</div>
                         </div>
                     </div>
 
                     {user.projects && user.projects.find(x => { return (x.userProjects.isRemove == false && x.userProjects.isRetired == false) }) && <>
-                        <div className="box__text ">Aktywne projekty: </div>
+                        <div className="box__text ">{t('dashboard.activProject')}: </div>
                         <div className="box--employe-list">
                             {user.projects.filter(x => { return (x.userProjects.isRetired == false) }).map((x) => (
                                 <Link className="box__text  box__item box__item--employe" key={`emploact-${x.name}`} to={`/project/${x.id}`}>{x.name}</Link>
@@ -96,12 +100,12 @@ export const UserProfile = (props) => {
                     </>}
                     {!user.projects || !user.projects.find(x => { return (x.userProjects.isRemove == false && x.userProjects.isRetired == false) }) &&
                         <div className="box__text  box__item box--half-border-top">
-                            Brak aktywnych pojektów
-                    </div>
+                            {t('common.lackInactiveProject')}
+                        </div>
                     }
 
                     {user.projects && user.projects.find(x => { return (x.userProjects.isRemove == false && x.userProjects.isRetired == true) }) && <>
-                        <div className="box__text ">Byłe projekty: </div>
+                        <div className="box__text ">  {t('common.inactiveProject')}: </div>
                         <div className="box--employe-list ">
                             {(user.projects.filter(xx => { return xx.userProjects.isRetired == true })).map((x) => (
                                 <Link className="box__text  box__item box__item--employe" key={`emploact-${x.name}`} to={`/project/${x.id}`}>{x.name}</Link>
@@ -109,20 +113,17 @@ export const UserProfile = (props) => {
                         </div>
                     </>}
 
-                    <div className="box__text ">Raport</div>
+                    <div className="box__text "> {t('common.report')}</div>
                     <div className="box__item">
-                        {isLoaded && user != null && <PDFDownloadLink
-                            document={<UserReportPDF data={user} />}
-                            fileName={`${user.firstname}-${user.lastname}.pdf`}
-                            className="button"
-                        >
-                            {({ blob, url, loading, error }) =>
-                                loading ? "Ładowanie" : "Pobierz"
-                            }
-                        </PDFDownloadLink>}
 
+                        {!generatePDF && <div className="button" onClick={() => setGeneratePDF(true)}> {t('button.generatePDF')}</div>}
+
+                        {generatePDF && user != null && <Suspense fallback={<div className="button">{t('common.loading')}</div>}>
+                            <UserReportPDF Doc={UserReportPDF} data={user} name={`${user.firstname}-${user.lastname}`} />
+                        </Suspense>}
                     </div>
                 </div>
             }</>
     )
 }
+

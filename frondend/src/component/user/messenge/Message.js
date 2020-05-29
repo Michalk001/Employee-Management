@@ -8,9 +8,11 @@ import config from '../../../config.json'
 
 import { MessageReceive } from "./MessageReceive"
 import { MessageSent } from "./MessageSent"
+import { useTranslation } from 'react-i18next';
 
 export const Message = (props) => {
 
+    const { t, i18n } = useTranslation('common');
     const [messages, setMessages] = useState({})
     const [selectMessageType, setSelectMessageType] = useState("receive")
     const [isLoading, setIsLoading] = useState(true);
@@ -73,10 +75,10 @@ export const Message = (props) => {
             {isLoading && <div className="box__loading">  <i className="fas fa-spinner load-ico load-ico--center load-ico__spin "></i></div>}
             <div className="message-list__menu-type ">
                 <div className="message-list__menu-type--select">
-                    <label className={`box__radio-button ${selectMessageTypeRadio("message-receive")}`} htmlFor={`message-receive`}  >Odebrane</label><input onChange={updateSelectMessageType} className="box__project--radio" id="message-receive" name="statusProject" value="receive" type="radio" />
-                    <label className={`box__radio-button ${selectMessageTypeRadio("message-sent")}`} htmlFor={`message-sent`} >Wysłane</label><input onChange={updateSelectMessageType} className="box__project--radio" id="message-sent" name="statusProject" value="sent" type="radio" />
+                    <label className={`box__radio-button ${selectMessageTypeRadio("message-receive")}`} htmlFor={`message-receive`}  >{t('message.received')}</label><input onChange={updateSelectMessageType} className="box__project--radio" id="message-receive" name="statusProject" value="receive" type="radio" />
+                    <label className={`box__radio-button ${selectMessageTypeRadio("message-sent")}`} htmlFor={`message-sent`} >{t('message.send')}</label><input onChange={updateSelectMessageType} className="box__project--radio" id="message-sent" name="statusProject" value="sent" type="radio" />
                 </div>
-                <Link to={`/message/new`} className="button message-list__item--button">Utwórz</Link>
+                <Link to={`/message/new`} className="button message-list__item--button">{t('button.create')}</Link>
             </div>
 
             <div className="message-list">

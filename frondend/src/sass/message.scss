@@ -82,7 +82,8 @@
         width: 100%;
         box-sizing: border-box;
         position: relative;
-        &--sender{
+
+        &--sender {
             margin-bottom: 19px;
         }
     }
@@ -119,7 +120,7 @@
             color: #000;
             transition-duration: 0.10s;
 
-         
+
 
             &:hover {
                 color: #3c3c3c;
@@ -131,9 +132,14 @@
                     width: 100%;
                     left: 3px;
                     border-top: 1px solid #989898;
-   
+
                 }
             }
+        }
+
+        &--message {
+            top: 12px;
+            position: relative;
         }
 
         &--topic {

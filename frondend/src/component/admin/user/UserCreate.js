@@ -9,6 +9,7 @@ import config from '../../../config.json'
 import Cookies from 'js-cookie';
 import { Project } from "../../user/Project";
 import Select from 'react-select'
+import { useTranslation } from "react-i18next";
 
 
 
@@ -16,7 +17,7 @@ export const UserCreate = (props) => {
 
 
     const passCharCount = 3;
-
+    const { t, i18n } = useTranslation('common');
     const infoBoxContext = useContext(InfoBoxContext);
     const authContext = useContext(AuthContext);
     const [user, setUser] = useState({ isAdmin: false });
@@ -76,12 +77,12 @@ export const UserCreate = (props) => {
 
             if (user.password.length <= passCharCount) {
                 valid.password = false
-                errorList.push(`Hasło wymaga minimum ${passCharCount} znaki`)
+                errorList.push(`${t('infoBox.errorPass')} ${passCharCount} ${t('infoBox.errorChar')}`)
             }
         }
         setIsValid(valid);
         if (!isOK)
-            infoBoxContext.addListInfo(errorList, "Zaznaczone pola są wymagane");
+            infoBoxContext.addListInfo(errorList,  t('infoBox.require'));
         return isOK
     }
 
@@ -93,15 +94,15 @@ export const UserCreate = (props) => {
         const data = await result.json();
 
         if (data.succeeded) {
-            infoBoxContext.addInfo("Utworzono pracownika");
+            infoBoxContext.addInfo( t('infoBox.createUser'));
             setUser({isAdmin: false})
 
         }
         else {
             if (data.code == 2)
-                infoBoxContext.addInfo("Login zajęty");
+                infoBoxContext.addInfo( t('infoBox.bussyLogin'));
             else
-                infoBoxContext.addInfo("Wystąpił błąd");
+                infoBoxContext.addInfo( t('infoBox.error'));
         }
 
     }
@@ -130,53 +131,53 @@ export const UserCreate = (props) => {
     return (
         <div className="box box--large">
             <div className="form-editor--inline box__item button--edit-box">
-                <div className="button button--save button--gap" onClick={() => createUser()}>Utwórz</div>
+                <div className="button button--save button--gap" onClick={() => createUser()}>{ t('button.create')}</div>
 
             </div>
-            <div className="box__text box__text--sub-title">Dane Logowania</div>
+            <div className="box__text box__text--sub-title"> { t('user.dateLogin')}</div>
             <div className="form-editor--inline-flex-wrap ">
                 <div className="form-editor__item--input-box">
-                    <div className="form-editor__text form-editor__text--vertical-center form-editor__text--require">Login </div>
+                    <div className="form-editor__text form-editor__text--vertical-center form-editor__text--require">{ t('user.login')} </div>
                     <input className={`form-editor__input form-editor__input--editor ${isValid.username == false ? `form-editor__input--require` : ""}`}
                         type="text" name="username" value={user.username ? user.username : ""} onChange={updateUserData} />
                 </div>
                 <div className="form-editor__item--input-box">
-                    <div className="form-editor__text form-editor__text--vertical-center form-editor__text--require">Hasło </div>
+                    <div className="form-editor__text form-editor__text--vertical-center form-editor__text--require">{ t('user.password')} </div>
                     <input className={`form-editor__input form-editor__input--editor ${isValid.password == false ? `form-editor__input--require` : ""}`}
                         type="password" name="password" value={user.password ? user.password : ""} onChange={updateUserData} />
                 </div>
                 <div className="form-editor__item--input-box">
-                    <div className="form-editor__text form-editor__text--vertical-center ">Uprawnienie Administratora </div>
+                    <div className="form-editor__text form-editor__text--vertical-center ">{ t('user.admin')}</div>
                     <div className="form-editor--inline form-editor__item--center">
-                        <label className={`form-editor__radio-button ${isActiveRadio("isAdminTrue")}`} htmlFor={`isAdminTrue`}  >TAK</label><input className="form-editor__radio-button--input" id="isAdminTrue" onChange={updateIsAdmin} name="isAdmin" value={true} type="radio" />
-                        <label className={`form-editor__radio-button ${isActiveRadio("isAdminFalse")}`} htmlFor={`isAdminFalse`} >NIE</label><input className="form-editor__radio-button--input" id="isAdminFalse" onChange={updateIsAdmin} name="isAdmin" value={false} type="radio" />
+                        <label className={`form-editor__radio-button ${isActiveRadio("isAdminTrue")}`} htmlFor={`isAdminTrue`}  >{ t('user.yes')}</label><input className="form-editor__radio-button--input" id="isAdminTrue" onChange={updateIsAdmin} name="isAdmin" value={true} type="radio" />
+                        <label className={`form-editor__radio-button ${isActiveRadio("isAdminFalse")}`} htmlFor={`isAdminFalse`} >{ t('user.no')}</label><input className="form-editor__radio-button--input" id="isAdminFalse" onChange={updateIsAdmin} name="isAdmin" value={false} type="radio" />
 
                     </div>
                 </div>
             </div>
-            <div className="box__text box__text--sub-title form-editor__item--half-border-top ">Dane Pracownika</div>
+            <div className="box__text box__text--sub-title form-editor__item--half-border-top "> { t('user.userData')}</div>
             <div className="form-editor--inline-flex-wrap ">
                 <div className="form-editor__item--input-box">
-                    <div className="form-editor__text form-editor__text--vertical-center form-editor__text--require">Imie </div>
+                    <div className="form-editor__text form-editor__text--vertical-center form-editor__text--require">{ t('user.firstname')} </div>
                     <input className={`form-editor__input form-editor__input--editor ${isValid.firstname == false ? `form-editor__input--require` : ""}`}
                         type="text" name="firstname" value={user.firstname ? user.firstname : ""} onChange={updateUserData} />
                 </div>
                 <div className="form-editor__item--input-box">
-                    <div className="form-editor__text form-editor__text--vertical-center form-editor__text--require">Nazwisko </div>
+                    <div className="form-editor__text form-editor__text--vertical-center form-editor__text--require">{ t('user.lastname')} </div>
                     <input className={`form-editor__input form-editor__input--editor ${isValid.lastname == false ? `form-editor__input--require` : ""} `}
                         type="text" name="lastname" value={user.lastname ? user.lastname : ""} onChange={updateUserData} />
                 </div>
                 <div className="form-editor__item--input-box">
-                    <div className="form-editor__text form-editor__text--vertical-center form-editor__text--require">E-mail: </div>
+                    <div className="form-editor__text form-editor__text--vertical-center form-editor__text--require">{ t('user.email')} </div>
                     <input className={`form-editor__input form-editor__input--editor ${isValid.email == false ? `form-editor__input--require` : ""}`}
                         type="text" name="email" value={user.email ? user.email : ""} onChange={updateUserData} />
                 </div>
                 <div className="form-editor__item--input-box">
-                    <div className="form-editor__text form-editor__text--vertical-center">Telefon </div>
+                    <div className="form-editor__text form-editor__text--vertical-center">{ t('user.phone')} </div>
                     <input className={`form-editor__input form-editor__input--editor`} type="text" name="phone" value={user.phone ? user.phone : ""} onChange={x => { validPhone(x, updateUserData) }} />
                 </div>
             </div>
-            <div className="form-editor__text form-editor__text--require-string">* Pole wymagane </div>
+            <div className="form-editor__text form-editor__text--require-string">* { t('common.require')} </div>
         </div>
 
     )

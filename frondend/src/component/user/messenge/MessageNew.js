@@ -8,9 +8,12 @@ import { InfoBoxContext } from "../../../context/InfoBox/InfoBoxContext";
 import Cookies from 'js-cookie';
 import config from '../../../config.json'
 import Select from 'react-select'
+import { useTranslation } from 'react-i18next';
 
 export const MessageNew = (props) => {
 
+
+    const { t, i18n } = useTranslation('common');
     const [users, setUsers] = useState([]);
     const [message, setMessage] = useState({ topic: "", description: "" });
 
@@ -62,12 +65,12 @@ export const MessageNew = (props) => {
         const data = await result.json();
    
         if (data.succeeded) {
-            infoBoxContext.addInfo("Wysłano wiadomość");
+            infoBoxContext.addInfo(t('infoBox.error'));
             setMessage({ topic: "", description: "" })
             updateRecipient(null);
         }
         else {
-            infoBoxContext.addInfo("Wystąpił błąd");
+            infoBoxContext.addInfo(t('infoBox.error'));
         }
 
     }
@@ -103,16 +106,18 @@ export const MessageNew = (props) => {
         <div className="box box--large">
 
             <div className="form-editor--inline ">
-                <Select placeholder="Do" value={recipient} onChange={updateRecipient} noOptionsMessage={() => { return "Brak pracowników" }} options={users} className="form-editor__input form-editor__input--large  form-editor__input--select-receiver " />
+                <Select placeholder={t('message.to')} value={recipient} onChange={updateRecipient} noOptionsMessage={() => { return "Brak pracowników" }} options={users} className="form-editor__input form-editor__input--large  form-editor__input--select-receiver " />
             </div>
+
             <div className="form-editor--inline">
-                <input placeholder="Temat" type="text" name="topic" value={message.topic} onChange={updateMessage} className="form-editor__input form-editor__input--large " />
+                <input placeholder={t('message.topic')} type="text" name="topic" value={message.topic} onChange={updateMessage} className="form-editor__input form-editor__input--large " />
             </div>
+            <div className="message-view__text message-view__text--message"> {t('message.message')}:</div>
             <div className="form-editor--inline">
                 <textarea className="form-editor__input form-editor__input--textarea" value={message.description} onChange={updateMessage} name="description" />
             </div>
             <div className="form-editor--inline box__item">
-                <button onClick={sendMessage} className="button " >Wyślij</button>
+                <button onClick={sendMessage} className="button " >{t('button.sent')}</button>
             </div>
         </div>
 

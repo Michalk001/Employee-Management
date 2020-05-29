@@ -10,10 +10,12 @@ import Cookies from 'js-cookie';
 import { Project } from "../../user/Project";
 import Select from 'react-select'
 
-
+import { useTranslation } from 'react-i18next';
 
 export const ProjectCreate = (props) => {
 
+
+    const { t, i18n } = useTranslation('common');
     const infoBoxContext = useContext(InfoBoxContext);
     const [project, setProject] = useState({});
     const [users, setUsers] = useState([]);
@@ -48,7 +50,7 @@ export const ProjectCreate = (props) => {
     const valid = () => {
         if (!project.name || project.name.replace(/ /g, '') == '') {
             setIsValidName(false)
-            infoBoxContext.addInfo("Wymagana nazwa projektu");
+            infoBoxContext.addInfo(t('infoBox.requireName'));
             return false
         }
         return true;
@@ -69,12 +71,12 @@ export const ProjectCreate = (props) => {
         const response = await result.json();
 
         if (response.succeeded) {
-            infoBoxContext.addInfo("Utworzono projekt");
+            infoBoxContext.addInfo(t('infoBox.createProject'));
             setProject({})
             setIsValidName(true)
         }
         else {
-            infoBoxContext.addInfo("Wystąpił błąd");
+            infoBoxContext.addInfo(t('infoBox.error'));
         }
     }
 
@@ -116,23 +118,23 @@ export const ProjectCreate = (props) => {
     return (
         <div className="box box--large">
             <div className="form-editor--inline box__item button--edit-box">
-                <div className="button button--save button--gap" onClick={() => { createProject() }}>Utwórz nowy projekt</div>
+                <div className="button button--save button--gap" onClick={() => { createProject() }}>{t('button.createProject')}</div>
 
             </div>
             <div className="form-editor--inline-flex-wrap ">
                 <div className="form-editor__item--input-box form-editor__item--project-name">
-                    <div className="form-editor__text form-editor__text--vertical-center form-editor__text--require">Nazwa</div>
+                    <div className="form-editor__text form-editor__text--vertical-center form-editor__text--require">{t('project.name')}</div>
                     <input className={`form-editor__input form-editor__input--large form-editor__input--editor ${validInput(isValidName)}`} type="text" name="name" value={project.name ? project.name : ""} onChange={updateProjectData} />
                 </div>
             </div>
-            <div className="form-editor__text">Opis </div>
+            <div className="form-editor__text">{t('project.description')} </div>
             <textarea className="form-editor__input form-editor__input--textarea" name="description" value={project.description ? project.description : ""} onChange={updateProjectData} />
             <div className="form-editor--inline">
-                <div className="form-editor__text form-editor__text--vertical-center">Dodaj nowego pracownika: </div>
-                <Select value={employeeToAdd} onChange={setEmployeeToAdd} placeholder="Wybierz" noOptionsMessage={() => { return "Brak pracowników" }} options={users} className="form-editor__input form-editor__input--select " />
-                <div className={`button ${!employeeToAdd ? `button--disabled` : ``}`} onClick={() => addEmployee()} >Dodaj</div>
+                <div className="form-editor__text form-editor__text--vertical-center">{t('project.addNewEmployee')} </div>
+                <Select value={employeeToAdd} onChange={setEmployeeToAdd} placeholder={t('project.select') }noOptionsMessage={() => { return t('project.emptyEmployeList') }} options={users} className="form-editor__input form-editor__input--select " />
+                <div className={`button ${!employeeToAdd ? `button--disabled` : ``}`} onClick={() => addEmployee()} >{t('button.add')}</div>
             </div>
-            <div className="form-editor__text">Przydzieleni pracownicy: </div>
+            <div className="form-editor__text">{t('project.activeEmployee')}: </div>
             {project.users && project.users.map((x) => (
                 <div key={`UserPE-${x.username}`} className="box__item form-editor__employe-box">
                     <div className="form-editor__employe-box--text  form-editor__employe-box--name " >{x.firstname} {x.lastname}</div>
@@ -140,9 +142,9 @@ export const ProjectCreate = (props) => {
                 </div>))}
             {(!project.users || project.users.length == 0) &&
                 <div className="form-editor__text">
-                    Brak
+                {t('project.non')}
             </div>}
-            <div className="form-editor__text form-editor__text--require-string">* Pole wymagane </div>
+            <div className="form-editor__text form-editor__text--require-string">* {t('common.require')} </div>
         </div>
 
     )

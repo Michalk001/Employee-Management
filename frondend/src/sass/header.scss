@@ -16,6 +16,25 @@
         display: flex;
         height: 100%;
     }
+    &__lang {
+        height: 30px;
+        width: 40px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        display: inline-block;
+        cursor: pointer;
+
+      
+        &--flag-pl {
+            background-image: url("/ico/flag-pl.svg");
+        }
+
+        &--flag-en {
+            background-image: url("/ico/flag-en.svg");
+        }
+    }
+
     &__home {
         position: relative;
         color: $base-text-color;

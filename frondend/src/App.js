@@ -16,20 +16,27 @@ import { UserRoute, RequireLogin } from "./component/Auth"
 
 import { AuthProvider } from './context/AuthContext';
 import { InfoBoxProvider } from './context/InfoBox/InfoBoxContext';
+
 import { Dashboard } from './component/dashboard/Dashboard'
 import { Project } from './component/user/Project'
 import { UserProfile } from './component/user/UserProfile'
 import { UserProfileEditor } from './component/user/UserProfileEditor'
-import { ProjectEditor } from './component/admin/project/ProjectEditor'
-import { ProjectCreate } from './component/admin/project/ProjectCreate'
-import { UserCreate } from './component/admin/user/UserCreate'
-import { ProjectList } from './component/admin/project/ProjectList'
-import { EmployeList } from './component/admin/user/EmployeList'
 import { UserProjectsList } from './component/user/UserProjectsList'
 import { Message } from './component/user/messenge/Message'
 import { MessageNew } from './component/user/messenge/MessageNew'
 import { MessageView } from './component/user/messenge/MessageView'
 import { ErrorPage } from './component/common/ErrorPage';
+
+
+import { ProjectEditor } from './component/admin/project/ProjectEditor'
+import { ProjectCreate } from './component/admin/project/ProjectCreate'
+import { UserCreate } from './component/admin/user/UserCreate'
+import { ProjectList } from './component/admin/project/ProjectList'
+import { EmployeList } from './component/admin/user/EmployeList'
+
+
+import { I18nextProvider } from 'react-i18next';
+import { i18nInit } from './localization/i18nInit';
 
 
 export const App = () => {
@@ -38,37 +45,38 @@ export const App = () => {
     return (
 
         <BrowserRouter>
+            <I18nextProvider i18n={i18nInit()}>
+                <InfoBoxProvider>
+                    <AuthProvider >
+                        <Header />
 
-            <InfoBoxProvider>
-                <AuthProvider >
-                    <Header />
+                        <Switch>
+                            <RequireLogin path="/" exact component={Dashboard} />
+                            <UserRoute path="/login" component={Login} />
 
-                    <Switch>
-                        <RequireLogin path="/" exact component={Dashboard} />
-                        <UserRoute path="/login" component={Login} />
+                            <RequireLogin path="/Admin/Project/New" component={ProjectCreate} />
+                            <RequireLogin path="/Admin/Project/Edit/:id" component={ProjectEditor} />
+                            <RequireLogin path="/Admin/Project/" component={ProjectList} />
+                            <RequireLogin path="/admin/user/new" component={UserCreate} />
+                            <RequireLogin path="/Admin/User/" component={EmployeList} />
 
-                        <RequireLogin path="/Admin/Project/New" component={ProjectCreate} />
-                        <RequireLogin path="/Admin/Project/Edit/:id" component={ProjectEditor} />
-                        <RequireLogin path="/Admin/Project/" component={ProjectList} />
-                        <RequireLogin path="/admin/user/new" component={UserCreate} />
-                        <RequireLogin path="/Admin/User/" component={EmployeList} />
+                            <RequireLogin path="/Project/:id" component={Project} />
+                            <RequireLogin path="/User/Profile/:id" component={UserProfileEditor} />
+                            <RequireLogin path="/User/Profile" component={UserProfileEditor} />
+                            <RequireLogin path="/User/Project/" component={UserProjectsList} />
 
-                        <RequireLogin path="/Project/:id" component={Project} />
-                        <RequireLogin path="/User/Profile/:id" component={UserProfileEditor} />
-                        <RequireLogin path="/User/Profile" component={UserProfileEditor} />
-                        <RequireLogin path="/User/Project/" component={UserProjectsList} />
+                            <RequireLogin path="/User/:id" component={UserProfile} />
 
-                        <RequireLogin path="/User/:id" component={UserProfile} />
+                            <RequireLogin path="/message/new" component={MessageNew} />
+                            <RequireLogin path="/message/:id" component={MessageView} />
+                            <RequireLogin path="/message/" component={Message} />
+                            <RequireLogin component={ErrorPage} />
 
-                        <RequireLogin path="/message/new" component={MessageNew} />
-                        <RequireLogin path="/message/:id" component={MessageView} />
-                        <RequireLogin path="/message/" component={Message} />
-                        <RequireLogin component={ErrorPage} />
+                        </Switch>
 
-                    </Switch>
-
-                </AuthProvider>
-            </InfoBoxProvider>
+                    </AuthProvider>
+                </InfoBoxProvider>
+            </I18nextProvider>
         </BrowserRouter>
 
     );

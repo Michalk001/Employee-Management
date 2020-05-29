@@ -1,9 +1,9 @@
 import {PDFDownloadLink} from "@react-pdf/renderer";
 import React, { useState, useEffect, state, useContext, useReducer } from "react";
 import { useTranslation } from "react-i18next";
-import {ProjectReportPDF as Document} from "./teamplet/ProjectReportPDF";
+import {UserProjectListPDF as Document} from "./teamplet/UserProjectListPDF"
 
-const ProjectReportPDF = ({data, name }) => {
+const UserProjectListPDF = ({ data, name }) => {
     const { t, i18n } = useTranslation('common');
     return (
         <>
@@ -21,4 +21,4 @@ const ProjectReportPDF = ({data, name }) => {
 
 }
 
-export default ProjectReportPDF;
+export default UserProjectListPDF;
