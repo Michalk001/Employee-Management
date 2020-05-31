@@ -125,8 +125,7 @@ export const Project = (props) => {
     }
     useEffect(() => {
         getProject(props.match.params.id)
-
-
+        document.title = t('title.project') 
     }, [props.match.params.id])
 
     useEffect(() => {

@@ -83,6 +83,7 @@ export const MessageView = (props) => {
     }
     useEffect(() => {
         getMessage(props.match.params.id)
+        document.title = t('title.message') 
     }, [props.match.params.id])
 
 

@@ -187,5 +187,24 @@
         "activeProject":"Quantity assigned project",
         "inactiveProjectHours":"Quantity hours for inactive projects",
         "inactiveProject":"Quantity inactive projects"
+    },
+    "title":{
+        "message":"Message",
+        "messages":"Messages",
+        "messageNew": "New message",
+        "messageSend":"Sent Messages",
+        "messageReceived":"Received Messages",
+        "dashboard":"Dashboard",
+        "userProject":"Employee Projects",
+        "userProfile":"Profile",
+        "newProject":"New Project",
+        "newEmployee":"New Employees",
+        "listEmployees":"Employees List",
+        "listProjects":"Projects List",
+        "editProject":"Project Edition",
+        "editEmployee":"Employee Edition",
+        "project":"Projects",
+        "login":"Log in"
+
     }
 }

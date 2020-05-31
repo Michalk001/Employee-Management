@@ -100,6 +100,7 @@ export const MessageNew = (props) => {
 
     useEffect(() => {
         reply();
+        document.title = t('title.messageNew') 
     }, [])
 
     return (

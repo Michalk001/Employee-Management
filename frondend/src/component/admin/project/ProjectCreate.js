@@ -104,7 +104,7 @@ export const ProjectCreate = (props) => {
 
     useEffect(() => {
         getUser();
-
+        document.title = t('title.newProject') 
     }, [])
 
     useEffect(() => {

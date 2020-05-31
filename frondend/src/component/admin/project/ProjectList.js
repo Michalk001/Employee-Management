@@ -100,7 +100,7 @@ export const ProjectList = () => {
 
     useEffect(() => {
         getProjects()
-
+        document.title = t('title.listProjects') 
     }, [])
 
     const filterList = () => {

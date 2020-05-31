@@ -132,7 +132,7 @@
             transition-duration: 0.25s;
 
             @media (max-width:768px) {
-                font-size: 24px;
+                font-size: 22px;
             }
 
             &:hover {
@@ -147,7 +147,7 @@
             color: $base-hover-text-color;
 
             @media (max-width:768px) {
-                font-size: 30px;
+                font-size: 28px;
             }
         }
     }

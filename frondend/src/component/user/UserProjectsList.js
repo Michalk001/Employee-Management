@@ -120,12 +120,12 @@ export const UserProjectsList = (props) => {
     useEffect(() => {
         if (authContext.userDate)
             getProjectList(authContext.userDate.username)
+
+            document.title = t('title.userProject') 
     }, [authContext.userDate])
 
 
-    const pdfDownload = (data) => {
 
-    }
 
     return (
         <div className="box box--center box--medium ">

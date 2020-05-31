@@ -206,7 +206,7 @@ export const UserProfileEditor = (props) => {
         else if (authContext.userDate && authContext.userDate.username)
             getUser(authContext.userDate.username)
 
-
+            document.title = t('title.editEmployee') 
     }, [authContext.userDate, props.match.params.id])
 
     useEffect(() => {

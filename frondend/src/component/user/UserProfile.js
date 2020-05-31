@@ -55,7 +55,7 @@ export const UserProfile = (props) => {
     useEffect(() => {
 
         getUser(props.match.params.id)
-
+        document.title = t('title.userProfile') 
     }, [props.match.params.id])
 
     useEffect(() => {

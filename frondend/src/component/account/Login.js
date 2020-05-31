@@ -57,6 +57,10 @@ export const Login = (props) => {
 
     }
 
+    useEffect(()=>{
+        document.title = t('title.login') 
+    },[])
+
     return (
         <>
             {canRedirect && <Redirect to='/' />}

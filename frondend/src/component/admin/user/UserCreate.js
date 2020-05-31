@@ -125,6 +125,10 @@ export const UserCreate = (props) => {
     }, [user, isValid])
 
 
+    useEffect(()=>{
+        document.title = t('title.newEmployee') 
+    },[])
+
     return (
         <div className="box box--large">
             <div className="form-editor--inline box__item button--edit-box">
@@ -145,7 +149,7 @@ export const UserCreate = (props) => {
                 </div>
                 <div className="form-editor__item--input-box">
                     <div className="form-editor__text form-editor__text--vertical-center ">{ t('user.admin')}</div>
-                    <div className="form-editor--inline form-editor__item--center  form-editor__item--admin-access ">
+                    <div className="form-editor--inline  form-editor__item--admin-access ">
                         <label className={`form-editor__radio-button ${isActiveRadio("isAdminTrue")}`} htmlFor={`isAdminTrue`}  >{ t('user.yes')}</label><input className="form-editor__radio-button--input" id="isAdminTrue" onChange={updateIsAdmin} name="isAdmin" value={true} type="radio" />
                         <label className={`form-editor__radio-button ${isActiveRadio("isAdminFalse")}`} htmlFor={`isAdminFalse`} >{ t('user.no')}</label><input className="form-editor__radio-button--input" id="isAdminFalse" onChange={updateIsAdmin} name="isAdmin" value={false} type="radio" />
 

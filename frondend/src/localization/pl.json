@@ -105,7 +105,8 @@
         "topic": "Temat",
         "message": "Wiadomość",
         "to": "Do",
-        "sent": "Wysłano wiadomość"
+        "sent": "Wysłano wiadomość",
+        "noMessage": "Brak Wiadomości"
     },
     "list": {
         "active": "Aktywne",
@@ -182,5 +183,24 @@
         "activeProject": "Liczba przydzielonych projektow",
         "inactiveProjectHours": "Liczba godzin przy nieaktywnych projektach",
         "inactiveProject": "Liczba nieaktywnych projektow"
+    },
+    "title":{
+        "message":"Wiadomość",
+        "messages":"Wiadomości",
+        "messageNew": "Nowa Wiadomość",
+        "messageSend":"Wysłane Wiadomości",
+        "messageReceived":"Odebrane Wiadomości",
+        "dashboard":"Kokpit",
+        "userProject":"Projekty Pracownika",
+        "userProfile":"Profil",
+        "newProject":"Nowy Projekt",
+        "newEmployee":"Nowy Pracownik",
+        "listEmployees":"Lista Pracowników",
+        "listProjects":"Lista Projektów",
+        "editProject":"Edycja Projektu",
+        "editEmployee":"Edycja Pracownika",
+        "project":"Projekt",
+        "login":"Logowanie"
+
     }
 }

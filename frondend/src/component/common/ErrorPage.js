@@ -2,6 +2,9 @@ import React from "react";
 
 
 export const ErrorPage = ({ code, text }) => {
+
+    
+
     return (
 
         <div className="box box--center">

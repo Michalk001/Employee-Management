@@ -1,6 +1,6 @@
 {
-    "apiRoot1": "https://empbackend.ew.r.appspot.com/",
-    "apiRoot": "http://localhost:4006",
+    "apiRoot": "https://empbackend.ew.r.appspot.com/",
+    "apiRoot1": "http://localhost:4006",
     "users": {
         "passwordChar": 8
     }

@@ -2,6 +2,11 @@
 
     margin: 20px 0;
 
+    &__text {
+        text-align: center;
+        font-size: 20px;
+        width: 100%;
+    }
     &__menu-type {
         display: inline-flex;
         width: 100%;
@@ -27,6 +32,8 @@
             }
         }
     }
+
+ 
 
     &__item {
         display: inline-flex;
@@ -147,7 +154,7 @@
 
     &__text {
         font-size: 20px;
-
+      
         &--header-author {
             @media (max-width: 500px) {
                 margin-top: 10px;

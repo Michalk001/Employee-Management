@@ -54,7 +54,7 @@ export const Message = (props) => {
 
     useEffect(() => {
         getMessages();
-        document.title = "new title"
+        document.title = t('title.messages') 
     }, [])
 
     useEffect(() => {

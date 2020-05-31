@@ -33,7 +33,6 @@ export const Message = () => {
 
         const sortReceiveMessages = data.receiveMessages.sort(sortDate).slice(0,4);
         setMessages(sortReceiveMessages)
-        console.log(sortReceiveMessages)
         setIsLoading(false)
     }
 

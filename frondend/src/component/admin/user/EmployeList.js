@@ -130,7 +130,7 @@ export const EmployeList = () => {
 
     useEffect(() => {
         getUsers()
-
+        document.title = t('title.listEmployees') 
     }, [])
 
     return (

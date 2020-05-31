@@ -210,7 +210,7 @@ export const ProjectEditor = (props) => {
 
         if (props.match.params.id)
             getProject(props.match.params.id);
-
+            document.title = t('title.editProject') 
     }, [props.match.params.id])
 
     useEffect(() => {
@@ -265,7 +265,9 @@ export const ProjectEditor = (props) => {
                             </div>
                         ))}
                     </>}
+                    <div className="form-editor__text form-editor__text--require-string">* {t('common.require')} </div>
             </div>}
+            
         </>
     )
 
