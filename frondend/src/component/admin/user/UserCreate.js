@@ -94,15 +94,15 @@ export const UserCreate = (props) => {
         const data = await result.json();
 
         if (data.succeeded) {
-            infoBoxContext.addInfo( t('infoBox.createUser'));
+            infoBoxContext.addInfo( t('infoBox.createUser'),3);
             setUser({isAdmin: false})
 
         }
         else {
             if (data.code == 2)
-                infoBoxContext.addInfo( t('infoBox.bussyLogin'));
+                infoBoxContext.addInfo( t('infoBox.bussyLogin'),3);
             else
-                infoBoxContext.addInfo( t('infoBox.error'));
+                infoBoxContext.addInfo( t('infoBox.error'),3);
         }
 
     }

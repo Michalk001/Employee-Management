@@ -65,12 +65,12 @@ export const MessageNew = (props) => {
         const data = await result.json();
    
         if (data.succeeded) {
-            infoBoxContext.addInfo(t('infoBox.sent'));
+            infoBoxContext.addInfo(t('infoBox.sent'),3);
             setMessage({ topic: "", description: "" })
             updateRecipient(null);
         }
         else {
-            infoBoxContext.addInfo(t('infoBox.error'));
+            infoBoxContext.addInfo(t('infoBox.error'),3);
         }
 
     }

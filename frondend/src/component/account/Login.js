@@ -26,7 +26,7 @@ export const Login = (props) => {
         try { result = await authContext.singUp(loginValue) }
         catch (err) {
             if(err == "TypeError: Failed to fetch")
-            infoBoxContext.addInfo(t('infoBox.errorConnect'));
+            infoBoxContext.addInfo(t('infoBox.errorConnect'),3);
             setIsLoading(false)
             return
         }
@@ -41,11 +41,11 @@ export const Login = (props) => {
         else {
 
             if (data.code == 1) {
-                infoBoxContext.addInfo(t('infoBox.accountRemove'));
+                infoBoxContext.addInfo(t('infoBox.accountRemove'),3);
             } else if (data.code == 3) {
-                infoBoxContext.addInfo(t('infoBox.accountBlocked'));
+                infoBoxContext.addInfo(t('infoBox.accountBlocked'),3);
             } else if (data.code == 2) {
-                infoBoxContext.addInfo(t('infoBox.loginError'));
+                infoBoxContext.addInfo(t('infoBox.loginError'),3);
             }
         }
 

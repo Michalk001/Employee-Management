@@ -28,7 +28,7 @@ export const RenderInfo = (props) => {
 
     useState(() => {
         if (props.msg.time || props.msg.time != 0)
-            setTimeout(() => { remove() }, props.msg.time)
+            setTimeout(() => { remove() }, props.msg.time*1000)
 
     }, [isClose, isRemove])
 
@@ -66,7 +66,7 @@ export const RenderListInfo = (props) => {
 
     useState(() => {
         if (props.msg.time || props.msg.time != 0)
-            setTimeout(() => { remove() }, props.msg.time)
+            setTimeout(() => { remove() }, props.msg.time*1000)
 
     }, [isClose, isRemove])
 

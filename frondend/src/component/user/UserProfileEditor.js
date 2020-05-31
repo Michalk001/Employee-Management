@@ -110,10 +110,10 @@ export const UserProfileEditor = (props) => {
         if (data.succeeded) {
             setUser(editUser);
             authContext.refreshToken();
-            infoBoxContext.addInfo( t('infoBox.updated'));
+            infoBoxContext.addInfo( t('infoBox.updated'),3);
         }
         else {
-            infoBoxContext.addInfo(t('infoBox.error'));
+            infoBoxContext.addInfo(t('infoBox.error'),3);
         }
     }
 
@@ -159,7 +159,7 @@ export const UserProfileEditor = (props) => {
         if (data.succeeded) {
             setPassEdit({ oldPassword: "", newPassword: "" })
             authContext.refreshToken();
-            infoBoxContext.addInfo(t('infoBox.changePass'));
+            infoBoxContext.addInfo(t('infoBox.changePass'),3);
         }
         else {
             if (data.code == 2) {
@@ -167,7 +167,7 @@ export const UserProfileEditor = (props) => {
                 setPassIsValid({ ...passIsValid, oldPassword: false })
             }
             else
-                infoBoxContext.addInfo(t('infoBox.error'));
+                infoBoxContext.addInfo(t('infoBox.error'),3);
         }
 
     }
@@ -190,12 +190,12 @@ export const UserProfileEditor = (props) => {
             setUser({ ...user, isRetired })
             setEditUser({ ...user, isRetired })
             if (isRetired)
-                infoBoxContext.addInfo(t('infoBox.archiveUser'));
+                infoBoxContext.addInfo(t('infoBox.archiveUser'),3);
             else
-                infoBoxContext.addInfo(t('infoBox.restoreUser'));
+                infoBoxContext.addInfo(t('infoBox.restoreUser'),3);
         }
         else {
-            infoBoxContext.addInfo(t('infoBox.error'));
+            infoBoxContext.addInfo(t('infoBox.error'),3);
         }
 
     }

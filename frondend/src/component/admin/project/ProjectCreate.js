@@ -50,7 +50,7 @@ export const ProjectCreate = (props) => {
     const valid = () => {
         if (!project.name || project.name.replace(/ /g, '') == '') {
             setIsValidName(false)
-            infoBoxContext.addInfo(t('infoBox.requireName'));
+            infoBoxContext.addInfo(t('infoBox.requireName'),3);
             return false
         }
         return true;
@@ -71,12 +71,12 @@ export const ProjectCreate = (props) => {
         const response = await result.json();
 
         if (response.succeeded) {
-            infoBoxContext.addInfo(t('infoBox.createProject'));
+            infoBoxContext.addInfo(t('infoBox.createProject'),3);
             setProject({})
             setIsValidName(true)
         }
         else {
-            infoBoxContext.addInfo(t('infoBox.error'));
+            infoBoxContext.addInfo(t('infoBox.error'),3);
         }
     }
 
