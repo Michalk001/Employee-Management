@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, state, useContext, useReducer } from "react";
 import nextId from "react-id-generator";
+import { useTranslation } from "react-i18next";
 
 export const InfoBoxContext = React.createContext({
 
@@ -100,7 +101,7 @@ export const RenderListInfo = (props) => {
 }
 
 export const RenderConfirm = (props) => {
-
+    const { t, i18n } = useTranslation('common');
     return (
 
         <div className={`info-box info-box--fullpage`} >
@@ -110,10 +111,10 @@ export const RenderConfirm = (props) => {
                 </div>
                 <div className={`info-box__button-inline `}>
                     <div className={`button `} onClick={() => { props.callback(); props.remove() }}>
-                        Tak
+                        {t('infoBox.yes')}
                     </div>
                     <div className={`button `} onClick={() => { props.remove() }}>
-                        Nie
+                        {t('infoBox.no')}
                     </div>
                 </div>
             </div>

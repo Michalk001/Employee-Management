@@ -35,7 +35,6 @@ export const save = async (req, res) => {
         description: req.body.message.description,
         topic: req.body.message.topic
     }
-    console.log(message)
     await database.message.create(message)
     res.status(201).json({ succeeded: true });
     res.end();

@@ -9,11 +9,11 @@
     z-index: 5;
     overflow-y: scroll;
     bottom: 0;
-    -ms-overflow-style: none;
+    
     top: 0;
     padding-top: 70px;
     box-sizing: border-box;
-
+    -ms-overflow-style: none;
     &::-webkit-scrollbar {
         display: none;
     }
@@ -87,7 +87,7 @@
         &--style {
             font-size: 32px;
             color: white;
-            right: 15px;
+            right: 10px;
             position: absolute;
             cursor: pointer;
         }

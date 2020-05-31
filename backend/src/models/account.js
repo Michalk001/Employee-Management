@@ -73,7 +73,7 @@ export const login = async (req, res) => {
         return;
     }
     if (bcrypt.compareSync(password, user.password)) {
-        console.log(user.isAdmin)
+
         const payload = { id: user.id, sub: user.username, firstname: user.firstname, lastname: user.lastname, isAdmin: user.isAdmin };
         const token = jwt.sign(payload, jwtOptions.secretOrKey, { expiresIn: '3000m' });
 

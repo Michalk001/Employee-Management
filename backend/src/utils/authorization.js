@@ -14,7 +14,6 @@ export const authorization = () => {
                 database.user.findOne({ where: { id: jwtpayload.id } })
                     .then(user => {
                         {
-                            console.group(user)
                             if (user) {
 
                                 return done(null, user)

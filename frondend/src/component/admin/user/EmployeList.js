@@ -69,10 +69,21 @@ export const EmployeList = () => {
 
     const projectStatus = (isRetired) => {
         if (isRetired)
-            return t('list.statusInactive')
-        return t('list.statusActive')
+            return (
+                <>
+                    <div className="box__project--status-text ">{t('list.statusInactive')}</div>
+                    <div className="box__project--status-ico box__project--status-ico-red "><i className="fas fa-times"></i></div>
+                </>
+            )
+        return (
+            <>
+                <div className="box__project--status-text ">{t('list.statusActive')}</div>
+                <div className="box__project--status-ico "><i className="fas fa-check"></i></div>
+            </>
+        )
 
     }
+
     const updateFilterOptions = (event) => {
 
         setFilterOptions({ ...filterOptions, [event.target.name]: event.target.value })
@@ -128,7 +139,7 @@ export const EmployeList = () => {
 
             <div className="box__item">
                 <div className=" box__radio-button--position">
-                    <div className="box__item--inline">
+                    <div className="box__radio-button--select-list">
                         <label className={`box__radio-button ${isActiveRadio("filtr-all")}`} htmlFor={`filtr-all`}  >{t('list.all')}</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-all" name="statusUser" value="all" type="radio" />
                         <label className={`box__radio-button ${isActiveRadio("filtr-active")}`} htmlFor={`filtr-active`} >{t('list.active')}</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-active" name="statusUser" value="active" type="radio" />
                         <label className={`box__radio-button ${isActiveRadio("filtr-inactive")}`} htmlFor={`filtr-inactive`} >{t('list.inactive')}</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-inactive" name="statusUser" value="inactive" type="radio" />
@@ -140,7 +151,7 @@ export const EmployeList = () => {
             <div className="box__text box__text--normal box__project">
                 <span className="box__project--title-name ">{t('list.name')}</span>
                 <span className="box__project--title-hours ">{t('list.hours')} </span>
-                <span className="box__project--employe ">{t('list.activeProject')}</span>
+                <span className="box__project--employe-title ">{t('list.activeProject')}</span>
                 <span className="box__project--employe-short ">{t('list.totalProject')}</span>
                 <span className="box__project--title-status ">{t('list.status')}</span>
             </div>
@@ -152,17 +163,18 @@ export const EmployeList = () => {
                     <div className="box__text box__text--center">{t('list.notFoundEmployee')}</div>
                 </div>}
 
+                <div className="box__project--list">
+                    {userList.length != 0 && filterUserList.map((item) => (
+                        <Link to={`/user/${item.username}`} key={`activU-${item.username}`} className="box__project box__project--hover">
+                            <span className="box__project--name ">{item.firstname} {item.lastname}</span>
+                            <span className="box__project--hours">{item.hoursTotal}</span>
+                            <span className="box__project--employe">{item.activProjectQuantity}</span>
+                            <span className="box__project--employe-short">{item.totalProjectQuantity}</span>
+                            <span className="box__project--status ">{projectStatus(item.isRetired)}</span>
 
-                {userList.length != 0 && filterUserList.map((item) => (
-                    <Link to={`/user/${item.username}`} key={`activU-${item.username}`} className="box__project box__project--hover">
-                        <span className="box__project--name ">{item.firstname} {item.lastname}</span>
-                        <span className="box__project--hours">{item.hoursTotal}</span>
-                        <span className="box__project--employe">{item.activProjectQuantity}</span>
-                        <span className="box__project--employe-short">{item.totalProjectQuantity}</span>
-                        <span className="box__project--status ">{projectStatus(item.isRetired)}</span>
-
-                    </Link>
-                ))}
+                        </Link>
+                    ))}
+                </div>
                 <div className="box__text box--half-border-top">{t('common.report')}:</div>
                 <div className="box__item">
 

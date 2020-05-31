@@ -18,11 +18,11 @@ export const SideBar = () => {
     }
 
     useEffect(() => {
-        if (Cookies.get('hiddenMenu') == "true") {
-            setHiddeMenu(true)
+        if (Cookies.get('hiddenMenu') == "false") {
+            setHiddeMenu(false)
         }
         else
-            setHiddeMenu(false)
+            setHiddeMenu(true)
 
     }, [])
 
@@ -31,8 +31,8 @@ export const SideBar = () => {
 
     }, [hiddeMenu])
 
-    const hiddenMenuOnMobile = () => {
-        if (window.innerWidth <= 768) {
+    const autoHiddenMenuSmallDevice = () => {
+        if (window.innerWidth <= 1180) {
             changeMenuVisible()
         }
     }
@@ -59,29 +59,29 @@ export const SideBar = () => {
                         <div className={`navBar__menu--text navBar__menu--title `}> {t('common.userPanel')}</div>
                     </div>
                     <div className={`navBar__menu--item`}>
-                        <Link to="/" onClick={() => hiddenMenuOnMobile()} className={`navBar__menu--text navBar__menu--link`} > {t('sideBar.dashboard')}</Link>
+                        <Link to="/" onClick={() => autoHiddenMenuSmallDevice()} className={`navBar__menu--text navBar__menu--link`} > {t('sideBar.dashboard')}</Link>
                     </div>
                     <div className={`navBar__menu--item`}>
-                        <Link to={`/user/project`} onClick={() => hiddenMenuOnMobile()} className={`navBar__menu--text navBar__menu--link`} >{t('sideBar.projects')} </Link>
+                        <Link to={`/user/project`} onClick={() => autoHiddenMenuSmallDevice()} className={`navBar__menu--text navBar__menu--link`} >{t('sideBar.projects')} </Link>
                     </div>
                     <div className={`navBar__menu--item`}>
-                        <Link to={`/user/${getUsername()}`} onClick={() => hiddenMenuOnMobile()} className={`navBar__menu--text navBar__menu--link`} >{t('sideBar.profil')}</Link>
+                        <Link to={`/user/${getUsername()}`} onClick={() => autoHiddenMenuSmallDevice()} className={`navBar__menu--text navBar__menu--link`} >{t('sideBar.profil')}</Link>
                     </div>
                     <div className={`navBar__menu--item`}>
-                        <Link to={`/message`} onClick={() => hiddenMenuOnMobile()} className={`navBar__menu--text navBar__menu--link`} >{t('message.messages')}</Link>
+                        <Link to={`/message`} onClick={() => autoHiddenMenuSmallDevice()} className={`navBar__menu--text navBar__menu--link`} >{t('message.messages')}</Link>
                     </div>
                     <div className={`navBar__menu--item`}>
-                        <Link to={`/message/new`} onClick={() => hiddenMenuOnMobile()} className={`navBar__menu--text navBar__menu--link`}> {t('message.write')} </Link>
+                        <Link to={`/message/new`} onClick={() => autoHiddenMenuSmallDevice()} className={`navBar__menu--text navBar__menu--link`}> {t('message.write')} </Link>
                     </div>
                     {authContext.isAdmin && <>
                         <div className={`navBar__menu--item`}>
                             <div className={`navBar__menu--text navBar__menu--title `}> {t('common.adminPanel')}</div>
                         </div>
                         <div className={`navBar__menu--item`}>
-                            <Link to="/admin/project/new" onClick={() => hiddenMenuOnMobile()} className={`navBar__menu--text navBar__menu--link  `}>{t('sideBar.newProject')}</Link>
-                            <Link to="/admin/user/new" onClick={() => hiddenMenuOnMobile()} className={`navBar__menu--text navBar__menu--link  `}>{t('sideBar.newEmploye')}</Link>
-                            <Link to="/admin/project" onClick={() => hiddenMenuOnMobile()} className={`navBar__menu--text navBar__menu--link  `}>{t('sideBar.projectsList')}</Link>
-                            <Link to="/admin/user" onClick={() => hiddenMenuOnMobile()} className={`navBar__menu--text navBar__menu--link  `}>{t('sideBar.employeeList')}</Link>
+                            <Link to="/admin/project/new" onClick={() => autoHiddenMenuSmallDevice()} className={`navBar__menu--text navBar__menu--link  `}>{t('sideBar.newProject')}</Link>
+                            <Link to="/admin/user/new" onClick={() => autoHiddenMenuSmallDevice()} className={`navBar__menu--text navBar__menu--link  `}>{t('sideBar.newEmploye')}</Link>
+                            <Link to="/admin/project" onClick={() => autoHiddenMenuSmallDevice()} className={`navBar__menu--text navBar__menu--link  `}>{t('sideBar.projectsList')}</Link>
+                            <Link to="/admin/user" onClick={() => autoHiddenMenuSmallDevice()} className={`navBar__menu--text navBar__menu--link  `}>{t('sideBar.employeeList')}</Link>
                         </div>
                     </>}
                 </div>

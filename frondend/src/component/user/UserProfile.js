@@ -81,12 +81,12 @@ export const UserProfile = (props) => {
                     </div>
                     <div className=" box__item box__item--inline ">
                         <div className="box__text box__item--inline ">
-                            <div className=" box__text--bold box__text--vertical-center">{t('user.email')}: </div>
-                            <div className=" box__text--text-item box__text--vertical-center">{user.email}</div>
+                            <div className=" box__text--bold ">{t('user.email')}: </div>
+                            <div className=" box__text--text-item ">{user.email}</div>
                         </div>
                         <div className="box__text box__item--inline">
-                            <div className=" box__text--bold box__text--vertical-center ">{t('user.phone')}: </div>
-                            <div className=" box__text--text-item box__text--vertical-center ">{getPhone(user.phone)}</div>
+                            <div className=" box__text--bold ">{t('user.phone')}: </div>
+                            <div className=" box__text--text-item ">{getPhone(user.phone)}</div>
                         </div>
                     </div>
 

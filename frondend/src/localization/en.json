@@ -17,7 +17,8 @@
         "sent":"Sent",
         "createProject":"Create Project",
         "profile": "Profile",
-        "changePass":"Change Password"
+        "changePass":"Change Password",
+        "generatePDF": "Generate PDF"
     },
     "common": {
         "addHours": "Add hours",
@@ -71,7 +72,17 @@
         "archiveUser": "Employee archived",
         "restoreUser": "Employee restored",
         "createUser": "Employee created",
-        "bussyLogin": "Login busy"
+        "bussyLogin": "Login busy",
+        "archiveProject":"Do you want archive project?",
+        "restoreProject":"Do you want restore project?",
+        "yes":"Yes",
+        "no":"No",
+        "cancelEdit": "Do you want cancel editing?",
+        "saveEdit": "Do you want save?",
+        "removeUserFromProject":"Do you want remove employee from project?",
+        "restoreUserToProject":"Do you want remove restore to project?",
+        "deleteUserFromProject":"Do you want remove delete from project?",
+        "errorConnect": "Server connection error"
     },
     "sideBar": {
         "dashboard": "Dashboard",
@@ -91,7 +102,8 @@
         "author":"Author",
         "topic":"Topic",
         "message":"Message",
-        "to":"To"
+        "to":"To",
+        "sent": "Message sent"
     },
     "list": {
         "active": "Active",

@@ -4,6 +4,16 @@
         display: inline-flex;
         width: 100%;
         margin: 10px 0;
+        @media (max-width:768px) {
+            flex-wrap: wrap;
+            justify-content: space-around;
+            flex-direction: column;
+            & > div{
+                margin: 5px 0;
+            }
+        }
+       
+
     }
 
     &--inline-flex-wrap {
@@ -96,15 +106,18 @@
             margin: 10px 0;
         }
 
-        &--select, &--select-receiver {
+        &--select,
+        &--select-receiver {
             padding: 0;
             border: none;
             width: 250px;
-            
+
         }
-        &--select{
+
+        &--select {
             margin-right: 15px;
         }
+
         &--require {
             background-color: #fd7373;
         }
@@ -125,6 +138,7 @@
         cursor: pointer;
 
         font-size: 22px;
+
         &--position {
             display: inline-flex;
             flex-direction: row-reverse;

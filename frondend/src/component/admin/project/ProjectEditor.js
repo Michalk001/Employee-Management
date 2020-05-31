@@ -21,6 +21,7 @@ export const ProjectEditor = (props) => {
     const [users, setUsers] = useState([]);
     const [employeeToAdd, setEmployeeToAdd] = useState(null);
     const [error, setError] = useState(null);
+    const [isValidName, setIsValidName] = useState(true);
     const updateProjectData = e => {
         setProject({ ...project, [e.target.name]: e.target.value })
     }
@@ -43,6 +44,15 @@ export const ProjectEditor = (props) => {
             await getUsersSelect(data.project.users);
         }
 
+    }
+
+    const valid = () => {
+        if (!project.name || project.name.replace(/ /g, '') == '') {
+            setIsValidName(false)
+            infoBoxContext.addInfo(t('infoBox.requireName'));
+            return false
+        }
+        return true;
     }
 
     const getUsersSelect = async (projectUsers) => {
@@ -70,6 +80,9 @@ export const ProjectEditor = (props) => {
 
 
     const updateProject = async () => {
+        if (!valid())
+            return
+
         const result = await fetch(`${config.apiRoot}/project/${project.id}`, {
             method: "put",
             headers: {
@@ -82,6 +95,7 @@ export const ProjectEditor = (props) => {
         const data = await result.json();
         if (data.succeeded) {
             infoBoxContext.addInfo(t('infoBox.updated'));
+            setIsValidName(true)
         }
         else {
             infoBoxContext.addInfo(t('infoBox.error'));
@@ -188,6 +202,10 @@ export const ProjectEditor = (props) => {
         }
     }
 
+    const validInput = (field) => {
+        return field == false ? ` box__input--require` : ""
+    }
+
     useEffect(() => {
 
         if (props.match.params.id)
@@ -207,30 +225,30 @@ export const ProjectEditor = (props) => {
                 <div className="form-editor--inline box__item button--edit-box">
                     <div className="button button--save button--gap" onClick={() => { updateProject() }}>{t('button.update')}</div>
                     {project && !project.isRetired && <div className="button button--remove button--gap"
-                        onClick={() => infoBoxContext.Confirm("Czy napewno chcesz zarchiwizować projekt", () => (archiveProject(project.id, true)))}>
+                        onClick={() => infoBoxContext.Confirm( t('infoBox.archiveProject'), () => (archiveProject(project.id, true)))}>
                         {t('button.archive')}
                 </div>}
                     {project && project.isRetired && <div className="button button--gap"
-                        onClick={() => infoBoxContext.Confirm("Czy napewno chcesz przywrócić projekt", () => (archiveProject(project.id, false)))}>
+                        onClick={() => infoBoxContext.Confirm(t('infoBox.restoreProject'), () => (archiveProject(project.id, false)))}>
                          {t('button.restore')}
                 </div>}
                 </div>
                 <div className="form-editor--inline-flex-wrap">
                     <div className="form-editor__text form-editor__text--vertical-center form-editor__text--require">  {t('project.name')} </div>
-                    <input className="form-editor__input form-editor__input--large form-editor__input--editor " type="text" name="name" value={project ? project.name : ""} onChange={updateProjectData} />
+                    <input className={`form-editor__input form-editor__input--large form-editor__input--editor ${validInput(isValidName)}`}  type="text" name="name" value={project ? project.name : ""} onChange={updateProjectData} />
                 </div>
                 <div className="form-editor__text"> {t('project.description')} </div>
                 <textarea className="form-editor__input form-editor__input--textarea" name="description" value={project ? project.description : ""} onChange={updateProjectData} />
                 {project && !project.isRetired && <div className="form-editor--inline">
                     <div className="form-editor__text form-editor__text--vertical-center"> {t('project.addNewEmployee')}: </div>
-                    <Select value={employeeToAdd} onChange={(x) => setEmployeeToAdd(x)} placeholder="Wybierz" noOptionsMessage={() => { return t('project.emptyEmployeList') }} options={users} className="form-editor__input form-editor__input--select " />
+                    <Select value={employeeToAdd} onChange={(x) => setEmployeeToAdd(x)} placeholder={t('project.select') } noOptionsMessage={() => { return t('project.emptyEmployeList') }} options={users} className="form-editor__input form-editor__input--select " />
                     <div className={`button ${!employeeToAdd ? `button--disabled` : ``}`} onClick={() => addEmployee()} > {t('button.add')}</div>
                 </div>}
                 <div className="form-editor__text"> {t('project.activeEmployee')}: </div>
                 {project && project.users.filter(xx => { return xx.userProjects.isRetired == false }).map((x) => (
                     <div key={`UserPE-${x.username}`} className="box__item form-editor__employe-box">
                         <Link className="form-editor__employe-box--text  form-editor__employe-box--name " to={`/user/${x.username}`}>{x.firstname} {x.lastname}</Link>
-                        <div className="form-editor__employe-box--text  form-editor__employe-box--retired" onClick={() => infoBoxContext.Confirm("Czy napewno chcesz usunąć pracownika z projektu", () => (archiveUser(x.userProjects.id, true)))}> <i className="fas fa-ban"></i></div>
+                        <div className="form-editor__employe-box--text  form-editor__employe-box--retired" onClick={() => infoBoxContext.Confirm(t('infoBox.removeUserFromProject'), () => (archiveUser(x.userProjects.id, true)))}> <i className="fas fa-ban"></i></div>
                     </div>))}
                 {project && !project.users.find(x => { return x.userProjects.isRetired == false }) &&
                     <div className="form-editor__text">
@@ -242,8 +260,8 @@ export const ProjectEditor = (props) => {
                         {project && project.users.filter(xx => { return xx.userProjects.isRetired == true }).map((x) => (
                             <div key={`unUserPE-${x.username}`} className="box__item form-editor__employe-box">
                                 <Link className="form-editor__employe-box--text  form-editor__employe-box--name " to={`/user/${x.username}`}>{x.firstname} {x.lastname}</Link>
-                                <div className="form-editor__employe-box--text  form-editor__employe-box--restore" onClick={() => infoBoxContext.Confirm("Czy napewno chcesz przywrócić pracownika do projektu", () => (archiveUser(x.userProjects.id, false)))}>  <i className="fas fa-undo-alt"></i></div>
-                                <div className="form-editor__employe-box--text  form-editor__employe-box--retired" onClick={() => infoBoxContext.Confirm("Czy napewno chcesz trwale usunąć pracownika z projektu", () => (removeUser(x.userProjects.id)))}>  <i className="fas fa-trash"></i></div>
+                                <div className="form-editor__employe-box--text  form-editor__employe-box--restore" onClick={() => infoBoxContext.Confirm(t('infoBox.restoreUserToProject'), () => (archiveUser(x.userProjects.id, false)))}>  <i className="fas fa-undo-alt"></i></div>
+                                <div className="form-editor__employe-box--text  form-editor__employe-box--retired" onClick={() => infoBoxContext.Confirm(t('infoBox.deleteUserFromProject'), () => (removeUser(x.userProjects.id)))}>  <i className="fas fa-trash"></i></div>
                             </div>
                         ))}
                     </>}

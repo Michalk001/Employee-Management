@@ -2,23 +2,26 @@
     $base-text-color: white;
     $base-hover-text-color: #46adf9;
     background-color: black;
-   
+
     position: fixed;
     height: 70px;
-   
-  
+
+
     width: 100%;
     z-index: 6;
-    &--wrap{
+
+    &--wrap {
         justify-content: space-between;
         padding-right: 100px;
         padding-left: 30px;
         display: flex;
         height: 100%;
+
         @media (max-width:1180px) {
             padding: 0 15px;
         }
     }
+
     &__lang {
         height: 30px;
         width: 40px;
@@ -28,7 +31,7 @@
         display: inline-block;
         cursor: pointer;
 
-      
+
         &--flag-pl {
             background-image: url("/ico/flag-pl.svg");
         }
@@ -45,8 +48,15 @@
         display: inline-flex;
         align-items: center;
         margin-right: 15px;
+
         &--transition {
             transition: all 0.25s;
+        }
+
+        &--hidden-m {
+            @media (max-width:768px) {
+                display: none;
+            }
         }
 
         &--ico {
@@ -58,19 +68,24 @@
             padding-left: 10px;
         }
 
-        &:hover & {
-            &--text {
-                font-size: 24px;
+        &--hidden-m {
+            @media (min-width:769px) {
+                &:hover & {
+                    &--text {
+                        font-size: 24px;
+                    }
+
+                    &--ico {
+                        font-size: 36px;
+                    }
+                }
             }
 
-            &--ico {
-                font-size: 36px;
+            &:hover {
+
+                color: $base-hover-text-color;
             }
-        }
 
-        &:hover {
-
-            color: $base-hover-text-color;
         }
     }
 
@@ -80,7 +95,22 @@
         text-decoration: none;
         display: inline-flex;
         align-items: center;
+        &--user-name{
+            @media (max-width:500px) {
+                display: none;
+            }
+        }
+        &--user-ico{
+            font-size: 32px;
+            margin-left: 10px;
+            @media (min-width:501px) {
+                display: none;
+            }
+            &:hover {
 
+                color: $base-hover-text-color;
+            }
+        }
     }
 
     &__item {
@@ -98,9 +128,9 @@
             color: $base-hover-text-color;
         }
 
-        &--link{
+        &--link {
             text-decoration: none;
-            cursor: pointer; 
+            cursor: pointer;
         }
     }
 }

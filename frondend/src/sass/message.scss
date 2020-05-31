@@ -8,8 +8,18 @@
         justify-content: space-between;
         margin-left: 15px;
 
+        @media (max-width: 500px) {
+            flex-wrap: wrap;
+            display: flex;
+            flex-direction: column;
+        }
+
         &--select {
             position: relative;
+
+            @media (max-width: 500px) {
+                margin-bottom: 15px;
+            }
 
             &>label {
                 top: 15%;
@@ -28,6 +38,13 @@
         background-color: #f5f7f7;
         border-bottom: 1px solid #e3e8ea;
         position: relative;
+
+        @media (max-width: 500px) {
+            display: flex;
+            flex-direction: column;
+        }
+
+
 
         &--button {
             position: relative;
@@ -52,12 +69,21 @@
             justify-content: space-between;
             width: 100%;
             display: inline-flex;
+
+            @media (max-width: 500px) {
+                flex-direction: column-reverse;
+                display: flex;
+            }
         }
 
         &--username {
             width: 250px;
             padding-right: 15px;
             box-sizing: border-box;
+
+            @media (max-width: 500px) {
+                padding-right: 0;
+            }
         }
 
         &--date {
@@ -65,6 +91,12 @@
             box-sizing: border-box;
             width: 100px;
             text-align: right;
+
+            @media (max-width: 500px) {
+                padding-left: 0;
+                text-align: left;
+                margin: 10px 0;
+            }
         }
 
 
@@ -86,6 +118,13 @@
         &--sender {
             margin-bottom: 19px;
         }
+
+        @media (max-width: 500px) {
+            flex-direction: column-reverse;
+            margin-bottom: 10px;
+        }
+
+
     }
 
     &__topic {
@@ -108,6 +147,12 @@
 
     &__text {
         font-size: 20px;
+
+        &--header-author {
+            @media (max-width: 500px) {
+                margin-top: 10px;
+            }
+        }
 
         &--vertical-center {
             top: 15%;

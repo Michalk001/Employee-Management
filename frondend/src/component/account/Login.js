@@ -22,7 +22,15 @@ export const Login = (props) => {
 
     const singUp = async () => {
         setIsLoading(true)
-        const result = await authContext.singUp(loginValue)
+        let result;
+        try { result = await authContext.singUp(loginValue) }
+        catch (err) {
+            if(err == "TypeError: Failed to fetch")
+            infoBoxContext.addInfo(t('infoBox.errorConnect'));
+            setIsLoading(false)
+            return
+        }
+        
         const data = await result.json();
         setIsLoading(false)
         if (data.succeeded == true) {
@@ -33,11 +41,11 @@ export const Login = (props) => {
         else {
 
             if (data.code == 1) {
-                infoBoxContext.addInfo( t('infoBox.accountRemove') );
+                infoBoxContext.addInfo(t('infoBox.accountRemove'));
             } else if (data.code == 3) {
-                infoBoxContext.addInfo( t('infoBox.accountBlocked') );
+                infoBoxContext.addInfo(t('infoBox.accountBlocked'));
             } else if (data.code == 2) {
-                infoBoxContext.addInfo( t('infoBox.loginError') );
+                infoBoxContext.addInfo(t('infoBox.loginError'));
             }
         }
 

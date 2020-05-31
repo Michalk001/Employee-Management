@@ -236,8 +236,8 @@ export const UserProfileEditor = (props) => {
                             {!user.isRetired && <button className="button button--gap button--remove" onClick={() => archiveUser(true)}>{t('button.archive')}</button>}
                             {user.isRetired && <button className="button button--gap button--remove" onClick={() => archiveUser(false)}>{t('button.restore')}</button>}
                         </>}
-                        <button onClick={() => infoBoxContext.Confirm("Czy napewno chcesz zapisać?", () => (saveEdit()))} className="button button--gap button--save">{t('button.save')}</button>
-                        <button onClick={() => infoBoxContext.Confirm("Czy napewno chcesz anulować edycje?", () => (cancelEdit()))} className="button button--gap button--remove">{t('button.cancel')}</button>
+                        <button onClick={() => infoBoxContext.Confirm( t('infoBox.saveEdit'), () => (saveEdit()))} className="button button--gap button--save">{t('button.save')}</button>
+                        <button onClick={() => infoBoxContext.Confirm( t('infoBox.cancelEdit'), () => (cancelEdit()))} className="button button--gap button--remove">{t('button.cancel')}</button>
                         <Link to={`/user/${user.username}`} className="button button--gap">{t('button.profile')}</Link>
                     </div>
 

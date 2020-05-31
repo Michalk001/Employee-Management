@@ -15,7 +15,6 @@ export const save = async (req, res) => {
         }
 
         const created = await database.project.create(project, { transaction: transaction });
-        console.log(created.id)
         if (req.body.project.users) {
             let users;
             users = await req.body.project.users.map(async (x) => {

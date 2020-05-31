@@ -57,11 +57,22 @@ export const UserProjectsList = (props) => {
 
     const projectStatus = (isRetired) => {
         if (isRetired)
-            return t('list.statusInactive')
-        return t('list.statusActive')
-
+            return (
+                <>
+                    <div className="box__project--status-text ">{t('list.statusInactive')}</div>
+                    <div className="box__project--status-ico box__project--status-ico-red "><i className="fas fa-times"></i></div>
+                </>
+            )
+        return (
+            <>
+                <div className="box__project--status-text ">{t('list.statusActive')}</div>
+                <div className="box__project--status-ico "><i className="fas fa-check"></i></div>
+            </>
+        )
 
     }
+
+
     const updateFilterOptions = (event) => {
 
         setFilterOptions({ ...filterOptions, [event.target.name]: event.target.value })
@@ -122,7 +133,7 @@ export const UserProjectsList = (props) => {
 
             <div className="box__item">
                 <div className=" box__radio-button--position">
-                    <div className="box__item--inline">
+                    <div className="box__radio-button--select-list">
                         <label className={`box__radio-button ${isActiveRadio("filtr-all")}`} htmlFor={`filtr-all`}  >{t('list.all')}</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-all" name="statusProject" value="all" type="radio" />
                         <label className={`box__radio-button ${isActiveRadio("filtr-active")}`} htmlFor={`filtr-active`} >{t('list.active')}</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-active" name="statusProject" value="active" type="radio" />
                         <label className={`box__radio-button ${isActiveRadio("filtr-inactive")}`} htmlFor={`filtr-inactive`} >{t('list.inactive')}</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-inactive" name="statusProject" value="inactive" type="radio" />
@@ -134,8 +145,8 @@ export const UserProjectsList = (props) => {
 
             <div className="box__text box__text--normal box__project">
                 <span className="box__project--title-name ">{t('list.name')}</span>
-                <span className="box__project--title-hours ">{t('list.hours')} </span>
-                <span className="box__project--title-status ">{t('list.status')}</span>
+                <span className="box__project--title-hours-user-list ">{t('list.hours')} </span>
+                <span className="box__project--title-status-user-list  ">{t('list.status')}</span>
             </div>
             {isLoading && <div className="box__loading">  <i className="fas fa-spinner load-ico load-ico--center load-ico__spin "></i></div>}
             {!isLoading && filterProjectList && <>
@@ -145,14 +156,17 @@ export const UserProjectsList = (props) => {
                 {projectList.length != 0 && filterProjectList.length == 0 && <div className="box__item">
                     <div className="box__text box__text--center">{t('list.noFoundProject')}</div>
                 </div>}
-                {filterProjectList.length != 0 && filterProjectList.map((item) => (
-                    <Link to={`/project/${item.id}`} key={`activP-${item.id}`} className="box__project box__project--hover">
-                        <span className="box__project--name ">{item.name}</span>
-                        <span className="box__project--hours">{item.hours}</span>
-                        <span className="box__project--status ">{projectStatus(item.isRetired)}</span>
+                <div className="box__project--list">
+                    {filterProjectList.length != 0 && filterProjectList.map((item) => (
 
-                    </Link>
-                ))}
+                        <Link to={`/project/${item.id}`} key={`activP-${item.id}`} className="box__project box__project--hover">
+                            <span className="box__project--name ">{item.name}</span>
+                            <span className="box__project--hours-user-list">{item.hours}</span>
+                            <span className="box__project--status ">{projectStatus(item.isRetired)}</span>
+
+                        </Link>
+                    ))}
+                </div>
             </>}
             <div className="box__text ">{t('common.report')}:</div>
             <div className="box__item">

@@ -7,7 +7,7 @@
         "remove": "Usuń",
         "cancel": "Anuluj",
         "ok": "Ok",
-        "sub": "Subtract",
+        "sub": "Odejmnij",
         "reportDownload": "Pobierz",
         "edit": "Edytuj",
         "archive": "Zarchiwizuj",
@@ -17,7 +17,7 @@
         "sent": "Wyślij",
         "createProject": "Uwtórz projekt",
         "profile": "Profil",
-        "changePass":"Zmień Hasło",
+        "changePass": "Zmień Hasło",
         "generatePDF": "Wygeneruj PDF"
     },
     "common": {
@@ -66,7 +66,17 @@
         "archiveUser": "Zarchiwizowano pracownika",
         "restoreUser": "Przywrócono pracownika",
         "createUser": "Utworzono pracownika",
-        "bussyLogin": "Login zajęty"
+        "bussyLogin": "Login zajęty",
+        "archiveProject": "Czy na pewno chcesz zarchiwizować projekt?",
+        "restoreProject": "Czy na pewno chcesz przywrócić projekt?",
+        "yes": "Tak",
+        "no": "Nie",
+        "cancelEdit": "Czy napewno chcesz anulować edycje?",
+        "saveEdit": "Czy napewno chcesz zapisać?",
+        "removeUserFromProject":"Czy napewno chcesz usunąć pracownika z projektu?",
+        "restoreUserToProject":"Czy napewno chcesz przywrócić pracownika do projektu?",
+        "deleteUserFromProject":"Czy napewno chcesz trwale usunąć pracownika z projektu?",
+        "errorConnect": "Błąd połączenia z serwerem"
     },
     "sideBar": {
         "dashboard": "Kokpit",
@@ -87,7 +97,8 @@
         "author": "Autor",
         "topic": "Temat",
         "message": "Wiadomość",
-        "to": "Do"
+        "to": "Do",
+        "sent": "Wysłano wiadomość"
     },
     "list": {
         "active": "Aktywne",
@@ -107,31 +118,31 @@
         "nonEmployee": "Brak Pracowników",
         "notFoundEmployee": "Nie znaleziono pracowników",
         "activeEmployee": "Liczba aktywnych pracowników",
-        "inaEmployee":"Nieaktywni Pracownicy",
-        "aEmployee":"Przydzieleni Pracownicy",
+        "inaEmployee": "Nieaktywni Pracownicy",
+        "aEmployee": "Przydzieleni Pracownicy",
         "totalEmployee": "Liczba \nPracowników",
-        "projectList":"Lista Projektów",
-        "non":"Brak",
-        "reportProject":"Raport Projektu",
-        "employeeList":"Lista Pracowników",
-        "setProject":"Przydzielone Projekty",
-        "unsetProject":"Nieaktywne Projekty"
+        "projectList": "Lista Projektów",
+        "non": "Brak",
+        "reportProject": "Raport Projektu",
+        "employeeList": "Lista Pracowników",
+        "setProject": "Przydzielone Projekty",
+        "unsetProject": "Nieaktywne Projekty"
     },
     "user": {
-        "firstname":"Imie",
-        "lastname":"Nazwisko",
-        "email":"E-mail",
-        "phone":"Telefon",
-        "changePass":"Zmień Hasło",
-        "oldPass":"Stare Hasło",
-        "newPass":"Nowe Hasło",
-        "dateLogin":"Dane Logowania",
-        "login":"Login",
-        "password":"Hasło",
-        "admin":"Uprawnienie Administratora",
-        "yes":"Tak",
+        "firstname": "Imie",
+        "lastname": "Nazwisko",
+        "email": "E-mail",
+        "phone": "Telefon",
+        "changePass": "Zmień Hasło",
+        "oldPass": "Stare Hasło",
+        "newPass": "Nowe Hasło",
+        "dateLogin": "Dane Logowania",
+        "login": "Login",
+        "password": "Hasło",
+        "admin": "Uprawnienie Administratora",
+        "yes": "Tak",
         "no": "Nie",
-        "userData":"Dane Pracownika"
+        "userData": "Dane Pracownika"
     },
     "project": {
         "title": "Projekt",
@@ -152,18 +163,17 @@
         "noDescription": "Brak Opisu",
         "select": "Wybierz"
     },
-    "report":{
-        "activeEmployee":"Liczba przydzielonych pracowników",
-        "activeOldEmployee":"Liczba nieaktywnych pracowników",
-        "activeHoursEmployee":"Liczba godzin przydzielonych pracowników",
-        "activeHoursOldEmployee":"Liczba godzin nieaktywnych pracowników",
-        "aEmployee":"Przydzieleni \npracownicy",
-        "inaEmploye":"Nieaktywni \npracownicy",
+    "report": {
+        "activeEmployee": "Liczba przydzielonych pracowników",
+        "activeOldEmployee": "Liczba nieaktywnych pracowników",
+        "activeHoursEmployee": "Liczba godzin przydzielonych pracowników",
+        "activeHoursOldEmployee": "Liczba godzin nieaktywnych pracowników",
+        "aEmployee": "Przydzieleni \npracownicy",
+        "inaEmploye": "Nieaktywni \npracownicy",
         "employeReport": "Raport Pacownika",
-        "activeProjectHours":"Liczba godzin przy przydzielonych projektach",
-        "activeProject":"Liczba przydzielonych projektow",
-        "inactiveProjectHours":"Liczba godzin przy nieaktywnych projektach",
-        "inactiveProject":"Liczba nieaktywnych projektow"
+        "activeProjectHours": "Liczba godzin przy przydzielonych projektach",
+        "activeProject": "Liczba przydzielonych projektow",
+        "inactiveProjectHours": "Liczba godzin przy nieaktywnych projektach",
+        "inactiveProject": "Liczba nieaktywnych projektow"
     }
-
 }

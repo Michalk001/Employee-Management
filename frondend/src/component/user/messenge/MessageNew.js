@@ -65,7 +65,7 @@ export const MessageNew = (props) => {
         const data = await result.json();
    
         if (data.succeeded) {
-            infoBoxContext.addInfo(t('infoBox.error'));
+            infoBoxContext.addInfo(t('infoBox.sent'));
             setMessage({ topic: "", description: "" })
             updateRecipient(null);
         }

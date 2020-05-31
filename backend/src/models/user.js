@@ -47,7 +47,7 @@ export const getByLogin = async (req, res) => {
 }
 
 export const update = async (req, res) => {
-    //console.log(req.headers.authorization) check id add
+
     const user = await database.user.findOne({
         where: {
             username:
