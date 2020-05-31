@@ -13,7 +13,6 @@ import { useTranslation } from "react-i18next";
 
 export const UserProfileEditor = (props) => {
 
-    const passCharCount = 3;
     const [error, setError] = useState(null);
     const [user, setUser] = useState(null);
     const [editUser, setEditUser] = useState([]);
@@ -129,10 +128,10 @@ export const UserProfileEditor = (props) => {
             valid.newPassword = false
             isOK = false;
         }
-        else if (passEdit.newPassword.length <= passCharCount) {
+        else if (passEdit.newPassword.length <= config.users.passwordChar) {
             valid.newPassword = false
             isOK = false;
-            errorList.push(`${t('infoBox.errorPass')} ${passCharCount} ${t('infoBox.errorChar')}`)
+            errorList.push(`${t('infoBox.errorPass')} ${config.users.passwordChar} ${t('infoBox.errorChar')}`)
 
         }
 

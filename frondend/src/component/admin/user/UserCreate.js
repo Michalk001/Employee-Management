@@ -1,14 +1,11 @@
 
 
 import React, { useState, useEffect, state, useContext, useReducer } from "react";
-import { Link } from 'react-router-dom';
+
 
 import { AuthContext } from '../../../context/AuthContext';
 import { InfoBoxContext } from '../../../context/InfoBox/InfoBoxContext';
 import config from '../../../config.json'
-import Cookies from 'js-cookie';
-import { Project } from "../../user/Project";
-import Select from 'react-select'
 import { useTranslation } from "react-i18next";
 
 
@@ -16,7 +13,7 @@ import { useTranslation } from "react-i18next";
 export const UserCreate = (props) => {
 
 
-    const passCharCount = 3;
+
     const { t, i18n } = useTranslation('common');
     const infoBoxContext = useContext(InfoBoxContext);
     const authContext = useContext(AuthContext);
@@ -75,9 +72,9 @@ export const UserCreate = (props) => {
             isOK = false;
         } else {
 
-            if (user.password.length <= passCharCount) {
+            if (user.password.length <= config.users.passwordChar) {
                 valid.password = false
-                errorList.push(`${t('infoBox.errorPass')} ${passCharCount} ${t('infoBox.errorChar')}`)
+                errorList.push(`${t('infoBox.errorPass')} ${config.users.passwordChar} ${t('infoBox.errorChar')}`)
             }
         }
         setIsValid(valid);
