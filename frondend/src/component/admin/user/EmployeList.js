@@ -13,7 +13,7 @@ export const EmployeList = () => {
     const { t, i18n } = useTranslation('common');
     const [userList, setUserList] = useState(null);
     const [filterUserList, setFilterUserList] = useState(null)
-    const [filterOptions, setFilterOptions] = useState({ name: "", statusUser: "all" })
+    const [filterOptions, setFilterOptions] = useState({ name: "", statusProject: "all" })
     const [isLoading, setIsLoading] = useState(true)
     const [generatePDF, setGeneratePDF] = useState(false)
 
@@ -85,15 +85,16 @@ export const EmployeList = () => {
     }
 
     const updateFilterOptions = (event) => {
-
         setFilterOptions({ ...filterOptions, [event.target.name]: event.target.value })
     }
+
+
     const isActiveRadio = (id) => {
-        if (id == "filtr-all" && filterOptions.statusUser == "all")
+        if (id == "filtr-all" && filterOptions.statusProject == "all")
             return "box__radio-button--active"
-        else if (id == "filtr-active" && filterOptions.statusUser == "active")
+        else if (id == "filtr-active" && filterOptions.statusProject == "active")
             return "box__radio-button--active"
-        else if (id == "filtr-inactive" && filterOptions.statusUser == "inactive")
+        else if (id == "filtr-inactive" && filterOptions.statusProject == "inactive")
             return "box__radio-button--active"
 
     }
@@ -109,7 +110,6 @@ export const EmployeList = () => {
                 }
 
             }).filter(item => item != undefined);
-
             if (filterOptions.statusProject == "inactive")
                 list = list.filter(item => { return item.isRetired })
             else if (filterOptions.statusProject == "active")
@@ -140,9 +140,9 @@ export const EmployeList = () => {
             <div className="box__item">
                 <div className=" box__radio-button--position">
                     <div className="box__radio-button--select-list">
-                        <label className={`box__radio-button ${isActiveRadio("filtr-all")}`} htmlFor={`filtr-all`}  >{t('list.all')}</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-all" name="statusUser" value="all" type="radio" />
-                        <label className={`box__radio-button ${isActiveRadio("filtr-active")}`} htmlFor={`filtr-active`} >{t('list.active')}</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-active" name="statusUser" value="active" type="radio" />
-                        <label className={`box__radio-button ${isActiveRadio("filtr-inactive")}`} htmlFor={`filtr-inactive`} >{t('list.inactive')}</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-inactive" name="statusUser" value="inactive" type="radio" />
+                        <label className={`box__radio-button ${isActiveRadio("filtr-all")}`} htmlFor={`filtr-all`}  >{t('list.all')}</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-all" name="statusProject" value="all" type="radio" />
+                        <label className={`box__radio-button ${isActiveRadio("filtr-active")}`} htmlFor={`filtr-active`} >{t('list.active')}</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-active" name="statusProject" value="active" type="radio" />
+                        <label className={`box__radio-button ${isActiveRadio("filtr-inactive")}`} htmlFor={`filtr-inactive`} >{t('list.inactive')}</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-inactive" name="statusProject" value="inactive" type="radio" />
                     </div>
                     <div className="box__text"> {t('list.searchByName')}</div>
                 </div>

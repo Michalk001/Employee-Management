@@ -239,8 +239,12 @@
         &--list>a:nth-child(odd) {
 
             background-color: #f3f3f3;
-        }
 
+           
+        }
+        &--list>a:hover {
+            background-color: #fbfbfb;
+        }
         &--list>a:last-child {
             margin-bottom: 15px;
         }
