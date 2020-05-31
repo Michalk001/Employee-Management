@@ -49,7 +49,11 @@
         "hours": "Hours",
         "name": "Name",
         "activProject": "Active Projects",
-        "non": "No projects"
+        "messages": "Last Messages",
+        "noneProject": "No Projects",
+        "noneMessages": "No Messages",
+        "sender": "Sender",
+        "topic": "Topic"
     },
     "infoBox": {
         "accountBlocked": "Inactive account",

@@ -43,11 +43,15 @@
         "hours": "Godziny",
         "name": "Nazwa",
         "activProject": "Aktywne Projekty",
-        "non": "Brak"
+        "messages": "Ostatnie Wiadomości",
+        "noneProject": "Brak Projektów",
+        "noneMessages": "Brak Wiadomości",
+        "sender": "Nadawca",
+        "topic": "Temat"
     },
     "infoBox": {
-        "accountBlocked": "Konto usunięte",
-        "accountRemove": "Konto nieaktywne",
+        "accountRemove": "Konto usunięte",
+        "accountBlocked": "Konto nieaktywne",
         "loginError": "Błędny login lub hasło",
         "projectNotFound": "Nie znaleziono Projektu",
         "error": "Wystąpił błąd",

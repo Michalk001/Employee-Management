@@ -1,0 +1,108 @@
+.dashboard {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 100%;
+    align-items: flex-start;
+
+    &__text {
+        color: black;
+        font-size: 18px;
+        position: relative;
+        word-break: break-all;
+        text-decoration: none;
+
+        &--center {
+            text-align: center;
+        }
+
+        &--title {
+            font-size: 22px;
+        }
+
+        &--column-name {
+            @media (max-width:500px) {
+                display: none;
+            }
+        }
+
+        &--sender {
+            width: 250px;
+            word-break: break-word;
+
+            @media (max-width:500px) {
+                width: 100%;
+            }
+        }
+
+        &--topic {
+            width: 100%;
+            padding-left: 10px;
+            box-sizing: border-box;
+
+            @media (max-width:500px) {
+                padding: 0;
+                margin-top: 5px;
+            }
+        }
+
+        &--name{
+            width: 250px;
+            @media (max-width:500px) {
+                width: auto;
+            }
+        }
+        &--hours{
+            width: 70px;
+            text-align: right;
+        }
+        &--hours-title{
+            width: 90px;
+            text-align: right;
+        }
+    }
+
+
+    &__list {
+        padding: 5px;
+        box-sizing: border-box;
+        &>a:nth-child(odd) {
+            background-color: #f3f3f3;
+        }
+
+
+    }
+
+
+    &__item {
+        display: block;
+        margin: 10px 0;
+        &--no-read {
+            font-weight: 600;
+        }
+
+        &--list,&--title {
+            display: flex;
+            padding: 10px 10px;
+            word-break: break-word;
+            justify-content: space-between;
+            text-decoration: none;
+            position: relative;
+   
+         
+        }
+        &--list{
+            &:hover{
+                box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0, 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+                z-index: 2;
+            }
+        }
+        &--message-title{
+            @media (max-width:500px) {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+       
+    }
+}
