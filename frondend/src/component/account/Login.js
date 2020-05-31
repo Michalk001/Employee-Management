@@ -7,6 +7,8 @@ import Cookies from 'js-cookie';
 import { Redirect } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 
+
+
 export const Login = (props) => {
 
     const [loginValue, setLoginValue] = useState({});
@@ -25,27 +27,31 @@ export const Login = (props) => {
         let result;
         try { result = await authContext.singUp(loginValue) }
         catch (err) {
-            if(err == "TypeError: Failed to fetch")
-            infoBoxContext.addInfo(t('infoBox.errorConnect'),3);
+            if (err == "TypeError: Failed to fetch")
+                infoBoxContext.addInfo(t('infoBox.errorConnect'), 3);
             setIsLoading(false)
             return
         }
-        
+
         const data = await result.json();
         setIsLoading(false)
         if (data.succeeded == true) {
-            Cookies.set('token', data.token);
+            const jwtDecode = require('jwt-decode');
+            const tokenDecode = jwtDecode(data.token);
+            const expiresToDay = 86400
+            const expiresTime = (tokenDecode.exp - tokenDecode.iat ) / expiresToDay;
+            Cookies.set('token', data.token, { expires: expiresTime });
             authContext.createUserData();
             setCanRedirect(true);
         }
         else {
 
             if (data.code == 1) {
-                infoBoxContext.addInfo(t('infoBox.accountRemove'),3);
+                infoBoxContext.addInfo(t('infoBox.accountRemove'), 3);
             } else if (data.code == 3) {
-                infoBoxContext.addInfo(t('infoBox.accountBlocked'),3);
+                infoBoxContext.addInfo(t('infoBox.accountBlocked'), 3);
             } else if (data.code == 2) {
-                infoBoxContext.addInfo(t('infoBox.loginError'),3);
+                infoBoxContext.addInfo(t('infoBox.loginError'), 3);
             }
         }
 

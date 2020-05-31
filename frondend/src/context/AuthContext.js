@@ -127,26 +127,25 @@ export const AuthProvider = (props) => {
 
 
     const refreshToken = async () => {
-        let result = {};
+
         if (!Cookies.get('token'))
             LogOut();
-        await fetch(`${config.apiRoot}/account/refreshToken/`, {
+        const result = await fetch(`${config.apiRoot}/account/refreshToken/`, {
             method: "post",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
             body: JSON.stringify({ token: Cookies.get('token') })
-        })
-            .then(res => res.json())
-            .then(res => {
-                result = res
-
-            })
-
-        if (result.succeeded) {
+        });
+        const data = await result.json();
+        if (data.succeeded) {
             Cookies.remove('token');
-            Cookies.set('token', result.token);
+            const jwtDecode = require('jwt-decode');
+            const tokenDecode = jwtDecode(data.token);
+            const expiresToDay = 86400
+            const expiresTime = (tokenDecode.exp - tokenDecode.iat) / expiresToDay;
+            Cookies.set('token', data.token, { expires: expiresTime });
             getUserData();
         }
     }
@@ -184,7 +183,7 @@ export const AuthProvider = (props) => {
                     singUp,
                     refreshToken,
                     createUserData,
-                   
+
                     register
                 }
             }

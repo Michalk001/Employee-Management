@@ -19,13 +19,13 @@ export const Header = () => {
             setLang(Cookies.get('lang'))
         else {
             setLang("en")
-            Cookies.set('lang', "en")
+            Cookies.set('lang', "en", { expires: 365 })
         }
     }
 
     const selectLang = (lang) => {
         i18n.changeLanguage(lang);
-        Cookies.set('lang', lang); setLang(lang)
+        Cookies.set('lang', lang, { expires: 365 }); setLang(lang)
     }
 
     useEffect(() => {

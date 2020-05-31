@@ -35,7 +35,7 @@ export const ProjectEditor = (props) => {
             }
         });
         if (result.status == 404) {
-            setError({ code: 404, text: t('infoBox.projectNotFound') })
+            setError({ code: 404, text: t('infoBox.projectNotFound') },3)
             return
         }
         const data = await result.json();
@@ -49,7 +49,7 @@ export const ProjectEditor = (props) => {
     const valid = () => {
         if (!project.name || project.name.replace(/ /g, '') == '') {
             setIsValidName(false)
-            infoBoxContext.addInfo(t('infoBox.requireName'));
+            infoBoxContext.addInfo(t('infoBox.requireName'),3);
             return false
         }
         return true;
@@ -94,11 +94,11 @@ export const ProjectEditor = (props) => {
 
         const data = await result.json();
         if (data.succeeded) {
-            infoBoxContext.addInfo(t('infoBox.updated'));
+            infoBoxContext.addInfo(t('infoBox.updated'),3);
             setIsValidName(true)
         }
         else {
-            infoBoxContext.addInfo(t('infoBox.error'));
+            infoBoxContext.addInfo(t('infoBox.error'),3);
         }
 
     }
@@ -118,12 +118,12 @@ export const ProjectEditor = (props) => {
         if (data.succeeded) {
             setProject({ ...project, isRetired })
             if (isRetired)
-                infoBoxContext.addInfo(t('infoBox.archive'));
+                infoBoxContext.addInfo(t('infoBox.archive'),3);
             else
-                infoBoxContext.addInfo(t('infoBox.restore'));
+                infoBoxContext.addInfo(t('infoBox.restore'),3);
         }
         else {
-            infoBoxContext.addInfo(t('infoBox.error'));
+            infoBoxContext.addInfo(t('infoBox.error'),3);
         }
 
     }
@@ -143,12 +143,12 @@ export const ProjectEditor = (props) => {
             const user = project.users.find(x => { return x.userProjects.id == id })
             user.userProjects.isRetired = isRetired;
             if (isRetired)
-                infoBoxContext.addInfo(t('project.removeEmploye'));
+                infoBoxContext.addInfo(t('project.removeEmploye'),3);
             else
-                infoBoxContext.addInfo(t('project.restoreEmploye'));
+                infoBoxContext.addInfo(t('project.restoreEmploye'),3);
         }
         else {
-            infoBoxContext.addInfo(t('infoBox.error'));
+            infoBoxContext.addInfo(t('infoBox.error'),3);
         }
     }
 
@@ -172,10 +172,10 @@ export const ProjectEditor = (props) => {
 
             setUsers(users.filter(x => { return x.value != employeeToAdd.value }))
 
-            infoBoxContext.addInfo(t('project.addEmploye'));
+            infoBoxContext.addInfo(t('project.addEmploye'),3);
         }
         else {
-            infoBoxContext.addInfo(t('infoBox.error'));
+            infoBoxContext.addInfo(t('infoBox.error'),3);
         }
         setEmployeeToAdd(null)
     }
@@ -195,10 +195,10 @@ export const ProjectEditor = (props) => {
             const user = project.users.find(x => { return x.userProjects.id == id });
             setUsers([...users, { label: user.firstname + " " + user.lastname, firstname: user.firstname, lastname: user.lastname, value: user.id, username: user.username, userProjects: { isRetired: false, isRemove: false, id: id } }])
             project.users = project.users.filter(x => { return x.userProjects.id != id })
-            infoBoxContext.addInfo(t('project.removeEmploye'));
+            infoBoxContext.addInfo(t('project.removeEmploye'),3);
         }
         else {
-            infoBoxContext.addInfo(t('infoBox.error'));
+            infoBoxContext.addInfo(t('infoBox.error'),3);
         }
     }
 

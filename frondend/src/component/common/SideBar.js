@@ -13,7 +13,7 @@ export const SideBar = () => {
     const { innerWidth: width, innerHeight: height } = window;
 
     const changeMenuVisible = () => {
-        Cookies.set('hiddenMenu', !hiddeMenu)
+        Cookies.set('hiddenMenu', !hiddeMenu, { expires: 365 })
         setHiddeMenu(!hiddeMenu)
     }
 
