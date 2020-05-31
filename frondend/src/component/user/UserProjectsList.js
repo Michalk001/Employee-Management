@@ -1,4 +1,4 @@
-import React, { useState, useEffect, state, useContext, useReducer, lazy } from "react";
+import React, { useState, useEffect, state, useContext, useReducer, lazy, Suspense } from "react";
 import { Link } from 'react-router-dom';
 
 import { AuthContext } from '../../context/AuthContext';
@@ -173,7 +173,7 @@ export const UserProjectsList = (props) => {
 
                 {!generatePDF && <div className="button" onClick={() => setGeneratePDF(true)}> {t('button.generatePDF')}</div>}
 
-                {generatePDF && user != null && <Suspense fallback={<div className="button">{t('common.loading')}</div>}>
+                {generatePDF && filterProjectList != null && <Suspense fallback={<div className="button">{t('common.loading')}</div>}>
                     <UserProjectListPDF Doc={UserProjectListPDF} data={filterProjectList} name={`Project-List-Report.pdf`} />
                 </Suspense>}
 

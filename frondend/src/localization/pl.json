@@ -36,7 +36,8 @@
         "noUserFound:": "Nie znaleziono pracownika",
         "lackInactiveProject": "Brak aktywnych projektów",
         "inactiveProject": "Nieaktywne Projekty",
-        "require": "Pole wymagane"
+        "require": "Pole wymagane",
+        "userArchive": "Zarchiwizowany"
     },
     "dashboard": {
         "hours": "Godziny",
@@ -73,10 +74,12 @@
         "no": "Nie",
         "cancelEdit": "Czy napewno chcesz anulować edycje?",
         "saveEdit": "Czy napewno chcesz zapisać?",
-        "removeUserFromProject":"Czy napewno chcesz usunąć pracownika z projektu?",
-        "restoreUserToProject":"Czy napewno chcesz przywrócić pracownika do projektu?",
-        "deleteUserFromProject":"Czy napewno chcesz trwale usunąć pracownika z projektu?",
-        "errorConnect": "Błąd połączenia z serwerem"
+        "removeUserFromProject": "Czy napewno chcesz usunąć pracownika z projektu?",
+        "restoreUserToProject": "Czy napewno chcesz przywrócić pracownika do projektu?",
+        "deleteUserFromProject": "Czy napewno chcesz trwale usunąć pracownika z projektu?",
+        "errorConnect": "Błąd połączenia z serwerem",
+        "archivUser": "Czy na pewno chcesz zarchiwizować pracownika?",
+        "restorUser": "Czy na pewno chcesz przywrócić pracownika?"
     },
     "sideBar": {
         "dashboard": "Kokpit",

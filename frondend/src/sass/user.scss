@@ -4,8 +4,8 @@
     background-color: #f5f6f8;
     margin: 0 auto;
     display: flex;
-    padding-top: 120px;
-    
+    padding-top: 90px;
+    padding-left: 54px;
     @media (max-width:1700px) {
         width: 900px;
     }
@@ -24,6 +24,7 @@
         box-sizing: border-box;
         padding-right: 6px;
         overflow: hidden;
+        padding-bottom: 40px;
     }
 
 

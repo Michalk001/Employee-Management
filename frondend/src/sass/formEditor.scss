@@ -4,15 +4,17 @@
         display: inline-flex;
         width: 100%;
         margin: 10px 0;
+
         @media (max-width:768px) {
             flex-wrap: wrap;
             justify-content: space-around;
             flex-direction: column;
-            & > div{
+
+            &>div {
                 margin: 5px 0;
             }
         }
-       
+
 
     }
 
@@ -63,7 +65,13 @@
             margin-right: 25px;
             display: inline-block;
             position: relative;
+
+            @media (max-width:768px) {
+                margin-right: 0;
+            }
         }
+
+      
 
         &--project-name {
             width: 100%;
@@ -88,6 +96,15 @@
         &--center {
             justify-content: center;
         }
+
+        &--admin-access {
+            @media (max-width:768px) {
+                display: inline-flex;
+                flex-direction: row;
+                justify-content: space-around;
+                margin-top: 15px;
+            }
+        }
     }
 
     &__input {
@@ -104,6 +121,10 @@
             resize: none;
             height: 250px;
             margin: 10px 0;
+
+            @media (max-width:768px) {
+                width: 100%;
+            }
         }
 
         &--select,
@@ -111,6 +132,10 @@
             padding: 0;
             border: none;
             width: 250px;
+
+            @media (max-width:768px) {
+                width: 100%;
+            }
 
         }
 
@@ -127,6 +152,10 @@
             padding: 0 10px;
             width: 300px;
             margin-top: 5px;
+
+            @media (max-width:768px) {
+                width: 100%;
+            }
         }
 
         &--large {
@@ -160,7 +189,7 @@
         }
 
         &--input {
-
+            position: absolute;
             visibility: hidden;
         }
     }
@@ -175,13 +204,11 @@
             font-size: 20px;
             text-decoration: none;
 
-            &:hover {
-                //  color: #46adf9;
-            }
+
         }
 
         &--name {
-            background-color:#2a3038;
+            background-color: #2a3038;
             background: #2a3038db;
             padding: 5px 10px;
             border-top-left-radius: 7px;
@@ -193,8 +220,7 @@
             padding: 5px 10px;
             cursor: pointer;
 
-            /* border-top-right-radius: 7px;
-            border-bottom-right-radius: 7px;*/
+
             &:hover {
                 background-color: #9c1907;
             }

@@ -232,8 +232,8 @@ export const UserProfileEditor = (props) => {
                     {user.isRetired && <div className="form-editor__text form-editor__text--archive-small">{t('infoBox.archive')} </div>}
                     <div className="box__item--inline box__item--full-width box__item button--edit-box">
                         {authContext.isAdmin && <>
-                            {!user.isRetired && <button className="button button--gap button--remove" onClick={() => archiveUser(true)}>{t('button.archive')}</button>}
-                            {user.isRetired && <button className="button button--gap button--remove" onClick={() => archiveUser(false)}>{t('button.restore')}</button>}
+                            {!user.isRetired && <button className="button button--gap button--remove" onClick={() => infoBoxContext.Confirm( t('infoBox.archiveProject'), () => archiveUser(true))}>{t('button.archive')}</button>}
+                            {user.isRetired && <button className="button button--gap button--remove" onClick={() => infoBoxContext.Confirm( t('infoBox.archiveProject'), () => archiveUser(false))}>{t('button.restore')}</button>}
                         </>}
                         <button onClick={() => infoBoxContext.Confirm( t('infoBox.saveEdit'), () => (saveEdit()))} className="button button--gap button--save">{t('button.save')}</button>
                         <button onClick={() => infoBoxContext.Confirm( t('infoBox.cancelEdit'), () => (cancelEdit()))} className="button button--gap button--remove">{t('button.cancel')}</button>
@@ -244,25 +244,25 @@ export const UserProfileEditor = (props) => {
                     <div className="box__item">
                         <div className="box__item--inline box__item--user-edit-mode  ">
                             <div className="box__text box__text--require">{t('user.firstname')} </div>
-                            <input className={`box__input box__input--user-edit ${validInput(isValid.firstname)}`} name="firstname"
+                            <input className={`box__input box__input--user-edit ${validInput(isValid.firstname)}`} id="firstnameEdit" name="firstname"
                                 onChange={updateEditUser} value={getValueOrOther(editUser.firstname)} />
                         </div>
 
                         <div className=" box__item--inline box__item--user-edit-mode">
                             <div className="box__text box__text--require">{t('user.lastname')} </div>
-                            <input className={`box__input box__input--user-edit ${validInput(isValid.lastname)}`} name="lastname"
+                            <input className={`box__input box__input--user-edit ${validInput(isValid.lastname)}`} id="lastnameEdit" name="lastname"
                                 onChange={updateEditUser} value={getValueOrOther(editUser.lastname)} />
                         </div>
 
                         <div className=" box__item--inline box__item--user-edit-mode ">
                             <div className="box__text  box__text--require">{t('user.email')}</div>
-                            <input className={`box__input box__input--user-edit  ${validInput(isValid.email)}`} name="email"
+                            <input className={`box__input box__input--user-edit  ${validInput(isValid.email)}`} id="emailEdit" name="email"
                                 onChange={updateEditUser} value={getValueOrOther(editUser.email)} />
                         </div>
 
                         <div className=" box__item--inline box__item--user-edit-mode">
                             <div className=" box__text ">{t('user.phone')} </div>
-                            <input className="box__input box__input--user-edit" name="phone" onChange={validPhone} value={getValueOrOther(editUser.phone)} />
+                            <input className="box__input box__input--user-edit" id="phoneEdit" name="phone" onChange={validPhone} value={getValueOrOther(editUser.phone)} />
                         </div>
                     </div>
                     {authContext.userDate.username == user.username && <>
@@ -271,12 +271,12 @@ export const UserProfileEditor = (props) => {
                             <div className="box__item--inline ">
                                 <div className="box__item box__item--user-edit-mode">
                                     <div className="box__text  box__text--require">{t('user.oldPass')}</div>
-                                    <input className={`box__input box__input--user-edit ${validInput(passIsValid.oldPassword)}`} type="password" name="oldPassword"
+                                    <input className={`box__input box__input--user-edit ${validInput(passIsValid.oldPassword)}`} id="oldPassEdit" type="password" name="oldPassword"
                                         value={getValueOrOther(passEdit.oldPassword)} onChange={updatePassEdit} />
                                 </div>
                                 <div className="box__item  box__item--user-edit-mode">
                                     <div className="box__text  box__text--require">{t('user.newPass')}</div>
-                                    <input className={`box__input box__input--user-edit ${validInput(passIsValid.newPassword)}`} type="password" name="newPassword"
+                                    <input className={`box__input box__input--user-edit ${validInput(passIsValid.newPassword)}`} id="newPassEdit" type="password" name="newPassword"
                                         value={getValueOrOther(passEdit.newPassword)} onChange={updatePassEdit} />
                                 </div>
                             </div>

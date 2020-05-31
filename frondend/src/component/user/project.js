@@ -143,7 +143,7 @@ export const Project = (props) => {
             {error != null && <ErrorPage text={error.text} code={error.code} />}
             {project &&
                 <div className="box box--large" >
-                    {project && project.isRetired && <div className="form-editor__text form-editor__text--archive-small">{t('common.archive')} </div>}
+                    {project && project.isRetired && <div className="box--archive">{t('common.archive')} </div>}
                     {authContext.isAdmin && <div className="box__item--inline box__item--full-width box__item button--edit-box">
                         <Link to={`/admin/project/edit/${project.id}`} className="button">{t('button.edit')}</Link>
                     </div>}
@@ -151,7 +151,7 @@ export const Project = (props) => {
                         <span className="box__text--bold ">{t('project.title')}: </span>
                         <span className="box__text--bold ">{project.name}</span>
                     </div>
-                    {currentUserInfo && <div className="box__item box--half-border-top">
+                    {currentUserInfo && <div className="box__item ">
                         <div className="box__item--inline">
                             <div className="box__text box__text--bold box__text--vertical-center  ">{t('project.yoursQuantityHours')}: </div>
                             <div className="box__text box__text--vertical-center "> {currentUserInfo && currentUserInfo.userProjects.hours}</div>
@@ -199,7 +199,7 @@ export const Project = (props) => {
 
                         {!generatePDF && <div className="button" onClick={() => setGeneratePDF(true)}> {t('button.generatePDF')}</div>}
 
-                        {generatePDF && user != null && <Suspense fallback={<div className="button">{t('common.loading')}</div>}>
+                        {generatePDF && project != null && <Suspense fallback={<div className="button">{t('common.loading')}</div>}>
                             <ProjectReportPDF Doc={ProjectReportPDF} data={project} name={`${project.name}`} />
                         </Suspense>}
 

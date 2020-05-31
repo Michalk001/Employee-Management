@@ -68,7 +68,7 @@ export const UserProfile = (props) => {
             {user &&
                 <div className="box box--large" >
 
-
+                    {user && user.isRetired && <div className="box--archive">{t('common.userArchive')} </div>}
                     <div className="box__item--inline box__item--full-width box__item button--edit-box">
                         {authContext.userDate.username != user.username &&
                             <Link to={{ pathname: '/message/new', reply: { user: user } }} className="button button--gap">{t('message.write')}</Link>}

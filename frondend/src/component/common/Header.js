@@ -40,7 +40,7 @@ export const Header = () => {
 
         <div className="header">
             <div className="header--wrap">
-                <Link to="/" className="header__home">
+                <Link to="/" className="header__home header__home--hover">
                     <i className="fas fa-home header__home--ico  header__home--transition"></i>
                     <div className="header__home--text header__home--hidden-m  header__home--transition">{t('common.home')}</div>
                 </Link>

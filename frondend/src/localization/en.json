@@ -42,7 +42,8 @@
         "noUserFound:": "Employee Not Found",
         "lackInactiveProject": "No active projects",
         "inactiveProject": "Inactive Projects",
-        "require":"Require"
+        "require":"Require",
+        "userArchive": "Archived"
     },
     "dashboard": {
         "hours": "Hours",
@@ -82,7 +83,9 @@
         "removeUserFromProject":"Do you want remove employee from project?",
         "restoreUserToProject":"Do you want remove restore to project?",
         "deleteUserFromProject":"Do you want remove delete from project?",
-        "errorConnect": "Server connection error"
+        "errorConnect": "Server connection error",
+        "archivUser": "Do you want archive employee?",
+        "restorUser": "Do you want restore employee?"
     },
     "sideBar": {
         "dashboard": "Dashboard",

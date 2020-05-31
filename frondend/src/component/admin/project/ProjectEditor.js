@@ -235,10 +235,10 @@ export const ProjectEditor = (props) => {
                 </div>
                 <div className="form-editor--inline-flex-wrap">
                     <div className="form-editor__text form-editor__text--vertical-center form-editor__text--require">  {t('project.name')} </div>
-                    <input className={`form-editor__input form-editor__input--large form-editor__input--editor ${validInput(isValidName)}`}  type="text" name="name" value={project ? project.name : ""} onChange={updateProjectData} />
+                    <input id="nameEditPro" className={`form-editor__input form-editor__input--large form-editor__input--editor ${validInput(isValidName)}`}  type="text" name="name" value={project ? project.name : ""} onChange={updateProjectData} />
                 </div>
                 <div className="form-editor__text"> {t('project.description')} </div>
-                <textarea className="form-editor__input form-editor__input--textarea" name="description" value={project ? project.description : ""} onChange={updateProjectData} />
+                <textarea id="descriptionEditPro" className="form-editor__input form-editor__input--textarea" name="description" value={project ? project.description : ""} onChange={updateProjectData} />
                 {project && !project.isRetired && <div className="form-editor--inline">
                     <div className="form-editor__text form-editor__text--vertical-center"> {t('project.addNewEmployee')}: </div>
                     <Select value={employeeToAdd} onChange={(x) => setEmployeeToAdd(x)} placeholder={t('project.select') } noOptionsMessage={() => { return t('project.emptyEmployeList') }} options={users} className="form-editor__input form-editor__input--select " />

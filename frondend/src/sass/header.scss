@@ -4,7 +4,7 @@
     background-color: black;
 
     position: fixed;
-    height: 70px;
+    height: 45px;
 
 
     width: 100%;
@@ -68,26 +68,28 @@
             padding-left: 10px;
         }
 
-        &--hidden-m {
-            @media (min-width:769px) {
-                &:hover & {
-                    &--text {
-                        font-size: 24px;
-                    }
-
-                    &--ico {
-                        font-size: 36px;
-                    }
-                }
-            }
+        &--hover {
 
             &:hover {
 
                 color: $base-hover-text-color;
-            }
 
+                @media (min-width:769px) {
+                    .header__home--text {
+                        font-size: 24px;
+                    }
+
+                    .header__home--ico {
+                        font-size: 36px;
+                    }
+                }
+            }
         }
+
+
+
     }
+
 
     &__menu {
         position: relative;
@@ -95,17 +97,23 @@
         text-decoration: none;
         display: inline-flex;
         align-items: center;
-        &--user-name{
+
+        &--user-name {
+
+
             @media (max-width:500px) {
                 display: none;
             }
         }
-        &--user-ico{
+
+        &--user-ico {
             font-size: 32px;
             margin-left: 10px;
+
             @media (min-width:501px) {
                 display: none;
             }
+
             &:hover {
 
                 color: $base-hover-text-color;
@@ -122,6 +130,12 @@
         font-size: 18px;
         text-decoration: none;
         transition-duration: 0.25s;
+
+        &:hover {
+            @media (min-width:769px) {
+                font-size: 24px;
+            }
+        }
 
         &:hover {
 
