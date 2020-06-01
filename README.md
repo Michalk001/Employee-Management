@@ -18,11 +18,11 @@
 
 Example frondend addres `https://empfrontend.ew.r.appspot.com/`
 
-User login with administrator rights  
+User login with administrator access 
 - `Login: admin Password: test1234`
 - `Login: monbrz Password: monbrz1234`
    
-User login  without administrator rights  
+User login  without administrator access
 - `Login: jankow Password: jankow1234`
 
 
@@ -32,7 +32,8 @@ User login  without administrator rights
 
 Example config.json
 
-``` {
+``` 
+{
     "PORT": 4006,
     "DBURL": "postgres://wollier:test1234@34.67.90.33:5432/emdb",
     "DBADMIN":{
@@ -42,20 +43,24 @@ Example config.json
         "lastname": "Wojtula",
         "email": "test@test.com"
     }
-} ```
+}
+```
 
 - DBURL - PostgresSQL database
+- DBADMIN - Default user with administrator access, create after start new database
 
 ### Frondend
 
 Example config.json
 
-``` {
+``` 
+{
     "apiRoot": "https://empbackend.ew.r.appspot.com/",
     "users": {
         "passwordChar": 8
     }
-} ```
+} 
+```
 
 - apiRoot - url to backend server
 
