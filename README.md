@@ -14,7 +14,7 @@
 ## Usage
 
 - Default addres for frondend `http://localhost:8000/`
-- Default addres for backend `http://localhost:4006/`
+- Default addres for backend `http://localhost:4008/`
 
 Example frondend addres `https://empfrontend.ew.r.appspot.com/`
 
@@ -34,7 +34,7 @@ Example config.json
 
 ``` 
 {
-    "PORT": 4006,
+    "PORT": 4008,
     "DBURL": "postgres://wollier:test1234@34.67.90.33:5432/emdb",
     "DBADMIN":{
         "username": "admin",
