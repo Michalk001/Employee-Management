@@ -29,3 +29,11 @@ export const RequireLogin = ({ path, component, ...rest }) => {
     </>
     )
 } 
+
+export const RequireAdmin = ({ path, component, ...rest }) => {
+    const authContext = useContext(AuthContext);
+    return (<>
+        {(authContext.isAdmin || authContext.isAdmin == null) ? <> <SideBar /> <UserRoute path={path} component={component} /></> : <Route render={() => (<Redirect to='/' />)} />}
+    </>
+    )
+} 

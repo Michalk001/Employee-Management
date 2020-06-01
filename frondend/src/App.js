@@ -12,7 +12,7 @@ import React, { useState, useEffect, state, useContext } from "react";
 import { Header } from "./component/common/Header"
 
 import { Login } from "./component/account/Login"
-import { UserRoute, RequireLogin } from "./component/Auth"
+import { UserRoute, RequireLogin,RequireAdmin } from "./component/Auth"
 
 import { AuthProvider } from './context/AuthContext';
 import { InfoBoxProvider } from './context/InfoBox/InfoBoxContext';
@@ -54,14 +54,14 @@ export const App = () => {
                             <RequireLogin path="/" exact component={Dashboard} />
                             <UserRoute path="/login" component={Login} />
 
-                            <RequireLogin path="/Admin/Project/New" component={ProjectCreate} />
-                            <RequireLogin path="/Admin/Project/Edit/:id" component={ProjectEditor} />
-                            <RequireLogin path="/Admin/Project/" component={ProjectList} />
-                            <RequireLogin path="/admin/user/new" component={UserCreate} />
-                            <RequireLogin path="/Admin/User/" component={EmployeList} />
+                            <RequireAdmin path="/Admin/Project/New" component={ProjectCreate} />
+                            <RequireAdmin path="/Admin/Project/Edit/:id" component={ProjectEditor} />
+                            <RequireAdmin path="/Admin/Project/" component={ProjectList} />
+                            <RequireAdmin path="/admin/user/new" component={UserCreate} />
+                            <RequireAdmin path="/Admin/User/" component={EmployeList} />
 
                             <RequireLogin path="/Project/:id" component={Project} />
-                            <RequireLogin path="/User/Profile/:id" component={UserProfileEditor} />
+                            <RequireAdmin path="/User/Profile/:id" component={UserProfileEditor} />
                             <RequireLogin path="/User/Profile" component={UserProfileEditor} />
                             <RequireLogin path="/User/Project/" component={UserProjectsList} />
 

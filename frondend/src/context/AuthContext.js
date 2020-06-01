@@ -27,7 +27,7 @@ export const AuthContext = React.createContext({
 export const AuthProvider = (props) => {
 
     const [isLogin, setIsLogin] = useState(null);
-    const [isAdmin, setIsAdmin] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(null);
     const [userDate, setUserDate] = useState(null)
 
 
@@ -66,8 +66,12 @@ export const AuthProvider = (props) => {
         }
         const jwtDecode = require('jwt-decode');
         const tokenDecode = jwtDecode(Cookies.get('token'));
-        if (tokenDecode.isAdmin)
+        if (tokenDecode.isAdmin) {
             setIsAdmin(true)
+        }
+        else {
+            setIsAdmin(false)
+        }
         setUserDate({
             username: tokenDecode.sub,
             firstname: tokenDecode.firstname,
