@@ -13,17 +13,17 @@
 
 ## Usage
 
-Default addres for frondend `http://localhost:8000/`
-Default addres for backend `http://localhost:4006/`
+- Default addres for frondend `http://localhost:8000/`
+- Default addres for backend `http://localhost:4006/`
 
 Example frondend addres `https://empfrontend.ew.r.appspot.com/`
 
 User login with administrator rights  
-`Login: admin Password: test1234`
-`Login: monbrz Password: monbrz1234`
+- `Login: admin Password: test1234`
+- `Login: monbrz Password: monbrz1234`
    
 User login  without administrator rights  
-`Login: jankow Password: jankow1234`
+- `Login: jankow Password: jankow1234`
 
 
 ## Configuration
