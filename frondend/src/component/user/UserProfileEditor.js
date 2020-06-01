@@ -128,7 +128,7 @@ export const UserProfileEditor = (props) => {
             valid.newPassword = false
             isOK = false;
         }
-        else if (passEdit.newPassword.length <= config.users.passwordChar) {
+        else if (passEdit.newPassword.length < config.users.passwordChar) {
             valid.newPassword = false
             isOK = false;
             errorList.push(`${t('infoBox.errorPass')} ${config.users.passwordChar} ${t('infoBox.errorChar')}`)

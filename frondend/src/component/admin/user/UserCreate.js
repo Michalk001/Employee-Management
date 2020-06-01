@@ -72,7 +72,7 @@ export const UserCreate = (props) => {
             isOK = false;
         } else {
 
-            if (user.password.length <= config.users.passwordChar) {
+            if (user.password.length < config.users.passwordChar) {
                 valid.password = false
                 errorList.push(`${t('infoBox.errorPass')} ${config.users.passwordChar} ${t('infoBox.errorChar')}`)
             }
