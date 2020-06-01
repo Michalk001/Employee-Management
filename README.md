@@ -32,8 +32,7 @@ User login  without administrator rights
 
 Example config.json
 
-``
-{
+```{
     "PORT": 4006,
     "DBURL": "postgres://wollier:test1234@34.67.90.33:5432/emdb",
     "DBADMIN":{
@@ -43,8 +42,7 @@ Example config.json
         "lastname": "Wojtula",
         "email": "test@test.com"
     }
-}
-``
+}```
 
 - DBURL - PostgresSQL database
 
@@ -52,14 +50,12 @@ Example config.json
 
 Example config.json
 
-```
-{
+```{
     "apiRoot": "https://empbackend.ew.r.appspot.com/",
     "users": {
         "passwordChar": 8
     }
-}
-```
+}```
 
 - apiRoot - url to backend server
 
