@@ -26,7 +26,7 @@ export default (sequelize, type) => {
         },
 
         description: {
-            type: type.STRING,
+            type: type.STRING(100000),
             defaultValue: "",
         },
         topic: {

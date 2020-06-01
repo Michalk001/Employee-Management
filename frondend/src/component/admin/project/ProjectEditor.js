@@ -35,7 +35,7 @@ export const ProjectEditor = (props) => {
             }
         });
         if (result.status == 404) {
-            setError({ code: 404, text: t('infoBox.projectNotFound') },3)
+            setError({ code: 404, text: t('infoBox.projectNotFound') }, 3)
             return
         }
         const data = await result.json();
@@ -49,7 +49,7 @@ export const ProjectEditor = (props) => {
     const valid = () => {
         if (!project.name || project.name.replace(/ /g, '') == '') {
             setIsValidName(false)
-            infoBoxContext.addInfo(t('infoBox.requireName'),3);
+            infoBoxContext.addInfo(t('infoBox.requireName'), 3);
             return false
         }
         return true;
@@ -94,11 +94,11 @@ export const ProjectEditor = (props) => {
 
         const data = await result.json();
         if (data.succeeded) {
-            infoBoxContext.addInfo(t('infoBox.updated'),3);
+            infoBoxContext.addInfo(t('infoBox.updated'), 3);
             setIsValidName(true)
         }
         else {
-            infoBoxContext.addInfo(t('infoBox.error'),3);
+            infoBoxContext.addInfo(t('infoBox.error'), 3);
         }
 
     }
@@ -118,12 +118,12 @@ export const ProjectEditor = (props) => {
         if (data.succeeded) {
             setProject({ ...project, isRetired })
             if (isRetired)
-                infoBoxContext.addInfo(t('infoBox.archive'),3);
+                infoBoxContext.addInfo(t('infoBox.archive'), 3);
             else
-                infoBoxContext.addInfo(t('infoBox.restore'),3);
+                infoBoxContext.addInfo(t('infoBox.restore'), 3);
         }
         else {
-            infoBoxContext.addInfo(t('infoBox.error'),3);
+            infoBoxContext.addInfo(t('infoBox.error'), 3);
         }
 
     }
@@ -138,17 +138,18 @@ export const ProjectEditor = (props) => {
             body: JSON.stringify({ userProject: { isRetired } })
         });
         const data = await result.json();
+      
         if (data.succeeded) {
 
             const user = project.users.find(x => { return x.userProjects.id == id })
             user.userProjects.isRetired = isRetired;
             if (isRetired)
-                infoBoxContext.addInfo(t('project.removeEmploye'),3);
+                infoBoxContext.addInfo(t('project.removeEmploye'), 3);
             else
-                infoBoxContext.addInfo(t('project.restoreEmploye'),3);
+                infoBoxContext.addInfo(t('project.restoreEmploye'), 3);
         }
         else {
-            infoBoxContext.addInfo(t('infoBox.error'),3);
+            infoBoxContext.addInfo(t('infoBox.error'), 3);
         }
     }
 
@@ -172,10 +173,10 @@ export const ProjectEditor = (props) => {
 
             setUsers(users.filter(x => { return x.value != employeeToAdd.value }))
 
-            infoBoxContext.addInfo(t('project.addEmploye'),3);
+            infoBoxContext.addInfo(t('project.addEmploye'), 3);
         }
         else {
-            infoBoxContext.addInfo(t('infoBox.error'),3);
+            infoBoxContext.addInfo(t('infoBox.error'), 3);
         }
         setEmployeeToAdd(null)
     }
@@ -195,10 +196,10 @@ export const ProjectEditor = (props) => {
             const user = project.users.find(x => { return x.userProjects.id == id });
             setUsers([...users, { label: user.firstname + " " + user.lastname, firstname: user.firstname, lastname: user.lastname, value: user.id, username: user.username, userProjects: { isRetired: false, isRemove: false, id: id } }])
             project.users = project.users.filter(x => { return x.userProjects.id != id })
-            infoBoxContext.addInfo(t('project.removeEmploye'),3);
+            infoBoxContext.addInfo(t('project.removeEmploye'), 3);
         }
         else {
-            infoBoxContext.addInfo(t('infoBox.error'),3);
+            infoBoxContext.addInfo(t('infoBox.error'), 3);
         }
     }
 
@@ -206,11 +207,15 @@ export const ProjectEditor = (props) => {
         return field == false ? ` box__input--require` : ""
     }
 
+    const isArchived = () => {
+        return project.isRetired
+    }
+
     useEffect(() => {
 
         if (props.match.params.id)
             getProject(props.match.params.id);
-            document.title = t('title.editProject') 
+        document.title = t('title.editProject')
     }, [props.match.params.id])
 
     useEffect(() => {
@@ -225,49 +230,51 @@ export const ProjectEditor = (props) => {
                 <div className="form-editor--inline box__item button--edit-box">
                     <div className="button button--save button--gap" onClick={() => { updateProject() }}>{t('button.update')}</div>
                     {project && !project.isRetired && <div className="button button--remove button--gap"
-                        onClick={() => infoBoxContext.Confirm( t('infoBox.archiveProject'), () => (archiveProject(project.id, true)))}>
+                        onClick={() => infoBoxContext.Confirm(t('infoBox.archiveProject'), () => (archiveProject(project.id, true)))}>
                         {t('button.archive')}
-                </div>}
+                    </div>}
                     {project && project.isRetired && <div className="button button--gap"
                         onClick={() => infoBoxContext.Confirm(t('infoBox.restoreProject'), () => (archiveProject(project.id, false)))}>
-                         {t('button.restore')}
-                </div>}
+                        {t('button.restore')}
+                    </div>}
                 </div>
                 <div className="form-editor--inline-flex-wrap">
                     <div className="form-editor__text form-editor__text--vertical-center form-editor__text--require">  {t('project.name')} </div>
-                    <input id="nameEditPro" className={`form-editor__input form-editor__input--large form-editor__input--editor ${validInput(isValidName)}`}  type="text" name="name" value={project ? project.name : ""} onChange={updateProjectData} />
+                    <input id="nameEditPro" className={`form-editor__input form-editor__input--large form-editor__input--editor ${validInput(isValidName)}`} type="text" name="name" value={project ? project.name : ""} onChange={updateProjectData} />
                 </div>
                 <div className="form-editor__text"> {t('project.description')} </div>
                 <textarea id="descriptionEditPro" className="form-editor__input form-editor__input--textarea" name="description" value={project ? project.description : ""} onChange={updateProjectData} />
                 {project && !project.isRetired && <div className="form-editor--inline">
                     <div className="form-editor__text form-editor__text--vertical-center"> {t('project.addNewEmployee')}: </div>
-                    <Select value={employeeToAdd} onChange={(x) => setEmployeeToAdd(x)} placeholder={t('project.select') } noOptionsMessage={() => { return t('project.emptyEmployeList') }} options={users} className="form-editor__input form-editor__input--select " />
+                    <Select value={employeeToAdd} onChange={(x) => setEmployeeToAdd(x)} placeholder={t('project.select')} noOptionsMessage={() => { return t('project.emptyEmployeList') }} options={users} className="form-editor__input form-editor__input--select " />
                     <div className={`button ${!employeeToAdd ? `button--disabled` : ``}`} onClick={() => addEmployee()} > {t('button.add')}</div>
                 </div>}
                 <div className="form-editor__text"> {t('project.activeEmployee')}: </div>
                 {project && project.users.filter(xx => { return xx.userProjects.isRetired == false }).map((x) => (
                     <div key={`UserPE-${x.username}`} className="box__item form-editor__employe-box">
                         <Link className="form-editor__employe-box--text  form-editor__employe-box--name " to={`/user/${x.username}`}>{x.firstname} {x.lastname}</Link>
-                        <div className="form-editor__employe-box--text  form-editor__employe-box--retired" onClick={() => infoBoxContext.Confirm(t('infoBox.removeUserFromProject'), () => (archiveUser(x.userProjects.id, true)))}> <i className="fas fa-ban"></i></div>
+                        {!isArchived() && <div className="form-editor__employe-box--text  form-editor__employe-box--retired" onClick={() => infoBoxContext.Confirm(t('infoBox.removeUserFromProject'), () => (archiveUser(x.userProjects.id, true)))}> <i className="fas fa-ban"></i></div>}
                     </div>))}
                 {project && !project.users.find(x => { return x.userProjects.isRetired == false }) &&
                     <div className="form-editor__text">
-                         {t('project.non')}
-            </div>}
+                        {t('project.non')}
+                    </div>}
                 {project && project.users.find(x => { return x.userProjects.isRetired == true }) &&
                     <>
                         <div className="form-editor__text  box--half-border-top"> {t('project.inactiveEmployee')}: </div>
                         {project && project.users.filter(xx => { return xx.userProjects.isRetired == true }).map((x) => (
                             <div key={`unUserPE-${x.username}`} className="box__item form-editor__employe-box">
                                 <Link className="form-editor__employe-box--text  form-editor__employe-box--name " to={`/user/${x.username}`}>{x.firstname} {x.lastname}</Link>
-                                <div className="form-editor__employe-box--text  form-editor__employe-box--restore" onClick={() => infoBoxContext.Confirm(t('infoBox.restoreUserToProject'), () => (archiveUser(x.userProjects.id, false)))}>  <i className="fas fa-undo-alt"></i></div>
-                                <div className="form-editor__employe-box--text  form-editor__employe-box--retired" onClick={() => infoBoxContext.Confirm(t('infoBox.deleteUserFromProject'), () => (removeUser(x.userProjects.id)))}>  <i className="fas fa-trash"></i></div>
+                                {!isArchived() && <>
+                                    <div className="form-editor__employe-box--text  form-editor__employe-box--restore" onClick={() => infoBoxContext.Confirm(t('infoBox.restoreUserToProject'), () => (archiveUser(x.userProjects.id, false)))}>  <i className="fas fa-undo-alt"></i></div>
+                                    <div className="form-editor__employe-box--text  form-editor__employe-box--retired" onClick={() => infoBoxContext.Confirm(t('infoBox.deleteUserFromProject'), () => (removeUser(x.userProjects.id)))}>  <i className="fas fa-trash"></i></div>
+                                </>}
                             </div>
                         ))}
                     </>}
-                    <div className="form-editor__text form-editor__text--require-string">* {t('common.require')} </div>
+                <div className="form-editor__text form-editor__text--require-string">* {t('common.require')} </div>
             </div>}
-            
+
         </>
     )
 

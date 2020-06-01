@@ -7,7 +7,7 @@ export default (sequelize, type) => {
             defaultValue: type.UUIDV4,
         },
         description: {
-            type: type.STRING,
+            type: type.STRING(100000),
             defaultValue: "",
         },
         name: type.STRING,

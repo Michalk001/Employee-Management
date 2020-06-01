@@ -89,7 +89,8 @@
         "deleteUserFromProject":"Do you want remove delete from project?",
         "errorConnect": "Server connection error",
         "archivUser": "Do you want archive employee?",
-        "restorUser": "Do you want restore employee?"
+        "restorUser": "Do you want restore employee?",
+        "sent":"Message sent"
     },
     "sideBar": {
         "dashboard": "Dashboard",

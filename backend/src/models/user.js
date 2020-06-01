@@ -37,7 +37,7 @@ export const getByLogin = async (req, res) => {
             }
         }]
     });
-    if(user == null){
+    if (user == null) {
         res.status(404).json({ succeeded: false, error: "Not Found" });
         res.end();
         return
@@ -56,7 +56,7 @@ export const update = async (req, res) => {
         include: [{
             model: database.project,
             required: false,
-            attributes: ['id', 'name'],
+            attributes: ['id', 'name', 'isRetired'],
             through: {
                 attributes: []
             }
@@ -75,7 +75,12 @@ export const update = async (req, res) => {
 
     if (req.body.user.isRetired != undefined) {
         user.isRetired = req.body.user.isRetired;
+        if (user.isRetired)
+            user.projects.map(item => {
+                item.isRetired = true;
+            })
         await user.save();
+
         res.json({ succeeded: true });
         res.end();
         return
@@ -90,6 +95,7 @@ export const update = async (req, res) => {
 }
 
 export const remove = async (req, res) => {
+
     const user = await database.user.findOne({
         where: {
             username:
@@ -98,7 +104,7 @@ export const remove = async (req, res) => {
         include: [{
             model: database.project,
             required: false,
-            attributes: ['id', 'name'],
+            attributes: ['id', 'name', 'isRetired'],
             through: {
                 attributes: []
             }
@@ -110,6 +116,10 @@ export const remove = async (req, res) => {
         return
     }
     user.isRemove = true;
+    user.projects.map(item => {
+        item.isRemove = true;
+    })
+
     await user.save();
     res.status(200).json({ succeeded: true });
     res.end();

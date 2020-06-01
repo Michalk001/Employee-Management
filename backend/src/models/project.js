@@ -82,7 +82,7 @@ export const getById = async (req, res) => {
         res.status(200).json({ succeeded: true, project });
         res.end();
     } catch (err) {
-        res.status(404).json({ succeeded: false,  error: "not found"});
+        res.status(404).json({ succeeded: false, error: "not found" });
     }
 }
 
@@ -108,6 +108,14 @@ export const update = async (req, res) => {
     if (req.body.project.isRetired != null || req.body.project.isRetired != undefined) {
 
         project.isRetired = req.body.project.isRetired;
+
+        if (project.isRetired) {
+             project.users.map(  async (item) => {
+               const userPro = item.userProjects;
+               userPro.isRetired = true;
+               await userPro.save()
+            })
+        }
         await project.save();
         res.status(200).json({ succeeded: true });
         res.end();

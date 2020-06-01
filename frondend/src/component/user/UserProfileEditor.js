@@ -185,6 +185,7 @@ export const UserProfileEditor = (props) => {
         });
 
         const data = await result.json();
+
         if (data.succeeded) {
             setUser({ ...user, isRetired })
             setEditUser({ ...user, isRetired })

@@ -24,12 +24,15 @@ export const ActiveProject = () => {
             },
         });
         const data = await result.json();
+
         if (data.succeeded) {
-            const activePro = data.user.projects.filter(x => (!x.userProjects.isRemove || !x.userProjects.isRetired))
+            const activePro = data.user.projects.filter(x => !x.userProjects.isRetired)
+                .filter(x => !x.userProjects.isRemove)
                 .map(x => ({
                     name: x.name,
                     idProject: x.id,
-                    hours: x.userProjects.hours
+                    hours: x.userProjects.hours,
+                    isRetired: x.userProjects.isRetired
                 })
                 )
             setActiveProject(activePro)
