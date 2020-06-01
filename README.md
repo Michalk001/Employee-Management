@@ -14,8 +14,9 @@
 ## Usage
 
 Default addres for frondend `http://localhost:8000/`
-Default addres for backend `http://localhost:5006/`
+Default addres for backend `http://localhost:4006/`
 
+Example frondend addres `https://empfrontend.ew.r.appspot.com/`
 
 User login with administrator rights  
 `Login: admin Password: test1234`
@@ -29,9 +30,42 @@ User login  without administrator rights
 
 ### Backend
 
+Example config.json
+
+`{
+    "PORT": 4006,
+    "DBURL": "postgres://wollier:test1234@34.67.90.33:5432/emdb",
+    "DBADMIN":{
+        "username": "admin",
+        "password": "test1234",
+        "firstname": "Marek",
+        "lastname": "Wojtula",
+        "email": "test@test.com"
+    }
+}`
+
+- DBURL - PostgresSQL database
 
 ### Frondend
 
+Example config.json
+
+`{
+    "apiRoot": "https://empbackend.ew.r.appspot.com/",
+    "users": {
+        "passwordChar": 8
+    }
+}`
+
+- apiRoot - url to backend server
+
+## Other
+
+Database was created for testing. Configuration data to db is in config.json
+
+Backend server was created for testing. `https://empbackend.ew.r.appspot.com/`
+
+Using hosting: Google Cloud Platform
 
 ## Technologies
 
