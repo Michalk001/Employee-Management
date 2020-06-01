@@ -70,7 +70,7 @@ Database was created for testing. Configuration data to db is in config.json
 
 Backend server was created for testing. `https://empbackend.ew.r.appspot.com/`
 
-Using hosting: Google Cloud Platform
+Hosting provider: Google Cloud Platform
 
 ## Technologies
 
