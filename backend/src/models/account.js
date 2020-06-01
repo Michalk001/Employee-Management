@@ -39,7 +39,7 @@ export const login = async (req, res) => {
     let name;
     let password;
     if (req.body.username && req.body.password) {
-        name = req.body.username;
+        name = req.body.username.trim();
         password = req.body.password;
     }
     else {
@@ -96,7 +96,7 @@ export const register = async (req, res) => {
     }
     const hashPassword = bcrypt.hashSync(req.body.user.password, 10);
     const user = {
-        username: req.body.user.username,
+        username: req.body.user.username.trim(),
         password: hashPassword,
         firstname: req.body.user.firstname,
         lastname: req.body.user.lastname,

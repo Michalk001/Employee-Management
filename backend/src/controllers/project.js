@@ -4,9 +4,9 @@ import database from "../database/models/database"
 
 export const projectController = (app, passport) => {
 
-    app.post("/project", save);
-    app.get("/project", get);
-    app.get("/project/:id", getById);
-    app.put("/project/:id",update)
+    app.post("/project",passport, save);
+    app.get("/project",passport, get);
+    app.get("/project/:id",passport, getById);
+    app.put("/project/:id",passport,update)
 
 }

@@ -1,5 +1,5 @@
 {
-    "PORT": 4006,
+    "PORT": 4008,
     "DBURL": "postgres://wollier:test1234@34.67.90.33:5432/emdb",
     "DBADMIN":{
         "username": "admin",
