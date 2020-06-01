@@ -9,7 +9,7 @@
 - `npm run start-dev` to local start 
 - Open frondend directory in Command-line
 - `npm install` to install 
-- `npm run start` to local start 
+- `npm run start-dev` to local start 
 
 ## Usage
 
