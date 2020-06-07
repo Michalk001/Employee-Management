@@ -11,46 +11,6 @@ export const InfoBoxContext = React.createContext({
 
 
 
-
-
-export const RenderInfo = (props) => {
-    const [isClose, setIsClose] = useState(false);
-    const [isRemove, setIsRemove] = useState(false);
-
-    const remove = () => {
-
-        setIsClose(true);
-        setTimeout(() => { { setIsRemove(true); props.callback(props.msg.id) } }, 800)
-
-
-    }
-
-
-    useEffect(() => {
-        if (props.msg.time || props.msg.time !== 0)
-            setTimeout(() => { remove() }, props.msg.time*1000)
-
-    }, [isClose, isRemove])
-
-    if (isRemove)
-        return (<></>);
-    if (!isRemove)
-        return (
-
-            <div className={`info-box ${isClose ? "info-box--close" : ""}`}  >
-                <div onClick={() => { remove() }} className={`info-box--wrap `}>
-                    <div className={`info-box__text `} >
-                        {props.msg.text}
-                    </div>
-                    <div className={`info-box__close `}>
-                        <i className="fas fa-times"/>
-                    </div>
-                </div>
-            </div >
-
-        )
-}
-
 export const RenderListInfo = (props) => {
     const [isClose, setIsClose] = useState(false);
     const [isRemove, setIsRemove] = useState(false);
@@ -82,7 +42,7 @@ export const RenderListInfo = (props) => {
                     
                         {props.msg.title}
                     </div>
-                  {props.msg.list && props.msg.list.length !== 0 &&  <div className={`info-box__text `} >
+                    {props.msg.list && props.msg.list.length !== 0 &&  <div className={`info-box__text `} >
                         <ul>
                             {props.msg.list.map((x, index) => (
                                 <li key={`li-${props.msg.id}-${index}`} className="info-box__text--list">
@@ -127,13 +87,11 @@ export const RenderConfirm = (props) => {
 
 export const InfoBoxProvider = (props) => {
 
-
-    const [information, setInformation] = useState([]);
     const [informationList, setInformationList] = useState([]);
     const [confirmData, setConfirmData] = useState(null)
 
-    const addInfo = (text, time = 0) => {
-        setInformation([...information, { msg: { text, id: nextId(), time }, isRemove: false }]);
+    const addInfo = (title, time = 0) => {
+        setInformationList([...informationList, { msg: { title, list:null, id: nextId(), time }, isRemove: false }]);
     }
     const addListInfo = (list, title, time = 0) => {
         setInformationList([...informationList, { msg: { title, list, id: nextId(), time }, isRemove: false }]);
@@ -148,14 +106,6 @@ export const InfoBoxProvider = (props) => {
     }, [informationList])
 
 
-
-    const removeFromInformation = (id) => {
-        const item = information.find((x) => { return x.msg.id === id })
-        if (item != null) {
-            item.isRemove = true;
-        }
-        setInformation(information.filter((x) => { return !x.isRemove  }))
-    }
 
     const removeFromInformationList = (id) => {
         const item = informationList.find((x) => { return x.msg.id === id })
@@ -180,11 +130,6 @@ export const InfoBoxProvider = (props) => {
                 }
             }>
             <>
-                {information.length !== 0 && information.map((x) => (
-                    <span key={`error-${x.msg.id}`} >
-                        {!x.isRemove && < RenderInfo {...x} callback={removeFromInformation} />}
-                    </span>
-                ))}
                 {informationList.length !== 0 && informationList.map((x) => (
                     <span key={`error-${x.msg.id}`} >
                         {!x.isRemove && < RenderListInfo {...x} callback={removeFromInformationList} />}

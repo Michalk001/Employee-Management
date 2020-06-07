@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 const UserListPDF = lazy(() => import('../../reportCreation/teamplet/UserListPDF'));
 import { useTranslation } from 'react-i18next';
 import {StatusFilter} from "../../../models/StatusFilter";
+import {UserProjectsData} from "../../../models/UserProjectsData";
 
 
 export const EmployeeList = () => {
@@ -49,21 +50,10 @@ export const EmployeeList = () => {
                 user.username = item.username
                 user.isRetired = item.isRetired;
                 user.search = item.firstname.toUpperCase() + " " + item.lastname.toUpperCase();
-                let hoursActiveProject = 0;
-                let hoursRetireProject = 0;
-                item.projects.map(project => {
-                    if (!project.userProjects.isRetired) {
-                        hoursActiveProject += project.userProjects.hours;
-                    }
-                    else if (project.userProjects.isRetired && !project.userProjects.isRemove) {
-                        hoursRetireProject += project.userProjects.hours;
-                    }
-                })
-                user.hoursActivProject = hoursActiveProject;
-                user.hoursRetireProject = hoursRetireProject;
-                user.hoursTotal = hoursRetireProject + hoursActiveProject;
-                user.activProjectQuantity = item.projects.filter((project) => !(project.userProjects.isRemove || project.userProjects.isRetired)).length
-                user.totalProjectQuantity = item.projects.filter((project) => !(project.userProjects.isRemove)).length
+                const userProjectData = UserProjectsData(item.projects)
+                user.hoursTotal =  userProjectData.hoursRetired + userProjectData.hoursActive;
+                user.activProjectQuantity = userProjectData.activeQuantity;
+                user.totalProjectQuantity = userProjectData.totalQuantity;
                 users.push(user);
             })
         return users;

@@ -83,8 +83,8 @@
         "restoreUserToProject": "Czy napewno chcesz przywrócić pracownika do projektu?",
         "deleteUserFromProject": "Czy napewno chcesz trwale usunąć pracownika z projektu?",
         "errorConnect": "Błąd połączenia z serwerem",
-        "archiveUser": "Czy na pewno chcesz zarchiwizować pracownika?",
-        "restoreUser": "Czy na pewno chcesz przywrócić pracownika?",
+        "archiveUserConfirm": "Czy na pewno chcesz zarchiwizować pracownika?",
+        "restoreUserConfirm": "Czy na pewno chcesz przywrócić pracownika?",
         "sent":"Wysłano wiadomość"
     },
     "sideBar": {

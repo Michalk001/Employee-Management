@@ -118,18 +118,7 @@ export const UserProfileEditor = (props) => {
     }
 
     const archiveUser = async (isRetired) => {
-        if (!valid())
-            return
-
-        const result = await fetch(`${config.apiRoot}/user/${user.username}`, {
-            method: "put",
-            headers: {
-                "Content-type": "application/json; charset=UTF-8",
-                'Authorization': 'Bearer ' + Cookies.get('token'),
-            },
-            body: JSON.stringify({user: {isRetired}})
-        });
-
+        const result = await Fetch(`${config.apiRoot}/user/${user.username}`, "put", JSON.stringify({user: {isRetired}}))
         const data = await result.json();
 
         if (data.succeeded) {
@@ -180,9 +169,9 @@ export const UserProfileEditor = (props) => {
                 <div className="box__item--inline box__item--full-width box__item button--edit-box">
                     {authContext.isAdmin && <>
                         {!user.isRetired && <button className="button button--gap button--remove"
-                                                    onClick={() => infoBoxContext.Confirm(t('infoBox.archiveProject'), () => archiveUser(true))}>{t('button.archive')}</button>}
+                                                    onClick={() => infoBoxContext.Confirm(t('infoBox.archiveUserConfirm'), () => archiveUser(true))}>{t('button.archive')}</button>}
                         {user.isRetired && <button className="button button--gap button--remove"
-                                                   onClick={() => infoBoxContext.Confirm(t('infoBox.archiveProject'), () => archiveUser(false))}>{t('button.restore')}</button>}
+                                                   onClick={() => infoBoxContext.Confirm(t('infoBox.restoreUserConfirm'), () => archiveUser(false))}>{t('button.restore')}</button>}
                     </>}
                     <button onClick={() => infoBoxContext.Confirm(t('infoBox.saveEdit'), () => (saveEdit()))}
                             className="button button--gap button--save">{t('button.save')}</button>

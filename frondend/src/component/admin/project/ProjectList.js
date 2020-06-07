@@ -4,6 +4,7 @@ import config from '../../../config.json'
 import { useTranslation } from "react-i18next";
 import {FetchGet} from "../../../models/Fetch";
 import {StatusFilter} from "../../../models/StatusFilter";
+import {UserProjectsData} from "../../../models/UserProjectsData";
 
 const ProjectListPDF = lazy(() => import('../../reportCreation/teamplet/ProjectListPDF'));
 
@@ -39,21 +40,10 @@ export const ProjectList = () => {
                 project.id = item.id;
                 project.isRetired = item.isRetired;
                 project.search = item.name.toUpperCase();
-                let hoursActivUser = 0;
-                let hoursRetiredUser = 0;
-                item.users.map(user => {
-                    if (!user.userProjects.isRetired) {
-                        hoursActivUser += user.userProjects.hours;
-                    }
-                    else if (user.userProjects.isRetired && !user.userProjects.isRemove) {
-                        hoursRetiredUser += user.userProjects.hours;
-                    }
-                })
-                project.hoursActivUser = hoursActivUser;
-                project.hoursRetiredUser = hoursRetiredUser;
-                project.hoursTotal = hoursRetiredUser + hoursActivUser;
-                project.activUserQuantity = item.users.filter((user) => !(user.userProjects.isRemove || user.userProjects.isRetired)).length
-                project.totalUserQuantity = item.users.filter((user) => !(user.userProjects.isRemove)).length
+                const userProjectData = UserProjectsData(item.users)
+                project.hoursTotal = userProjectData.hoursRetired + userProjectData.hoursActive;
+                project.activUserQuantity = userProjectData.activeQuantity;
+                project.totalUserQuantity =userProjectData.totalQuantity;
                 projects.push(project);
             })
         return projects;
