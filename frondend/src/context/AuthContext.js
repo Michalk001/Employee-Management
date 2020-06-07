@@ -4,7 +4,7 @@ import React, {useEffect, useState} from "react";
 
 import config from '../config.json'
 
-import {Fetch} from "../models/Fetch";
+import {Fetch, FetchGet} from "../models/Fetch";
 
 export const AuthContext = React.createContext({
     isLogin: false,
@@ -114,14 +114,7 @@ export const AuthProvider = (props) => {
 
         if (!Cookies.get('token'))
             LogOut();
-        const result = await fetch(`${config.apiRoot}/account/refreshToken/`, {
-            method: "post",
-            headers: {
-                "Content-type": "application/json; charset=UTF-8",
-                'Authorization': 'Bearer ' + Cookies.get('token'),
-            },
-            body: JSON.stringify({token: Cookies.get('token')})
-        });
+        const result = await  FetchGet(`${config.apiRoot}/account/refreshToken/`)
         const data = await result.json();
         if (data.succeeded) {
             Cookies.remove('token');

@@ -20,9 +20,9 @@ export const Message = () => {
         setSelectMessageType(event.target.value)
     }
 
-    const getMessages = async () => {
+    const getMessages = async (signal) => {
 
-        const result = await FetchGet(`${config.apiRoot}/message/`)
+        const result = await FetchGet(`${config.apiRoot}/message/`,signal)
         const data = await result.json();
 
         const sortReceiveMessages = data.receiveMessages.sort(sortDate);
@@ -46,8 +46,11 @@ export const Message = () => {
     }
 
     useEffect(() => {
-        getMessages();
-        document.title = t('title.messages') 
+        const abortController = new AbortController();
+        getMessages(abortController.signal);
+        document.title = t('title.messages')
+        return () => abortController.abort();
+
     }, [])
 
     useEffect(() => {

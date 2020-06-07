@@ -26,8 +26,8 @@ export const MessageNew = (props) => {
         setRecipient(value)
     }
 
-    const getUser = async () => {
-        const result = await FetchGet(`${config.apiRoot}/user/`)
+    const getUser = async (signal) => {
+        const result = await FetchGet(`${config.apiRoot}/user/`,signal)
 
         const data = await result.json();
         if (data.succeeded) {
@@ -79,9 +79,10 @@ export const MessageNew = (props) => {
 
 
     useEffect(() => {
-
+        const abortController = new AbortController();
         if (authContext.userDate)
-            getUser();
+            getUser(abortController.signal);
+        return () => abortController.abort();
     }, [authContext.userDate])
 
     useEffect(() => {

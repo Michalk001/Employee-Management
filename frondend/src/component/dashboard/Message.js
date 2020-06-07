@@ -20,8 +20,8 @@ export const Message = () => {
         return dateTimeItem2 - dateTimeItem1;
     }
 
-    const getMessages = async () => {
-        const result = await FetchGet(`${config.apiRoot}/message/`)
+    const getMessages = async (signal) => {
+        const result = await FetchGet(`${config.apiRoot}/message/`,signal)
 
         const data = await result.json();
 
@@ -35,7 +35,9 @@ export const Message = () => {
     }
 
     useEffect(() =>{
-        getMessages();
+        const abortController = new AbortController();
+        getMessages(abortController.signal);
+        return () => abortController.abort();
     },[])
 
     return (

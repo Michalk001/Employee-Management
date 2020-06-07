@@ -2,11 +2,11 @@ import React, { useState, useEffect,  Suspense, lazy } from "react";
 import { Link } from 'react-router-dom';
 
 import config from '../../../config.json'
-import Cookies from 'js-cookie';
 const UserListPDF = lazy(() => import('../../reportCreation/teamplet/UserListPDF'));
 import { useTranslation } from 'react-i18next';
 import {StatusFilter} from "../../../models/StatusFilter";
 import {UserProjectsData} from "../../../models/UserProjectsData";
+import { FetchGet} from "../../../models/Fetch";
 
 
 export const EmployeeList = () => {
@@ -18,15 +18,9 @@ export const EmployeeList = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [generatePDF, setGeneratePDF] = useState(false)
 
-    const getUsers = async () => {
+    const getUsers = async (signal = null) => {
 
-        const result = await fetch(`${config.apiRoot}/user`, {
-            method: "get",
-            headers: {
-                "Content-type": "application/json; charset=UTF-8",
-                'Authorization': 'Bearer ' + Cookies.get('token'),
-            },
-        });
+        const result = await  FetchGet( `${config.apiRoot}/user`,signal)
         const data = await result.json();
         if (data.succeeded) {
             const users = userData(data.user);
@@ -83,8 +77,10 @@ export const EmployeeList = () => {
     }, [userList, filterUserList])
 
     useEffect(() => {
-        getUsers()
-        document.title = t('title.listEmployees') 
+        const abortController = new AbortController();
+        getUsers(abortController.signal)
+        document.title = t('title.listEmployees')
+        return () => abortController.abort();
     }, [])
 
     return (

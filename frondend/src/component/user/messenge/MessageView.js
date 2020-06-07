@@ -14,9 +14,9 @@ export const MessageView = (props) => {
     const [error, setError] = useState(null);
     const authContext = useContext(AuthContext)
 
-    const getMessage = async (id) => {
+    const getMessage = async (id,signal) => {
 
-        const result = await FetchGet(`${config.apiRoot}/message/${id}`)
+        const result = await FetchGet(`${config.apiRoot}/message/${id}`,signal)
 
         if (result.status === 404) {
             setError({code: 404, text: t('infoBox.messageNotFound')})
@@ -70,8 +70,10 @@ export const MessageView = (props) => {
             )
     }
     useEffect(() => {
-        getMessage(props.match.params.id)
+        const abortController = new AbortController();
+        getMessage(props.match.params.id,abortController.signal)
         document.title = t('title.message')
+        return () => abortController.abort();
     }, [props.match.params.id])
 
 

@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom';
 
 import { AuthContext } from '../../context/AuthContext';
 import config from '../../config.json'
-import Cookies from 'js-cookie';
 import { ErrorPage } from "../common/ErrorPage";
 import { useTranslation } from 'react-i18next';
+import {FetchGet} from "../../models/Fetch";
 
 const UserReportPDF = lazy(() => import('../reportCreation/teamplet/UserReportPDF'));
 
@@ -21,14 +21,8 @@ export const UserProfile = (props) => {
 
     const [generatePDF, setGeneratePDF] = useState(false)
 
-    const getUser = async (id) => {
-        const result = await fetch(`${config.apiRoot}/user/${id}`, {
-            method: "get",
-            headers: {
-                "Content-type": "application/json; charset=UTF-8",
-                'Authorization': 'Bearer ' + Cookies.get('token'),
-            },
-        });
+    const getUser = async (id,signal) => {
+        const result = await  FetchGet(`${config.apiRoot}/user/${id}`,signal);
         const data = await result.json();
         if (result.status === 404) {
             setError({ code: 404, text: t('common.noUserFound') })
@@ -53,9 +47,10 @@ export const UserProfile = (props) => {
         return authContext.isAdmin && authContext.userDate.username !== user.username
     }
     useEffect(() => {
-
-        getUser(props.match.params.id)
-        document.title = t('title.userProfile') 
+        const abortController = new AbortController();
+        getUser(props.match.params.id,signal)
+        document.title = t('title.userProfile')
+        return () => abortController.abort();
     }, [props.match.params.id])
 
     useEffect(() => {

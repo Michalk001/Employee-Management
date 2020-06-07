@@ -19,9 +19,9 @@ export const UserProjectsList = () => {
     const [generatePDF, setGeneratePDF] = useState(false)
     const { t } = useTranslation('common');
 
-    const getProjectList = async (name) => {
+    const getProjectList = async (name,signal = null) => {
 
-        const result = await  FetchGet(`${config.apiRoot}/user/${name}`)
+        const result = await  FetchGet(`${config.apiRoot}/user/${name}`,signal)
 
         const data = await result.json();
         if (data.succeeded) {
@@ -73,19 +73,18 @@ export const UserProjectsList = () => {
 
 
     useEffect(() => {
+        const abortController = new AbortController();
         if (authContext.userDate)
-            getProjectList(authContext.userDate.username)
-
+            getProjectList(authContext.userDate.username,abortController.signal);
         document.title = t('title.userProject')
+        return () => abortController.abort();
     }, [authContext.userDate])
 
 
 
     return (
         <div className="box box--center box--medium ">
-
             <StatusFilter  listRaw={projectList} setFilterList={setFilterProjectList}/>
-
             <div className="box__text box__text--normal box__project">
                 <span className="box__project--title-name ">{t('list.name')}</span>
                 <span className="box__project--title-hours-user-list ">{t('list.hours')} </span>

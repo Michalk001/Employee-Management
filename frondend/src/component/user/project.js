@@ -22,9 +22,9 @@ export const Project = (props) => {
 
     const [generatePDF, setGeneratePDF] = useState(false)
 
-    const getProject = async (id) => {
+    const getProject = async (id,signal) => {
 
-        const result = await FetchGet(`${config.apiRoot}/project/${id}`)
+        const result = await FetchGet(`${config.apiRoot}/project/${id}`,signal)
 
         if (result.status === 404) {
             setError({code: 404, text: t('infoBox.projectNotFound')})
@@ -110,8 +110,10 @@ export const Project = (props) => {
 
     }
     useEffect(() => {
-        getProject(props.match.params.id)
+        const abortController = new AbortController();
+        getProject(props.match.params.id,abortController.signal)
         document.title = t('title.project')
+        return () => abortController.abort();
     }, [props.match.params.id])
 
     useEffect(() => {

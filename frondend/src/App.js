@@ -43,7 +43,6 @@ export const App = () => {
                 <InfoBoxProvider>
                     <AuthProvider >
                         <Header />
-
                         <Switch>
                             <RequireLogin path="/" exact component={Dashboard} />
                             <UserRoute path="/login" component={Login} />
@@ -58,7 +57,6 @@ export const App = () => {
                             <RequireAdmin path="/User/Profile/:id" component={UserProfileEditor} />
                             <RequireLogin path="/User/Profile" component={UserProfileEditor} />
                             <RequireLogin path="/User/Project/" component={UserProjectsList} />
-
                             <RequireLogin path="/User/:id" component={UserProfile} />
 
                             <RequireLogin path="/message/new" component={MessageNew} />

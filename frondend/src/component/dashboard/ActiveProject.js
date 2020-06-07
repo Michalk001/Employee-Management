@@ -13,10 +13,10 @@ export const ActiveProject = () => {
     const authContext = useContext(AuthContext)
     const { t} = useTranslation('common');
 
-    const getProject = async () => {
+    const getProject = async (signal) => {
         if (!authContext.userDate)
             return;
-        const result = await FetchGet(`${config.apiRoot}/user/${authContext.userDate.username}`);
+        const result = await FetchGet(`${config.apiRoot}/user/${authContext.userDate.username}`,signal);
         const data = await result.json();
 
         if (data.succeeded) {
@@ -35,8 +35,10 @@ export const ActiveProject = () => {
     }
 
     useEffect(() => {
-        getProject();
+        const abortController = new AbortController();
+        getProject(abortController.signal);
 
+        return () => abortController.abort();
     }, [authContext.userDate])
 
     useEffect(() => {

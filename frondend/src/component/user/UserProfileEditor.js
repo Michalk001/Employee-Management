@@ -22,9 +22,9 @@ export const UserProfileEditor = (props) => {
     const {t} = useTranslation('common');
     const infoBoxContext = useContext(InfoBoxContext);
 
-    const getUser = async (id) => {
+    const getUser = async (id,signal) => {
 
-        const result = await FetchGet(`${config.apiRoot}/user/${id}`)
+        const result = await FetchGet(`${config.apiRoot}/user/${id}`,signal)
 
         if (result.status === 404) {
             setError({code: 404, text: t('infoBox.userNotFound')})
@@ -134,13 +134,14 @@ export const UserProfileEditor = (props) => {
     }
 
     useEffect(() => {
-
+        const abortController = new AbortController();
         if (props.match.params.id)
-            getUser(props.match.params.id)
+            getUser(props.match.params.id,abortController.signal)
         else if (authContext.userDate && authContext.userDate.username)
-            getUser(authContext.userDate.username)
-
+            getUser(authContext.userDate.username,abortController.signal)
         document.title = t('title.editEmployee')
+        return () => abortController.abort();
+
     }, [authContext.userDate, props.match.params.id])
 
     useEffect(() => {

@@ -20,7 +20,6 @@ export const RenderListInfo = (props) => {
         setIsClose(true);
         setTimeout(() => { { setIsRemove(true); props.callback(props.msg.id) } }, 800)
 
-
     }
 
 
