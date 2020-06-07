@@ -265,7 +265,7 @@ export const UserProfileEditor = (props) => {
                                onChange={validPhone} value={getValueOrOther(editUser.phone)}/>
                     </div>
                 </div>
-                {authContext.userDate.username == user.username && <>
+                {authContext.userDate.username === user.username && <>
                     <div className=" box__item ">
                         <div className="box__text  box__text--bold box--half-border-top">{t('user.changePass')}</div>
                         <div className="box__item--inline ">

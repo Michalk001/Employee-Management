@@ -35,7 +35,7 @@ export const Login = () => {
         const data = await result.json();
 
         setIsLoading(false)
-        if (data.succeeded == true) {
+        if (data.succeeded === true) {
             const jwtDecode = require('jwt-decode');
             const tokenDecode = jwtDecode(data.token);
             const expiresToDay = 86400
