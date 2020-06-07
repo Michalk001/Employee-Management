@@ -5,6 +5,8 @@ import { AuthContext } from '../../context/AuthContext';
 import config from '../../config.json'
 import Cookies from 'js-cookie';
 import { useTranslation } from 'react-i18next';
+import {StatusFilter} from "../../models/StatusFilter";
+import {FetchGet} from "../../models/Fetch";
 
 const UserProjectListPDF = lazy(() => import('../reportCreation/teamplet/UserProjectListPDF'));
 
@@ -13,7 +15,6 @@ export const UserProjectsList = () => {
 
     const [projectList, setProjectList] = useState([]);
     const [filterProjectList, setFilterProjectList] = useState([])
-    const [filterOptions, setFilterOptions] = useState({ name: "", statusProject: "all" })
     const [isLoading, setIsLoading] = useState(true)
     const authContext = useContext(AuthContext)
     const [generatePDF, setGeneratePDF] = useState(false)
@@ -21,16 +22,9 @@ export const UserProjectsList = () => {
 
     const getProjectList = async (name) => {
 
-        const result = await fetch(`${config.apiRoot}/user/${name}`, {
-            method: "get",
-            headers: {
-                "Content-type": "application/json; charset=UTF-8",
-                'Authorization': 'Bearer ' + Cookies.get('token'),
-            },
-        });
+        const result = await  FetchGet(`${config.apiRoot}/user/${name}`)
 
         const data = await result.json();
-
         if (data.succeeded) {
 
             if (data.user != null) {
@@ -41,6 +35,7 @@ export const UserProjectsList = () => {
                         return
                     let project = {};
                     project.name = item.name;
+                    project.search = item.name.toUpperCase();
                     project.id = item.id;
                     project.hours = item.userProjects.hours
                     project.isRetired = item.userProjects.isRetired
@@ -73,46 +68,6 @@ export const UserProjectsList = () => {
 
     }
 
-
-    const updateFilterOptions = (event) => {
-
-        setFilterOptions({ ...filterOptions, [event.target.name]: event.target.value })
-    }
-    const isActiveRadio = (id) => {
-        if (id === "filtr-all" && filterOptions.statusProject === "all")
-            return "box__radio-button--active"
-        else if (id === "filtr-active" && filterOptions.statusProject === "active")
-            return "box__radio-button--active"
-        else if (id === "filtr-inactive" && filterOptions.statusProject === "inactive")
-            return "box__radio-button--active"
-
-    }
-
-
-    const filterList = () => {
-
-        if (projectList != null) {
-            let list = projectList.map((item) => {
-                if (item.name.toUpperCase().includes(filterOptions.name.toUpperCase())) {
-                    return item
-                }
-
-            }).filter(item => item !== undefined);
-
-            if (filterOptions.statusProject === "inactive")
-                list = list.filter(item => { return item.isRetired })
-            else if (filterOptions.statusProject === "active")
-                list = list.filter(item => { return !item.isRetired })
-            setFilterProjectList(list)
-        }
-
-
-    }
-    useEffect(() => {
-        filterList();
-
-    }, [filterOptions])
-
     useEffect(() => {
         setGeneratePDF(false)
     }, [projectList, filterProjectList])
@@ -131,17 +86,7 @@ export const UserProjectsList = () => {
         <div className="box box--center box--medium ">
 
 
-            <div className="box__item">
-                <div className=" box__radio-button--position">
-                    <div className="box__radio-button--select-list">
-                        <label className={`box__radio-button ${isActiveRadio("filtr-all")}`} htmlFor={`filtr-all`}  >{t('list.all')}</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-all" name="statusProject" value="all" type="radio" />
-                        <label className={`box__radio-button ${isActiveRadio("filtr-active")}`} htmlFor={`filtr-active`} >{t('list.active')}</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-active" name="statusProject" value="active" type="radio" />
-                        <label className={`box__radio-button ${isActiveRadio("filtr-inactive")}`} htmlFor={`filtr-inactive`} >{t('list.inactive')}</label><input onChange={updateFilterOptions} className="box__project--radio" id="filtr-inactive" name="statusProject" value="inactive" type="radio" />
-                    </div>
-                    <div className="box__text"> {t('list.searchByName')}</div>
-                </div>
-                <input placeholder={`${t('list.search')}...`} type="text" className="box__input box__input--search" id="name" name="name" value={filterOptions.name} onChange={updateFilterOptions} />
-            </div>
+            <StatusFilter  listRaw={projectList} setFilterList={setFilterProjectList}/>
 
             <div className="box__text box__text--normal box__project">
                 <span className="box__project--title-name ">{t('list.name')}</span>
