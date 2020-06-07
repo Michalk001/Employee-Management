@@ -48,7 +48,7 @@ export const UserProfile = (props) => {
     }
     useEffect(() => {
         const abortController = new AbortController();
-        getUser(props.match.params.id,signal)
+        getUser(props.match.params.id,abortController.signal)
         document.title = t('title.userProfile')
         return () => abortController.abort();
     }, [props.match.params.id])
