@@ -9,6 +9,7 @@ import Cookies from 'js-cookie';
 import {ErrorPage} from "../common/ErrorPage";
 import {useTranslation} from "react-i18next";
 import {Fetch, FetchGet} from "../../models/Fetch";
+import {UserEditValid, UserNewValid, UserPasswordValid, validPhone} from "../../models/ValidForm";
 
 export const UserProfileEditor = (props) => {
 
@@ -43,45 +44,14 @@ export const UserProfileEditor = (props) => {
     const updatePassEdit = (event) => {
         setPassEdit({...passEdit, [event.target.name]: event.target.value})
     }
-    const validPhone = (event) => {
-        const reg = /^\d+$/;
-        if ((e.target.value.length <= 9 && reg.test(e.target.value)) || e.target.value === "") {
-            updateEditUser(event)
-        }
-    }
-
-    function validEmail(email) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-    }
 
     const valid = () => {
-        let isOK = true;
-        let valid = {};
-        let errorList = [];
-        if (!editUser.firstname || editUser.firstname.replace(/ /g, '') === '') {
-            valid.firstname = false;
-            isOK = false;
+        const resultValid = UserEditValid(user);
+        if (!resultValid.isOK) {
+            infoBoxContext.addListInfo([], t('infoBox.require'));
         }
-        if (!editUser.lastname || editUser.lastname.replace(/ /g, '') === '') {
-            valid.lastname = false;
-            isOK = false;
-        }
-
-        if (!editUser.email || editUser.email.replace(/ /g, '') === '') {
-            valid.email = false;
-            isOK = false;
-        }
-        if (editUser.email) {
-
-            if (!validEmail(editUser.email)) {
-                valid.email = false;
-                isOK = false;
-            }
-        }
-        setIsValid(valid);
-        if (!isOK)
-            infoBoxContext.addListInfo(errorList, t('infoBox.require'));
-        return isOK
+        setIsValid(resultValid.valid);
+        return valid.isOK
     }
 
 
@@ -92,21 +62,15 @@ export const UserProfileEditor = (props) => {
     const saveEdit = async () => {
         if (!valid())
             return
-        const result = await fetch(`${config.apiRoot}/user/${user.username}`, {
-            method: "put",
-            headers: {
-                "Content-type": "application/json; charset=UTF-8",
-                'Authorization': 'Bearer ' + Cookies.get('token'),
-            },
-            body: JSON.stringify({
-                user: {
-                    firstname: editUser.firstname,
-                    lastname: editUser.lastname,
-                    phone: editUser.phone,
-                    email: editUser.email
-                }
-            })
-        });
+        const body = JSON.stringify({
+            user: {
+                firstname: editUser.firstname,
+                lastname: editUser.lastname,
+                phone: editUser.phone,
+                email: editUser.email
+            }
+        })
+        const result = await Fetch(`${config.apiRoot}/user/${user.username}`, "put", body)
         const data = await result.json();
         if (data.succeeded) {
             setUser(editUser);
@@ -118,35 +82,26 @@ export const UserProfileEditor = (props) => {
     }
 
     const validPassword = () => {
-        let isOK = true;
-        let valid = {oldPassword: true, newPassword: true};
-        let errorList = [];
-        if (passEdit.oldPassword.replace(/ /g, '') === '') {
-            valid.oldPassword = false
-            isOK = false;
-        }
-        if (passEdit.newPassword.replace(/ /g, '') === '') {
-            valid.newPassword = false
-            isOK = false;
-        } else if (passEdit.newPassword.length < config.users.passwordChar) {
-            valid.newPassword = false
-            isOK = false;
-            errorList.push(`${t('infoBox.errorPass')} ${config.users.passwordChar} ${t('infoBox.errorChar')}`)
 
-        }
-
-        setPassIsValid(valid)
-        if (!isOK)
+        const resultValid = UserPasswordValid(user);
+        if (!resultValid.isOK) {
+            const errorList = []
+            if (resultValid.valid.password === false) {
+                errorList.push(`${t('infoBox.errorPass')} ${config.users.passwordChar} ${t('infoBox.errorChar')}`)
+            }
             infoBoxContext.addListInfo(errorList, t('infoBox.require'));
-        return isOK;
+        }
+        setPassIsValid(resultValid.valid);
+        return valid.isOK
     }
+
 
     const changePassword = async () => {
         if (!validPassword())
             return
         setPassIsValid({oldPassword: true, newPassword: true})
         const body = JSON.stringify({password: {oldPassword: passEdit.oldPassword, newPassword: passEdit.oldPassword}});
-        const result = await  Fetch(`${config.apiRoot}/account/changePassword/${user.username}`, "put", body)
+        const result = await Fetch(`${config.apiRoot}/account/changePassword/${user.username}`, "put", body)
         const data = await result.json();
         if (data.succeeded) {
             setPassEdit({oldPassword: "", newPassword: ""})
