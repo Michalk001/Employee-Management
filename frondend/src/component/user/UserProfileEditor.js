@@ -1,15 +1,14 @@
+import React, {useState, useEffect, useContext} from "react";
+import {Link} from 'react-router-dom';
 
 
-import React, { useState, useEffect, state, useContext, useReducer } from "react";
-import { Link } from 'react-router-dom';
-
-
-import { InfoBoxContext } from '../../context/InfoBox/InfoBoxContext';
-import { AuthContext } from '../../context/AuthContext';
+import {InfoBoxContext} from '../../context/InfoBox/InfoBoxContext';
+import {AuthContext} from '../../context/AuthContext';
 import config from '../../config.json'
 import Cookies from 'js-cookie';
-import { ErrorPage } from "../common/ErrorPage";
-import { useTranslation } from "react-i18next";
+import {ErrorPage} from "../common/ErrorPage";
+import {useTranslation} from "react-i18next";
+import {Fetch, FetchGet} from "../../models/Fetch";
 
 export const UserProfileEditor = (props) => {
 
@@ -17,22 +16,18 @@ export const UserProfileEditor = (props) => {
     const [user, setUser] = useState(null);
     const [editUser, setEditUser] = useState([]);
     const [isValid, setIsValid] = useState({})
-    const [passEdit, setPassEdit] = useState({ oldPassword: "", newPassword: "" })
-    const [passIsValid, setPassIsValid] = useState({ oldPassword: true, newPassword: true })
+    const [passEdit, setPassEdit] = useState({oldPassword: "", newPassword: ""})
+    const [passIsValid, setPassIsValid] = useState({oldPassword: true, newPassword: true})
     const authContext = useContext(AuthContext);
-    const { t, i18n } = useTranslation('common');
+    const {t} = useTranslation('common');
     const infoBoxContext = useContext(InfoBoxContext);
 
     const getUser = async (id) => {
-        const result = await fetch(`${config.apiRoot}/user/${id}`, {
-            method: "get",
-            headers: {
-                "Content-type": "application/json; charset=UTF-8",
-                'Authorization': 'Bearer ' + Cookies.get('token'),
-            },
-        });
-        if (result.status == 404) {
-            setError({ code: 404, text: t('infoBox.userNotFound') })
+
+        const result = await FetchGet(`${config.apiRoot}/user/${id}`)
+
+        if (result.status === 404) {
+            setError({code: 404, text: t('infoBox.userNotFound')})
         }
         const data = await result.json();
         if (data.succeeded) {
@@ -43,14 +38,14 @@ export const UserProfileEditor = (props) => {
     }
 
     const updateEditUser = (event) => {
-        setEditUser({ ...editUser, [event.target.name]: event.target.value })
+        setEditUser({...editUser, [event.target.name]: event.target.value})
     }
     const updatePassEdit = (event) => {
-        setPassEdit({ ...passEdit, [event.target.name]: event.target.value })
+        setPassEdit({...passEdit, [event.target.name]: event.target.value})
     }
     const validPhone = (event) => {
         const reg = /^\d+$/;
-        if ((e.target.value.length <= 9 && reg.test(e.target.value)) || e.target.value == "") {
+        if ((e.target.value.length <= 9 && reg.test(e.target.value)) || e.target.value === "") {
             updateEditUser(event)
         }
     }
@@ -63,16 +58,16 @@ export const UserProfileEditor = (props) => {
         let isOK = true;
         let valid = {};
         let errorList = [];
-        if (!editUser.firstname || editUser.firstname.replace(/ /g, '') == '') {
+        if (!editUser.firstname || editUser.firstname.replace(/ /g, '') === '') {
             valid.firstname = false;
             isOK = false;
         }
-        if (!editUser.lastname || editUser.lastname.replace(/ /g, '') == '') {
+        if (!editUser.lastname || editUser.lastname.replace(/ /g, '') === '') {
             valid.lastname = false;
             isOK = false;
         }
 
-        if (!editUser.email || editUser.email.replace(/ /g, '') == '') {
+        if (!editUser.email || editUser.email.replace(/ /g, '') === '') {
             valid.email = false;
             isOK = false;
         }
@@ -85,7 +80,7 @@ export const UserProfileEditor = (props) => {
         }
         setIsValid(valid);
         if (!isOK)
-            infoBoxContext.addListInfo(errorList,  t('infoBox.require'));
+            infoBoxContext.addListInfo(errorList, t('infoBox.require'));
         return isOK
     }
 
@@ -103,32 +98,37 @@ export const UserProfileEditor = (props) => {
                 "Content-type": "application/json; charset=UTF-8",
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
-            body: JSON.stringify({ user: { firstname: editUser.firstname, lastname: editUser.lastname, phone: editUser.phone, email: editUser.email } })
+            body: JSON.stringify({
+                user: {
+                    firstname: editUser.firstname,
+                    lastname: editUser.lastname,
+                    phone: editUser.phone,
+                    email: editUser.email
+                }
+            })
         });
         const data = await result.json();
         if (data.succeeded) {
             setUser(editUser);
             authContext.refreshToken();
-            infoBoxContext.addInfo( t('infoBox.updated'),3);
-        }
-        else {
-            infoBoxContext.addInfo(t('infoBox.error'),3);
+            infoBoxContext.addInfo(t('infoBox.updated'), 3);
+        } else {
+            infoBoxContext.addInfo(t('infoBox.error'), 3);
         }
     }
 
     const validPassword = () => {
         let isOK = true;
-        let valid = { oldPassword: true, newPassword: true };
+        let valid = {oldPassword: true, newPassword: true};
         let errorList = [];
-        if (passEdit.oldPassword.replace(/ /g, '') == '') {
+        if (passEdit.oldPassword.replace(/ /g, '') === '') {
             valid.oldPassword = false
             isOK = false;
         }
-        if (passEdit.newPassword.replace(/ /g, '') == '') {
+        if (passEdit.newPassword.replace(/ /g, '') === '') {
             valid.newPassword = false
             isOK = false;
-        }
-        else if (passEdit.newPassword.length < config.users.passwordChar) {
+        } else if (passEdit.newPassword.length < config.users.passwordChar) {
             valid.newPassword = false
             isOK = false;
             errorList.push(`${t('infoBox.errorPass')} ${config.users.passwordChar} ${t('infoBox.errorChar')}`)
@@ -144,29 +144,20 @@ export const UserProfileEditor = (props) => {
     const changePassword = async () => {
         if (!validPassword())
             return
-        setPassIsValid({ oldPassword: true, newPassword: true })
-        const result = await fetch(`${config.apiRoot}/account/changePassword/${user.username}`, {
-            method: "put",
-            headers: {
-                "Content-type": "application/json; charset=UTF-8",
-                'Authorization': 'Bearer ' + Cookies.get('token'),
-            },
-            body: JSON.stringify({ password: { oldPassword: passEdit.oldPassword, newPassword: passEdit.oldPassword } })
-        });
-
+        setPassIsValid({oldPassword: true, newPassword: true})
+        const body = JSON.stringify({password: {oldPassword: passEdit.oldPassword, newPassword: passEdit.oldPassword}});
+        const result = await  Fetch(`${config.apiRoot}/account/changePassword/${user.username}`, "put", body)
         const data = await result.json();
         if (data.succeeded) {
-            setPassEdit({ oldPassword: "", newPassword: "" })
+            setPassEdit({oldPassword: "", newPassword: ""})
             authContext.refreshToken();
-            infoBoxContext.addInfo(t('infoBox.changePass'),3);
-        }
-        else {
-            if (data.code == 2) {
+            infoBoxContext.addInfo(t('infoBox.changePass'), 3);
+        } else {
+            if (data.code === 2) {
                 infoBoxContext.addInfo(t('infoBox.wrongPass'));
-                setPassIsValid({ ...passIsValid, oldPassword: false })
-            }
-            else
-                infoBoxContext.addInfo(t('infoBox.error'),3);
+                setPassIsValid({...passIsValid, oldPassword: false})
+            } else
+                infoBoxContext.addInfo(t('infoBox.error'), 3);
         }
 
     }
@@ -181,21 +172,20 @@ export const UserProfileEditor = (props) => {
                 "Content-type": "application/json; charset=UTF-8",
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
-            body: JSON.stringify({ user: { isRetired } })
+            body: JSON.stringify({user: {isRetired}})
         });
 
         const data = await result.json();
 
         if (data.succeeded) {
-            setUser({ ...user, isRetired })
-            setEditUser({ ...user, isRetired })
+            setUser({...user, isRetired})
+            setEditUser({...user, isRetired})
             if (isRetired)
-                infoBoxContext.addInfo(t('infoBox.archiveUser'),3);
+                infoBoxContext.addInfo(t('infoBox.archiveUser'), 3);
             else
-                infoBoxContext.addInfo(t('infoBox.restoreUser'),3);
-        }
-        else {
-            infoBoxContext.addInfo(t('infoBox.error'),3);
+                infoBoxContext.addInfo(t('infoBox.restoreUser'), 3);
+        } else {
+            infoBoxContext.addInfo(t('infoBox.error'), 3);
         }
 
     }
@@ -207,7 +197,7 @@ export const UserProfileEditor = (props) => {
         else if (authContext.userDate && authContext.userDate.username)
             getUser(authContext.userDate.username)
 
-            document.title = t('title.editEmployee') 
+        document.title = t('title.editEmployee')
     }, [authContext.userDate, props.match.params.id])
 
     useEffect(() => {
@@ -215,7 +205,7 @@ export const UserProfileEditor = (props) => {
     }, [user, editUser, isValid, passIsValid, passEdit])
 
     const validInput = (field) => {
-        return field == false ? ` box__input--require` : ""
+        return field === false ? ` box__input--require` : ""
     }
 
 
@@ -227,67 +217,82 @@ export const UserProfileEditor = (props) => {
 
 
     return (
-        <> {error != null && <ErrorPage text={error.text} code={error.code} />}
+        <> {error != null && <ErrorPage text={error.text} code={error.code}/>}
             {user &&
-                <div className="box box--large" >
-                    {user.isRetired && <div className="form-editor__text form-editor__text--archive-small">{t('infoBox.archive')} </div>}
-                    <div className="box__item--inline box__item--full-width box__item button--edit-box">
-                        {authContext.isAdmin && <>
-                            {!user.isRetired && <button className="button button--gap button--remove" onClick={() => infoBoxContext.Confirm( t('infoBox.archiveProject'), () => archiveUser(true))}>{t('button.archive')}</button>}
-                            {user.isRetired && <button className="button button--gap button--remove" onClick={() => infoBoxContext.Confirm( t('infoBox.archiveProject'), () => archiveUser(false))}>{t('button.restore')}</button>}
-                        </>}
-                        <button onClick={() => infoBoxContext.Confirm( t('infoBox.saveEdit'), () => (saveEdit()))} className="button button--gap button--save">{t('button.save')}</button>
-                        <button onClick={() => infoBoxContext.Confirm( t('infoBox.cancelEdit'), () => (cancelEdit()))} className="button button--gap button--remove">{t('button.cancel')}</button>
-                        <Link to={`/user/${user.username}`} className="button button--gap">{t('button.profile')}</Link>
+            <div className="box box--large">
+                {user.isRetired &&
+                <div className="form-editor__text form-editor__text--archive-small">{t('infoBox.archive')} </div>}
+                <div className="box__item--inline box__item--full-width box__item button--edit-box">
+                    {authContext.isAdmin && <>
+                        {!user.isRetired && <button className="button button--gap button--remove"
+                                                    onClick={() => infoBoxContext.Confirm(t('infoBox.archiveProject'), () => archiveUser(true))}>{t('button.archive')}</button>}
+                        {user.isRetired && <button className="button button--gap button--remove"
+                                                   onClick={() => infoBoxContext.Confirm(t('infoBox.archiveProject'), () => archiveUser(false))}>{t('button.restore')}</button>}
+                    </>}
+                    <button onClick={() => infoBoxContext.Confirm(t('infoBox.saveEdit'), () => (saveEdit()))}
+                            className="button button--gap button--save">{t('button.save')}</button>
+                    <button onClick={() => infoBoxContext.Confirm(t('infoBox.cancelEdit'), () => (cancelEdit()))}
+                            className="button button--gap button--remove">{t('button.cancel')}</button>
+                    <Link to={`/user/${user.username}`} className="button button--gap">{t('button.profile')}</Link>
+                </div>
+
+
+                <div className="box__item">
+                    <div className="box__item--inline box__item--user-edit-mode  ">
+                        <div className="box__text box__text--require">{t('user.firstName')} </div>
+                        <input className={`box__input box__input--user-edit ${validInput(isValid.firstname)}`}
+                               id="firstnameEdit" name="firstname"
+                               onChange={updateEditUser} value={getValueOrOther(editUser.firstname)}/>
                     </div>
 
-
-                    <div className="box__item">
-                        <div className="box__item--inline box__item--user-edit-mode  ">
-                            <div className="box__text box__text--require">{t('user.firstname')} </div>
-                            <input className={`box__input box__input--user-edit ${validInput(isValid.firstname)}`} id="firstnameEdit" name="firstname"
-                                onChange={updateEditUser} value={getValueOrOther(editUser.firstname)} />
-                        </div>
-
-                        <div className=" box__item--inline box__item--user-edit-mode">
-                            <div className="box__text box__text--require">{t('user.lastname')} </div>
-                            <input className={`box__input box__input--user-edit ${validInput(isValid.lastname)}`} id="lastnameEdit" name="lastname"
-                                onChange={updateEditUser} value={getValueOrOther(editUser.lastname)} />
-                        </div>
-
-                        <div className=" box__item--inline box__item--user-edit-mode ">
-                            <div className="box__text  box__text--require">{t('user.email')}</div>
-                            <input className={`box__input box__input--user-edit  ${validInput(isValid.email)}`} id="emailEdit" name="email"
-                                onChange={updateEditUser} value={getValueOrOther(editUser.email)} />
-                        </div>
-
-                        <div className=" box__item--inline box__item--user-edit-mode">
-                            <div className=" box__text ">{t('user.phone')} </div>
-                            <input className="box__input box__input--user-edit" id="phoneEdit" name="phone" onChange={validPhone} value={getValueOrOther(editUser.phone)} />
-                        </div>
+                    <div className=" box__item--inline box__item--user-edit-mode">
+                        <div className="box__text box__text--require">{t('user.lastName')} </div>
+                        <input className={`box__input box__input--user-edit ${validInput(isValid.lastname)}`}
+                               id="lastnameEdit" name="lastname"
+                               onChange={updateEditUser} value={getValueOrOther(editUser.lastname)}/>
                     </div>
-                    {authContext.userDate.username == user.username && <>
-                        <div className=" box__item ">
-                            <div className="box__text  box__text--bold box--half-border-top">{t('user.changePass')}</div>
-                            <div className="box__item--inline ">
-                                <div className="box__item box__item--user-edit-mode">
-                                    <div className="box__text  box__text--require">{t('user.oldPass')}</div>
-                                    <input className={`box__input box__input--user-edit ${validInput(passIsValid.oldPassword)}`} id="oldPassEdit" type="password" name="oldPassword"
-                                        value={getValueOrOther(passEdit.oldPassword)} onChange={updatePassEdit} />
-                                </div>
-                                <div className="box__item  box__item--user-edit-mode">
-                                    <div className="box__text  box__text--require">{t('user.newPass')}</div>
-                                    <input className={`box__input box__input--user-edit ${validInput(passIsValid.newPassword)}`} id="newPassEdit" type="password" name="newPassword"
-                                        value={getValueOrOther(passEdit.newPassword)} onChange={updatePassEdit} />
-                                </div>
+
+                    <div className=" box__item--inline box__item--user-edit-mode ">
+                        <div className="box__text  box__text--require">{t('user.email')}</div>
+                        <input className={`box__input box__input--user-edit  ${validInput(isValid.email)}`}
+                               id="emailEdit" name="email"
+                               onChange={updateEditUser} value={getValueOrOther(editUser.email)}/>
+                    </div>
+
+                    <div className=" box__item--inline box__item--user-edit-mode">
+                        <div className=" box__text ">{t('user.phone')} </div>
+                        <input className="box__input box__input--user-edit" id="phoneEdit" name="phone"
+                               onChange={validPhone} value={getValueOrOther(editUser.phone)}/>
+                    </div>
+                </div>
+                {authContext.userDate.username == user.username && <>
+                    <div className=" box__item ">
+                        <div className="box__text  box__text--bold box--half-border-top">{t('user.changePass')}</div>
+                        <div className="box__item--inline ">
+                            <div className="box__item box__item--user-edit-mode">
+                                <div className="box__text  box__text--require">{t('user.oldPass')}</div>
+                                <input
+                                    className={`box__input box__input--user-edit ${validInput(passIsValid.oldPassword)}`}
+                                    id="oldPassEdit" type="password" name="oldPassword"
+                                    value={getValueOrOther(passEdit.oldPassword)} onChange={updatePassEdit}/>
+                            </div>
+                            <div className="box__item  box__item--user-edit-mode">
+                                <div className="box__text  box__text--require">{t('user.newPass')}</div>
+                                <input
+                                    className={`box__input box__input--user-edit ${validInput(passIsValid.newPassword)}`}
+                                    id="newPassEdit" type="password" name="newPassword"
+                                    value={getValueOrOther(passEdit.newPassword)} onChange={updatePassEdit}/>
                             </div>
                         </div>
-                        <div className="box__item">
-                            <button className="button button--gap button--save" onClick={() => { changePassword() }}>{t('button.changePass')}</button>
-                        </div>
-                    </>}
-                    <div className="form-editor__text form-editor__text--require-string">* {t('common.require')} </div>
-                </div>
+                    </div>
+                    <div className="box__item">
+                        <button className="button button--gap button--save" onClick={() => {
+                            changePassword()
+                        }}>{t('button.changePass')}</button>
+                    </div>
+                </>}
+                <div className="form-editor__text form-editor__text--require-string">* {t('common.require')} </div>
+            </div>
             }</>
     )
 }

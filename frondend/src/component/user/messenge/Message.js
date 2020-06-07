@@ -1,18 +1,17 @@
-import React, { useState, useEffect, state, useContext, useReducer } from "react";
+import React, { useState, useEffect} from "react";
 import { Link } from 'react-router-dom';
 
-import { AuthContext } from "../../../context/AuthContext";
-import { InfoBoxContext } from "../../../context/InfoBox/InfoBoxContext";
-import Cookies from 'js-cookie';
+
 import config from '../../../config.json'
 
 import { MessageReceive } from "./MessageReceive"
 import { MessageSent } from "./MessageSent"
 import { useTranslation } from 'react-i18next';
+import { FetchGet } from "../../../models/Fetch";
 
-export const Message = (props) => {
+export const Message = () => {
 
-    const { t, i18n } = useTranslation('common');
+    const { t } = useTranslation('common');
     const [messages, setMessages] = useState({})
     const [selectMessageType, setSelectMessageType] = useState("receive")
     const [isLoading, setIsLoading] = useState(true);
@@ -23,13 +22,7 @@ export const Message = (props) => {
 
     const getMessages = async () => {
 
-        const result = await fetch(`${config.apiRoot}/message/`, {
-            method: "get",
-            headers: {
-                "Content-type": "application/json; charset=UTF-8",
-                'Authorization': 'Bearer ' + Cookies.get('token'),
-            },
-        });
+        const result = await FetchGet(`${config.apiRoot}/message/`)
         const data = await result.json();
 
         const sortReceiveMessages = data.receiveMessages.sort(sortDate);
@@ -39,16 +32,16 @@ export const Message = (props) => {
     }
 
     const selectMessageTypeRadio = (id) => {
-        if (id == "message-receive" && selectMessageType == "receive")
+        if (id === "message-receive" && selectMessageType === "receive")
             return "box__radio-button--active"
-        else if (id == "message-sent" && selectMessageType == "sent")
+        else if (id === "message-sent" && selectMessageType === "sent")
             return "box__radio-button--active"
         return ""
     }
 
     const sortDate = (timeItem1, timeItem2) => {
-        var dateTimeItem1 = new Date(timeItem1.createdAt);
-        var dateTimeItem2 = new Date(timeItem2.createdAt);
+        const dateTimeItem1 = new Date(timeItem1.createdAt);
+        const dateTimeItem2 = new Date(timeItem2.createdAt);
         return dateTimeItem2 - dateTimeItem1;
     }
 
@@ -62,9 +55,9 @@ export const Message = (props) => {
     }, [messages])
 
     const chooseMessageType = () => {
-        if (selectMessageType == "receive")
+        if (selectMessageType === "receive")
             return <MessageReceive receiveMessages={messages.receiveMessages} />
-        if (selectMessageType == "sent")
+        if (selectMessageType === "sent")
             return <MessageSent sentMessages={messages.sentMessages} />
     }
 
@@ -73,7 +66,7 @@ export const Message = (props) => {
 
         <div className="box box--large ">
 
-            {isLoading && <div className="box__loading">  <i className="fas fa-spinner load-ico load-ico--center load-ico__spin "></i></div>}
+            {isLoading && <div className="box__loading">  <i className="fas fa-spinner load-ico load-ico--center load-ico__spin "/></div>}
             <div className="message-list__menu-type ">
                 <div className="message-list__menu-type--select">
                     <label className={`box__radio-button ${selectMessageTypeRadio("message-receive")}`} htmlFor={`message-receive`}  >{t('message.received')}</label><input onChange={updateSelectMessageType} className="box__project--radio" id="message-receive" name="statusProject" value="receive" type="radio" />

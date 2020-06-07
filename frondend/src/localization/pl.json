@@ -37,12 +37,13 @@
         "lackInactiveProject": "Brak aktywnych projektów",
         "inactiveProject": "Nieaktywne Projekty",
         "require": "Pole wymagane",
-        "userArchive": "Zarchiwizowany"
+        "userArchive": "Zarchiwizowany",
+        "NotFoundPage" : "Nie Znaleziono Strony"
     },
     "dashboard": {
         "hours": "Godziny",
         "name": "Nazwa",
-        "activProject": "Aktywne Projekty",
+        "activeProject": "Aktywne Projekty",
         "messages": "Ostatnie Wiadomości",
         "noneProject": "Brak Projektów",
         "noneMessages": "Brak Wiadomości",
@@ -71,7 +72,7 @@
         "archiveUser": "Zarchiwizowano pracownika",
         "restoreUser": "Przywrócono pracownika",
         "createUser": "Utworzono pracownika",
-        "bussyLogin": "Login zajęty",
+        "busyLogin": "Login zajęty",
         "archiveProject": "Czy na pewno chcesz zarchiwizować projekt?",
         "restoreProject": "Czy na pewno chcesz przywrócić projekt?",
         "yes": "Tak",
@@ -82,17 +83,17 @@
         "restoreUserToProject": "Czy napewno chcesz przywrócić pracownika do projektu?",
         "deleteUserFromProject": "Czy napewno chcesz trwale usunąć pracownika z projektu?",
         "errorConnect": "Błąd połączenia z serwerem",
-        "archivUser": "Czy na pewno chcesz zarchiwizować pracownika?",
-        "restorUser": "Czy na pewno chcesz przywrócić pracownika?",
+        "archiveUser": "Czy na pewno chcesz zarchiwizować pracownika?",
+        "restoreUser": "Czy na pewno chcesz przywrócić pracownika?",
         "sent":"Wysłano wiadomość"
     },
     "sideBar": {
         "dashboard": "Kokpit",
-        "profil": "Profil",
+        "profile": "Profil",
         "project": "Projekty",
         "projects": "Projekty",
         "newProject": "Nowy Projekt",
-        "newEmploye": "Nowy Pracownik",
+        "newEmployee": "Nowy Pracownik",
         "projectsList": "Lista Projektów",
         "employeeList": "Lista Pracowników"
     },
@@ -107,7 +108,8 @@
         "message": "Wiadomość",
         "to": "Do",
         "sent": "Wysłano wiadomość",
-        "noMessage": "Brak Wiadomości"
+        "noMessage": "Brak Wiadomości",
+        "noRecipient": "Brak Odbiorców"
     },
     "list": {
         "active": "Aktywne",
@@ -138,8 +140,8 @@
         "unsetProject": "Nieaktywne Projekty"
     },
     "user": {
-        "firstname": "Imie",
-        "lastname": "Nazwisko",
+        "firstName": "Imie",
+        "lastName": "Nazwisko",
         "email": "E-mail",
         "phone": "Telefon",
         "changePass": "Zmień Hasło",
@@ -162,13 +164,13 @@
         "inactiveEmployee": "Nieaktywni pracownicy",
         "addHoursInfo": "Dodano godziny pracy",
         "subHoursInfo": "Zmniejszono godziny pracy",
-        "removeEmploye": "Usunięto pracownika z projektu",
-        "restoreEmploye": "Przywrócono pracownika do projektu",
-        "addEmploye": "Przydzielono pracownika do projektu",
+        "removeEmployee": "Usunięto pracownika z projektu",
+        "restoreEmployee": "Przywrócono pracownika do projektu",
+        "addEmployee": "Przydzielono pracownika do projektu",
         "name": "Nazwa",
         "addNewEmployee": "Dodaj nowego pracownika",
         "non": "Brak",
-        "emptyEmployeList": "Brak pracowników",
+        "emptyEmployeeList": "Brak pracowników",
         "noDescription": "Brak Opisu",
         "select": "Wybierz"
     },
@@ -178,8 +180,8 @@
         "activeHoursEmployee": "Liczba godzin przydzielonych pracowników",
         "activeHoursOldEmployee": "Liczba godzin nieaktywnych pracowników",
         "aEmployee": "Przydzieleni \npracownicy",
-        "inaEmploye": "Nieaktywni \npracownicy",
-        "employeReport": "Raport Pacownika",
+        "inaEmployee": "Nieaktywni \npracownicy",
+        "employeeReport": "Raport Pacownika",
         "activeProjectHours": "Liczba godzin przy przydzielonych projektach",
         "activeProject": "Liczba przydzielonych projektow",
         "inactiveProjectHours": "Liczba godzin przy nieaktywnych projektach",

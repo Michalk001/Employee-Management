@@ -1,20 +1,20 @@
-import React, { useState, useEffect, state, useContext, useReducer } from "react";
+import React, {useEffect} from "react";
 
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 import {ActiveProject} from './ActiveProject'
-import { Message } from "./Message";
+import {Message} from "./Message";
 
 export const Dashboard = () => {
-    const { t, i18n } = useTranslation('common');
-    useEffect(()=>{
-        document.title = t('title.dashboard') 
-    },[])
+    const {t, i18n} = useTranslation('common');
+    useEffect(() => {
+        document.title = t('title.dashboard')
+    }, [])
 
-    return(
+    return (
         <div className="dashboard">
-            <ActiveProject />
-            <Message />
+            <ActiveProject/>
+            <Message/>
         </div>
     )
 

@@ -55,7 +55,7 @@
         }
     }
 
-    &--employe-list {
+    &--employee-list {
         display: flex;
         flex-wrap: wrap;
     }
@@ -118,7 +118,7 @@
         }
 
         &--text-item {
-            margin: 0px 10px;
+            margin: 0 10px;
         }
 
         &--bold {
@@ -133,7 +133,7 @@
                 font-size: 26px;
                 position: relative;
                 right: 0;
-                bottom: 0px;
+                bottom: 0;
             }
         }
 
@@ -211,9 +211,8 @@
             }
         }
 
-        &--employe {
+        &--employee {
             background-color: #2a3038;
-            background-color: #2a3038db;
             width: fit-content;
             padding: 5px 10px;
             border-radius: 7px;
@@ -306,7 +305,7 @@
 
         &--hours,
         &--hours-user-list,
-        &--employe {
+        &--employee {
 
             position: relative;
             width: 130px;
@@ -347,7 +346,7 @@
             }
         }
 
-        &--employe {
+        &--employee {
             width: 300px;
             text-align: right;
 
@@ -359,7 +358,7 @@
 
         }
 
-        &--employe-title,
+        &--e-title,
         &--title-hours-user-list {
             width: 300px;
             text-align: right;
@@ -371,7 +370,7 @@
             }
         }
 
-        &--ememploye-title {
+        &--employee-title {
             @media (max-width:400px) {
                 padding-right: 32px;
             }
@@ -386,7 +385,7 @@
             }
         }
 
-        &--employe-short {
+        &--employee-short {
             width: 200px;
             text-align: right;
 
@@ -465,8 +464,6 @@
         border-radius: 5px;
         height: 40px;
         transition-duration: 0.5s;
-
-        width: 100%;
 
         &--add-hours {
             width: 130px;

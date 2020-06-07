@@ -1,11 +1,8 @@
 import {
     BrowserRouter,
-    Route,
-    Link,
-    Switch,
-    Redirect
+    Switch
 } from 'react-router-dom';
-import React, { useState, useEffect, state, useContext } from "react";
+import React from "react";
 
 
 
@@ -32,7 +29,7 @@ import { ProjectEditor } from './component/admin/project/ProjectEditor'
 import { ProjectCreate } from './component/admin/project/ProjectCreate'
 import { UserCreate } from './component/admin/user/UserCreate'
 import { ProjectList } from './component/admin/project/ProjectList'
-import { EmployeList } from './component/admin/user/EmployeList'
+import { EmployeeList } from './component/admin/user/EmployeeList'
 
 
 import { I18nextProvider } from 'react-i18next';
@@ -58,7 +55,7 @@ export const App = () => {
                             <RequireAdmin path="/Admin/Project/Edit/:id" component={ProjectEditor} />
                             <RequireAdmin path="/Admin/Project/" component={ProjectList} />
                             <RequireAdmin path="/admin/user/new" component={UserCreate} />
-                            <RequireAdmin path="/Admin/User/" component={EmployeList} />
+                            <RequireAdmin path="/Admin/User/" component={EmployeeList} />
 
                             <RequireLogin path="/Project/:id" component={Project} />
                             <RequireAdmin path="/User/Profile/:id" component={UserProfileEditor} />

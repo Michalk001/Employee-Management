@@ -4,7 +4,7 @@ $normal-remove-color:#c82814;
 $normal-remove-hover-color:#9c1907;
 $normal-save-color:#00b314;
 $normal-save-hover-color:#007e0f;
-$normal-diseble-color:#7d7d7d;
+$normal-disable-color:#7d7d7d;
 
 
 .button {
@@ -28,7 +28,7 @@ $normal-diseble-color:#7d7d7d;
     }
 
     &--edit-box {
-        margin: 20px 0px;
+        margin: 20px 0;
         justify-content: flex-end;
 
         @media (max-width:768px) {
@@ -70,12 +70,12 @@ $normal-diseble-color:#7d7d7d;
     }
 
     &--disabled {
-        background-color: $normal-diseble-color;
+        background-color: $normal-disable-color;
         cursor: not-allowed;
 
         &:hover {
 
-            background-color: $normal-diseble-color;
+            background-color: $normal-disable-color;
         }
     }
 }

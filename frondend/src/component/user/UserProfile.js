@@ -9,7 +9,7 @@ import Cookies from 'js-cookie';
 import { ErrorPage } from "../common/ErrorPage";
 import { useTranslation } from 'react-i18next';
 
-const UserReportPDF = lazy(() => import('../reportCreation/UserReportPDF'));
+const UserReportPDF = lazy(() => import('../reportCreation/teamplet/UserReportPDF'));
 
 export const UserProfile = (props) => {
 
@@ -30,7 +30,7 @@ export const UserProfile = (props) => {
             },
         });
         const data = await result.json();
-        if (result.status == 404) {
+        if (result.status === 404) {
             setError({ code: 404, text: t('common.noUserFound') })
         }
         if (data.succeeded) {
@@ -46,11 +46,11 @@ export const UserProfile = (props) => {
     }
     const canEditByUser = () => {
 
-        return authContext.userDate.username == user.username
+        return authContext.userDate.username === user.username
     }
     const canEditByAdmin = () => {
 
-        return authContext.isAdmin && authContext.userDate.username != user.username
+        return authContext.isAdmin && authContext.userDate.username !== user.username
     }
     useEffect(() => {
 
@@ -70,7 +70,7 @@ export const UserProfile = (props) => {
 
                     {user && user.isRetired && <div className="box--archive">{t('common.userArchive')} </div>}
                     <div className="box__item--inline box__item--full-width box__item button--edit-box">
-                        {authContext.userDate.username != user.username &&
+                        {authContext.userDate.username !== user.username &&
                             <Link to={{ pathname: '/message/new', reply: { user: user } }} className="button button--gap">{t('message.write')}</Link>}
                         {canEditByUser() && <Link to="/user/profile" className="button button--gap">{t('button.edit')}</Link>}
                         {canEditByAdmin() && <Link to={`/user/profile/${user.username}`} className="button button--gap">{t('button.edit')}</Link>}
@@ -90,25 +90,25 @@ export const UserProfile = (props) => {
                         </div>
                     </div>
 
-                    {user.projects && user.projects.find(x => { return (x.userProjects.isRemove == false && x.userProjects.isRetired == false) }) && <>
-                        <div className="box__text ">{t('dashboard.activProject')}: </div>
-                        <div className="box--employe-list">
-                            {user.projects.filter(x => { return (x.userProjects.isRetired == false) }).map((x) => (
+                    {user.projects && user.projects.find(x => { return (!x.userProjects.isRemove && x.userProjects.isRetired) }) && <>
+                        <div className="box__text ">{t('dashboard.activeProject')}: </div>
+                        <div className="box--employee-list">
+                            {user.projects.filter(x => { return (!x.userProjects.isRetired ) }).map((x) => (
                                 <Link className="box__text  box__item box__item--employe" key={`emploact-${x.name}`} to={`/project/${x.id}`}>{x.name}</Link>
                             ))}
                         </div>
                     </>}
-                    {!user.projects || !user.projects.find(x => { return (x.userProjects.isRemove == false && x.userProjects.isRetired == false) }) &&
+                    {!user.projects || !user.projects.find(x => { return (!x.userProjects.isRemove && !x.userProjects.isRetired ) }) &&
                         <div className="box__text  box__item box--half-border-top">
                             {t('common.lackInactiveProject')}
                         </div>
                     }
 
-                    {user.projects && user.projects.find(x => { return (x.userProjects.isRemove == false && x.userProjects.isRetired == true) }) && <>
+                    {user.projects && user.projects.find(x => { return (!x.userProjects.isRemove  && x.userProjects.isRetired ) }) && <>
                         <div className="box__text ">  {t('common.inactiveProject')}: </div>
-                        <div className="box--employe-list ">
-                            {(user.projects.filter(xx => { return xx.userProjects.isRetired == true })).map((x) => (
-                                <Link className="box__text  box__item box__item--employe" key={`emploact-${x.name}`} to={`/project/${x.id}`}>{x.name}</Link>
+                        <div className="box--employee-list ">
+                            {(user.projects.filter(xx => { return xx.userProjects.isRetired  })).map((x) => (
+                                <Link className="box__text  box__item box__item--employee" key={`projectActive-${x.name}`} to={`/project/${x.id}`}>{x.name}</Link>
                             ))}
                         </div>
                     </>}
@@ -118,7 +118,7 @@ export const UserProfile = (props) => {
 
                         {!generatePDF && <div className="button" onClick={() => setGeneratePDF(true)}> {t('button.generatePDF')}</div>}
 
-                        {generatePDF && user != null && <Suspense fallback={<div className="button">{t('common.loading')}</div>}>
+                        {generatePDF && <Suspense fallback={<div className="button">{t('common.loading')}</div>}>
                             <UserReportPDF Doc={UserReportPDF} data={user} name={`${user.firstname}-${user.lastname}`} />
                         </Suspense>}
                     </div>

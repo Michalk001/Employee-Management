@@ -1,4 +1,4 @@
-import React, { useState, useEffect, state, useContext, useReducer, lazy, Suspense } from "react";
+import React, { useState, useEffect, useContext, lazy, Suspense } from "react";
 import { Link } from 'react-router-dom';
 
 import { AuthContext } from '../../context/AuthContext';
@@ -6,7 +6,8 @@ import config from '../../config.json'
 import Cookies from 'js-cookie';
 import { useTranslation } from 'react-i18next';
 
-const UserProjectListPDF = lazy(() => import('../reportCreation/UserProjectListPDF'));
+const UserProjectListPDF = lazy(() => import('../reportCreation/teamplet/UserProjectListPDF'));
+
 
 export const UserProjectsList = (props) => {
 
@@ -16,7 +17,7 @@ export const UserProjectsList = (props) => {
     const [isLoading, setIsLoading] = useState(true)
     const authContext = useContext(AuthContext)
     const [generatePDF, setGeneratePDF] = useState(false)
-    const { t, i18n } = useTranslation('common');
+    const { t } = useTranslation('common');
 
     const getProjectList = async (name) => {
 
@@ -60,13 +61,13 @@ export const UserProjectsList = (props) => {
             return (
                 <>
                     <div className="box__project--status-text ">{t('list.statusInactive')}</div>
-                    <div className="box__project--status-ico box__project--status-ico-red "><i className="fas fa-times"></i></div>
+                    <div className="box__project--status-ico box__project--status-ico-red "><i className="fas fa-times"/></div>
                 </>
             )
         return (
             <>
                 <div className="box__project--status-text ">{t('list.statusActive')}</div>
-                <div className="box__project--status-ico "><i className="fas fa-check"></i></div>
+                <div className="box__project--status-ico "><i className="fas fa-check"/></div>
             </>
         )
 
@@ -78,11 +79,11 @@ export const UserProjectsList = (props) => {
         setFilterOptions({ ...filterOptions, [event.target.name]: event.target.value })
     }
     const isActiveRadio = (id) => {
-        if (id == "filtr-all" && filterOptions.statusProject == "all")
+        if (id === "filtr-all" && filterOptions.statusProject === "all")
             return "box__radio-button--active"
-        else if (id == "filtr-active" && filterOptions.statusProject == "active")
+        else if (id === "filtr-active" && filterOptions.statusProject === "active")
             return "box__radio-button--active"
-        else if (id == "filtr-inactive" && filterOptions.statusProject == "inactive")
+        else if (id === "filtr-inactive" && filterOptions.statusProject === "inactive")
             return "box__radio-button--active"
 
     }
@@ -96,11 +97,11 @@ export const UserProjectsList = (props) => {
                     return item
                 }
 
-            }).filter(item => item != undefined);
+            }).filter(item => item !== undefined);
 
-            if (filterOptions.statusProject == "inactive")
+            if (filterOptions.statusProject === "inactive")
                 list = list.filter(item => { return item.isRetired })
-            else if (filterOptions.statusProject == "active")
+            else if (filterOptions.statusProject === "active")
                 list = list.filter(item => { return !item.isRetired })
             setFilterProjectList(list)
         }
@@ -121,9 +122,8 @@ export const UserProjectsList = (props) => {
         if (authContext.userDate)
             getProjectList(authContext.userDate.username)
 
-            document.title = t('title.userProject') 
+        document.title = t('title.userProject')
     }, [authContext.userDate])
-
 
 
 
@@ -148,18 +148,18 @@ export const UserProjectsList = (props) => {
                 <span className="box__project--title-hours-user-list ">{t('list.hours')} </span>
                 <span className="box__project--title-status-user-list  ">{t('list.status')}</span>
             </div>
-            {isLoading && <div className="box__loading">  <i className="fas fa-spinner load-ico load-ico--center load-ico__spin "></i></div>}
+            {isLoading && <div className="box__loading">  <i className="fas fa-spinner load-ico load-ico--center load-ico__spin "/></div>}
             {!isLoading && filterProjectList && <>
-                {projectList.length == 0 && <div className="box__item">
+                {projectList.length === 0 && <div className="box__item">
                     <div className="box__text box__text--center">{t('list.nonProject')}</div>
                 </div>}
-                {projectList.length != 0 && filterProjectList.length == 0 && <div className="box__item">
+                {projectList.length !== 0 && filterProjectList.length === 0 && <div className="box__item">
                     <div className="box__text box__text--center">{t('list.noFoundProject')}</div>
                 </div>}
                 <div className="box__project--list">
-                    {filterProjectList.length != 0 && filterProjectList.map((item) => (
+                    {filterProjectList.length !== 0 && filterProjectList.map((item) => (
 
-                        <Link to={`/project/${item.id}`} key={`activP-${item.id}`} className="box__project box__project--hover">
+                        <Link to={`/project/${item.id}`} key={`activeProject-${item.id}`} className="box__project box__project--hover">
                             <span className="box__project--name ">{item.name}</span>
                             <span className="box__project--hours-user-list">{item.hours}</span>
                             <span className="box__project--status ">{projectStatus(item.isRetired)}</span>
@@ -172,10 +172,10 @@ export const UserProjectsList = (props) => {
             <div className="box__item">
 
                 {!generatePDF && <div className="button" onClick={() => setGeneratePDF(true)}> {t('button.generatePDF')}</div>}
-
-                {generatePDF && filterProjectList != null && <Suspense fallback={<div className="button">{t('common.loading')}</div>}>
-                    <UserProjectListPDF Doc={UserProjectListPDF} data={filterProjectList} name={`Project-List-Report.pdf`} />
+                {generatePDF && <Suspense fallback={<div className="button">{t('common.loading')}</div>}>          
+                        <UserProjectListPDF  data={filterProjectList} name={`Project-List-Report.pdf`} />
                 </Suspense>}
+
 
             </div>
         </div>

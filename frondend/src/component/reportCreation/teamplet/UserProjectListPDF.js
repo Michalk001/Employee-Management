@@ -1,25 +1,25 @@
-import React, { useState, useEffect, state } from "react";
+import React from "react";
 import {
     Page,
     Text,
     View,
     Document,
     StyleSheet,
-    Image,
     Font
 } from "@react-pdf/renderer";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
+import {GenerationPDF} from "../GenerationPDF";
 
 
-export const UserProjectListPDF = (props) => {
+const UserProjectListTemplate = (props) => {
 
-    const { t, i18n } = useTranslation('common');
+    const {t} = useTranslation('common');
     const project = props.data
-    
+
     Font.register({
         family: 'Rajdhani', fonts: [
-            { src: "/font/Rajdhani.ttf" },
-            { src: "/font/Rajdhani-Bold.ttf", fontWeight: "bold" },
+            {src: "/font/Rajdhani.ttf"},
+            {src: "/font/Rajdhani-Bold.ttf", fontWeight: "bold"},
         ]
     });
     const styles = StyleSheet.create({
@@ -56,26 +56,26 @@ export const UserProjectListPDF = (props) => {
             marginTop: 10,
             padding: 5,
             width: 530,
-            paddingTop:10,
-            paddingBottom:0
+            paddingTop: 10,
+            paddingBottom: 0
 
         },
         name: {
             width: 290,
             flexWrap: "wrap",
-            fontSize:18
+            fontSize: 18
         },
         hours: {
             width: 100,
             flexWrap: "wrap",
             textAlign: "right",
- 
+
         },
         active: {
             width: 100,
             flexWrap: "wrap",
             textAlign: "right",
-            fontSize:18
+            fontSize: 18
         }
 
     })
@@ -97,21 +97,19 @@ export const UserProjectListPDF = (props) => {
                 </View>
 
             </View>
-
         )
 
     }
 
 
-
     return (
 
-        <Document  >
+        <Document>
 
             <Page style={[styles.font, styles.page]}>
 
                 <View style={styles.section}>
-                    <View style={styles.row} >
+                    <View style={styles.row}>
                         <Text style={[styles.title, styles.fontBold]}>
                             {t('list.projectList')}
                         </Text>
@@ -127,7 +125,12 @@ export const UserProjectListPDF = (props) => {
                 {getProjectList(project)}
 
             </Page>
-        </Document >
+        </Document>
     );
 }
 
+
+const UserProjectListPDF = ({data, name}) => {
+    return (<GenerationPDF Doc={UserProjectListTemplate} data={data} name={name}/>)
+}
+export default UserProjectListPDF

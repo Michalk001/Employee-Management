@@ -1,27 +1,29 @@
 import Cookies from 'js-cookie';
-import React, { useState, useEffect, state, useReducer, useContext } from "react";
-import { Redirect } from 'react-router-dom';
+import React, {useEffect, useState} from "react";
+
 
 import config from '../config.json'
 
-import { InfoBoxContext } from './InfoBox/InfoBoxContext';
+import {Fetch} from "../models/Fetch";
 
 export const AuthContext = React.createContext({
     isLogin: false,
     isAdmin: false,
     userDate: null,
-    checkError: (error) => { },
-    onAdmin: () => { },
-    onLogin: () => { },
-    LogOut: () => { },
-    refreshToken: () => { },
-    singUp: async () => { },
-    createUserData: () => { },
-    register: async (user) => { }
+    checkUnauthorized: (error) => {
+    },
+    LogOut: () => {
+    },
+    refreshToken: () => {
+    },
+    singUp: async () => {
+    },
+    createUserData: () => {
+    },
+    register: async (user) => {
+    }
 
 })
-
-
 
 
 export const AuthProvider = (props) => {
@@ -29,12 +31,6 @@ export const AuthProvider = (props) => {
     const [isLogin, setIsLogin] = useState(null);
     const [isAdmin, setIsAdmin] = useState(null);
     const [userDate, setUserDate] = useState(null)
-
-
-
-    const infoBoxContext = useContext(InfoBoxContext)
-
-
 
     const checkIsLogin = () => {
 
@@ -45,13 +41,11 @@ export const AuthProvider = (props) => {
             if (decoded.exp > (new Date() / 1000)) {
                 setIsLogin(true)
 
-            }
-            else {
+            } else {
                 setIsLogin(false)
 
             }
-        }
-        else {
+        } else {
             setIsLogin(false)
         }
     }
@@ -68,8 +62,7 @@ export const AuthProvider = (props) => {
         const tokenDecode = jwtDecode(Cookies.get('token'));
         if (tokenDecode.isAdmin) {
             setIsAdmin(true)
-        }
-        else {
+        } else {
             setIsAdmin(false)
         }
         setUserDate({
@@ -87,28 +80,15 @@ export const AuthProvider = (props) => {
             username: loginValue.username,
             password: loginValue.password
         }
-        const result = await fetch(`${config.apiRoot}/account/login`, {
-            method: "post",
-            headers: {
-                "Content-type": "application/json; charset=UTF-8",
-            },
-            body: JSON.stringify(obj)
-        })
-        return result;
+    console.log(obj)
+        return await Fetch(`${config.apiRoot}/account/login`, "post", JSON.stringify(obj));
 
 
     }
 
     const register = async (user) => {
-        const result = await fetch(`${config.apiRoot}/account/register`, {
-            method: "post",
-            headers: {
-                "Content-type": "application/json; charset=UTF-8",
-                'Authorization': 'Bearer ' + Cookies.get('token'),
-            },
-            body: JSON.stringify({ user })
-        });
-        return result;
+        return await Fetch(`${config.apiRoot}/account/register`, "post", JSON.stringify({user}))
+
     }
 
     const LogOut = () => {
@@ -120,9 +100,9 @@ export const AuthProvider = (props) => {
     }
 
 
-    const checkError = (error) => {
+    const checkUnauthorized = (error) => {
         const status = error.status;
-        if (status === 401 || status === 403) {
+        if (status === 401 ) {
             LogOut();
             return true
         }
@@ -140,7 +120,7 @@ export const AuthProvider = (props) => {
                 "Content-type": "application/json; charset=UTF-8",
                 'Authorization': 'Bearer ' + Cookies.get('token'),
             },
-            body: JSON.stringify({ token: Cookies.get('token') })
+            body: JSON.stringify({token: Cookies.get('token')})
         });
         const data = await result.json();
         if (data.succeeded) {
@@ -149,7 +129,7 @@ export const AuthProvider = (props) => {
             const tokenDecode = jwtDecode(data.token);
             const expiresToDay = 86400
             const expiresTime = (tokenDecode.exp - tokenDecode.iat) / expiresToDay;
-            Cookies.set('token', data.token, { expires: expiresTime });
+            Cookies.set('token', data.token, {expires: expiresTime});
             getUserData();
         }
     }
@@ -182,12 +162,11 @@ export const AuthProvider = (props) => {
                     isLogin,
                     isAdmin,
                     userDate,
-                    checkError,
+                    checkUnauthorized,
                     LogOut,
                     singUp,
                     refreshToken,
                     createUserData,
-
                     register
                 }
             }

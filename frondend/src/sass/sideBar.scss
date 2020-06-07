@@ -45,7 +45,7 @@
         background-color: #000000a1;
         position: fixed;
         height: 100%;
-        left: 0%;
+        left: 0;
         z-index: 1;
 
         @media (max-width:1180px) {
@@ -70,8 +70,7 @@
         transition-duration: 0.5s;
         @media (max-width:768px) {
             width: 100%;
-            right: 0px;
-            right: 0px;
+            right: 0;
             left: auto;
         }
 
@@ -79,7 +78,7 @@
             width: 54px;
             background-color: transparent;
             @media (max-width:768px) {
-                right: 0px;
+                right: 0;
                 left: auto;
             }
         }

@@ -1,13 +1,7 @@
 
-import {
-    BrowserRouter,
-    Route,
-    Link,
-    Switch,
-    Redirect
-} from 'react-router-dom';
-import React, { useState, useEffect, state, useContext } from "react";
-import { AuthContext, AuthProvider } from '../context/AuthContext';
+import { Route, Redirect } from 'react-router-dom';
+import React, { useContext } from "react";
+import { AuthContext } from '../context/AuthContext';
 import { SideBar } from "./common/SideBar"
 
 
@@ -22,7 +16,7 @@ export const UserRoute = ({ component: Component, ...rest }) => (
     />
 )
 
-export const RequireLogin = ({ path, component, ...rest }) => {
+export const RequireLogin = ({ path, component }) => {
     const authContext = useContext(AuthContext);
     return (<>
         {(authContext.isLogin || authContext.isLogin == null) ? <> <SideBar /> <UserRoute path={path} component={component} /></> : <Route render={() => (<Redirect to='/login' />)} />}
@@ -30,7 +24,7 @@ export const RequireLogin = ({ path, component, ...rest }) => {
     )
 } 
 
-export const RequireAdmin = ({ path, component, ...rest }) => {
+export const RequireAdmin = ({ path, component }) => {
     const authContext = useContext(AuthContext);
     return (<>
         {(authContext.isAdmin || authContext.isAdmin == null) ? <> <SideBar /> <UserRoute path={path} component={component} /></> : <Route render={() => (<Redirect to='/' />)} />}

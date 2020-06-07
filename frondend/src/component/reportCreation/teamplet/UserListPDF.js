@@ -1,25 +1,25 @@
-import React, { useState, useEffect, state } from "react";
+import React from "react";
 import {
     Page,
     Text,
     View,
     Document,
     StyleSheet,
-    Image,
     Font
 } from "@react-pdf/renderer";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
+import {GenerationPDF} from "../GenerationPDF";
 
 
-export const UserListPDF = (props) => {
+const UserListPDFTemplate = (props) => {
 
-    const { t, i18n } = useTranslation('common');
+    const {t} = useTranslation('common');
     const users = props.data
 
     Font.register({
         family: 'Rajdhani', fonts: [
-            { src: "/font/Rajdhani.ttf" },
-            { src: "/font/Rajdhani-Bold.ttf", fontWeight: "bold" },
+            {src: "/font/Rajdhani.ttf"},
+            {src: "/font/Rajdhani-Bold.ttf", fontWeight: "bold"},
         ]
     });
     const styles = StyleSheet.create({
@@ -72,13 +72,13 @@ export const UserListPDF = (props) => {
             fontSize: 18,
             marginRight: 5
         },
-        employe: {
+        employee: {
             width: 100,
             flexWrap: "wrap",
             textAlign: "right",
             fontSize: 18
         },
-        employeShort: {
+        employeeShort: {
             width: 100,
             flexWrap: "wrap",
             textAlign: "right",
@@ -107,27 +107,23 @@ export const UserListPDF = (props) => {
                 <View style={styles.row}>
                     <Text style={[styles.name]}>{item.firstname} {item.lastname} </Text>
                     <Text style={[styles.hours]}>{item.hoursTotal} </Text>
-                    <Text style={[styles.employe]}>{item.activProjectQuantity} </Text>
-                    <Text style={[styles.employeShort]}>{item.totalProjectQuantity} </Text>
+                    <Text style={[styles.employee]}>{item.activProjectQuantity} </Text>
+                    <Text style={[styles.employeeShort]}>{item.totalProjectQuantity} </Text>
                     <Text style={[styles.active]}>{userStatus(item.isRetired)} </Text>
                 </View>
 
             </View>
-
         )
 
     }
 
 
-
     return (
-
-        <Document  >
-
+        <Document>
             <Page style={[styles.font, styles.page]}>
 
                 <View style={styles.section}>
-                    <View style={styles.row} >
+                    <View style={styles.row}>
                         <Text style={[styles.title, styles.fontBold]}>
                             {t('list.employeeList')}
                         </Text>
@@ -137,15 +133,17 @@ export const UserListPDF = (props) => {
                 <View style={styles.row}>
                     <Text style={[styles.name]}>{t('list.name')} </Text>
                     <Text style={[styles.hours]}>{t('list.hours')}</Text>
-                    <Text style={[styles.employe]}>{t('list.setProject')} </Text>
-                    <Text style={[styles.employeShort]}>{t('list.totalProject')} </Text>
+                    <Text style={[styles.employee]}>{t('list.setProject')} </Text>
+                    <Text style={[styles.employeeShort]}>{t('list.totalProject')} </Text>
                     <Text style={[styles.active]}>{t('list.status')} </Text>
                 </View>
-
                 {getUsersList(users)}
-
             </Page>
-        </Document >
+        </Document>
     );
 }
 
+const UserListPDF = ({data, name}) => {
+    return (<GenerationPDF Doc={UserListPDFTemplate} data={data} name={name}/>)
+}
+export default UserListPDF

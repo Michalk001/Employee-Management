@@ -58,7 +58,7 @@
                 font-size: 26px;
                 position: absolute;
                 right: -2px;
-                bottom: 0px;
+                bottom: 0;
             }
         }
     }
@@ -214,7 +214,6 @@
 
         &--name {
             background-color: #2a3038;
-            background: #2a3038db;
             padding: 5px 10px;
             border-top-left-radius: 7px;
             border-bottom-left-radius: 7px;

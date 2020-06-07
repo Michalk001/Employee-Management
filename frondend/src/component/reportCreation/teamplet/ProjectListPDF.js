@@ -1,25 +1,25 @@
-import React, { useState, useEffect, state } from "react";
+import React from "react";
 import {
     Page,
     Text,
     View,
     Document,
     StyleSheet,
-    Image,
     Font
 } from "@react-pdf/renderer";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
+import {GenerationPDF} from "../GenerationPDF";
 
 
-export const ProjectListPDF = (props) => {
+const ProjectListPDFTemplate = (props) => {
 
-    const { t, i18n } = useTranslation('common');
+    const {t} = useTranslation('common');
     const project = props.data
 
     Font.register({
         family: 'Rajdhani', fonts: [
-            { src: "/font/Rajdhani.ttf" },
-            { src: "/font/Rajdhani-Bold.ttf", fontWeight: "bold" },
+            {src: "/font/Rajdhani.ttf"},
+            {src: "/font/Rajdhani-Bold.ttf", fontWeight: "bold"},
         ]
     });
     const styles = StyleSheet.create({
@@ -56,38 +56,38 @@ export const ProjectListPDF = (props) => {
             marginTop: 10,
             padding: 5,
             width: 530,
-            paddingTop:10,
-            paddingBottom:0
+            paddingTop: 10,
+            paddingBottom: 0
 
         },
         name: {
             width: 150,
             flexWrap: "wrap",
-            fontSize:18
+            fontSize: 18
         },
         hours: {
             width: 50,
             flexWrap: "wrap",
             textAlign: "right",
- 
+
         },
-        employe: {
+        employee: {
             width: 100,
             flexWrap: "wrap",
             textAlign: "right",
 
         },
-        employeShort: {
+        employeeShort: {
             width: 120,
             flexWrap: "wrap",
             textAlign: "right",
-   
+
         },
         active: {
             width: 100,
             flexWrap: "wrap",
             textAlign: "right",
-            fontSize:18
+            fontSize: 18
         }
 
     })
@@ -106,27 +106,25 @@ export const ProjectListPDF = (props) => {
                 <View style={styles.row}>
                     <Text style={[styles.name]}>{item.name}  </Text>
                     <Text style={[styles.hours]}>{item.hoursTotal} </Text>
-                    <Text style={[styles.employe]}>{item.activUserQuantity} </Text>
-                    <Text style={[styles.employeShort]}>{item.totalUserQuantity} </Text>
+                    <Text style={[styles.employee]}>{item.activUserQuantity} </Text>
+                    <Text style={[styles.employeeShort]}>{item.totalUserQuantity} </Text>
                     <Text style={[styles.active]}>{projectStatus(item.isRetired)} </Text>
                 </View>
 
             </View>
-
         )
 
     }
 
 
-
     return (
 
-        <Document  >
+        <Document>
 
             <Page style={[styles.font, styles.page]}>
 
                 <View style={styles.section}>
-                    <View style={styles.row} >
+                    <View style={styles.row}>
                         <Text style={[styles.title, styles.fontBold]}>
                             {t('list.projectList')}
                         </Text>
@@ -136,15 +134,19 @@ export const ProjectListPDF = (props) => {
                 <View style={styles.row}>
                     <Text style={[styles.name]}>{t('list.name')}</Text>
                     <Text style={[styles.hours]}> {t('list.hours')}</Text>
-                    <Text style={[styles.employe]}>{t('report.aEmployee')}</Text>
-                    <Text style={[styles.employeShort]}>{t('list.totalEmployee')}</Text>
+                    <Text style={[styles.employee]}>{t('report.aEmployee')}</Text>
+                    <Text style={[styles.employeeShort]}>{t('list.totalEmployee')}</Text>
                     <Text style={[styles.active]}>{t('list.status')}</Text>
                 </View>
 
                 {getProjectList(project)}
 
             </Page>
-        </Document >
+        </Document>
     );
 }
 
+const ProjectListPDF = ({data, name}) => {
+    return (<GenerationPDF Doc={ProjectListPDFTemplate} data={data} name={name}/>)
+}
+export default ProjectListPDF
