@@ -6,7 +6,7 @@ import {ActiveProject} from './ActiveProject'
 import {Message} from "./Message";
 
 export const Dashboard = () => {
-    const {t, i18n} = useTranslation('common');
+    const {t} = useTranslation('common');
     useEffect(() => {
         document.title = t('title.dashboard')
     }, [])

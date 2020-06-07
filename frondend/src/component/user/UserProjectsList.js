@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 const UserProjectListPDF = lazy(() => import('../reportCreation/teamplet/UserProjectListPDF'));
 
 
-export const UserProjectsList = (props) => {
+export const UserProjectsList = () => {
 
     const [projectList, setProjectList] = useState([]);
     const [filterProjectList, setFilterProjectList] = useState([])

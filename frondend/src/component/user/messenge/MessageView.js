@@ -1,12 +1,8 @@
 import React, {useState, useEffect, useContext} from "react";
 import {Link} from 'react-router-dom';
-
 import {AuthContext} from "../../../context/AuthContext";
-
-import Cookies from 'js-cookie';
 import config from '../../../config.json'
 import {ErrorPage} from "../../common/ErrorPage";
-
 import {useTranslation} from 'react-i18next';
 import {Fetch, FetchGet} from "../../../models/Fetch";
 

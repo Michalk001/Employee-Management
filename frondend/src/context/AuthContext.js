@@ -10,7 +10,7 @@ export const AuthContext = React.createContext({
     isLogin: false,
     isAdmin: false,
     userDate: null,
-    checkUnauthorized: (error) => {
+    checkUnauthorized: () => {
     },
     LogOut: () => {
     },
@@ -20,7 +20,7 @@ export const AuthContext = React.createContext({
     },
     createUserData: () => {
     },
-    register: async (user) => {
+    register: async () => {
     }
 
 })

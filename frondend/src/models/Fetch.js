@@ -1,4 +1,3 @@
-import config from "../config.json";
 import Cookies from "js-cookie";
 
 

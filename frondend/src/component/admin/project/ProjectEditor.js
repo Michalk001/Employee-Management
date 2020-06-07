@@ -26,7 +26,7 @@ export const ProjectEditor = (props) => {
     const getProject = async (id) => {
         const result = await FetchGet(`${config.apiRoot}/project/${id}`)
         if (result.status === 404) {
-            setError({code: 404, text: t('infoBox.projectNotFound')}, 3)
+            setError({code: 404, text: t('infoBox.projectNotFound')})
             return
         }
         const data = await result.json();
@@ -82,7 +82,7 @@ export const ProjectEditor = (props) => {
         if (!valid())
             return
         const body = JSON.stringify({project: {name: project.name, description: project.description, id: project.id}});
-        const result = await Fetch(`${config.apiRoot}/message/`, "post", JSON.stringify({message: messageObj}));
+        const result = await Fetch(`${config.apiRoot}/message/`, "post", body);
         const data = await result.json();
         if (data.succeeded) {
             infoBoxContext.addInfo(t('infoBox.updated'), 3);
@@ -96,7 +96,7 @@ export const ProjectEditor = (props) => {
     const archiveProject = async (id, isRetired) => {
 
         const body = JSON.stringify({project: {isRetired}});
-        const result = await Fetch(`${config.apiRoot}/message/`, "post", JSON.stringify({message: messageObj}));
+        const result = await Fetch(`${config.apiRoot}/message/`, "post", body);
         const data = await result.json();
 
         if (data.succeeded) {
@@ -114,7 +114,7 @@ export const ProjectEditor = (props) => {
     const archiveUser = async (id, isRetired) => {
 
         const body = JSON.stringify({userProject: {isRetired}})
-        const result = await Fetch(`${config.apiRoot}/message/`, "post", JSON.stringify({message: messageObj}));
+        const result = await Fetch(`${config.apiRoot}/message/`, "post",body);
         const data = await result.json();
 
         if (data.succeeded) {
@@ -135,7 +135,7 @@ export const ProjectEditor = (props) => {
     const addEmployee = async () => {
 
         const body = JSON.stringify({idUser: employeeToAdd.value, idProject: project.id})
-        const result = await Fetch(`${config.apiRoot}/message/`, "post", JSON.stringify({message: messageObj}));
+        const result = await Fetch(`${config.apiRoot}/message/`, "post", body);
 
         const data = await result.json();
         if (data.succeeded) {

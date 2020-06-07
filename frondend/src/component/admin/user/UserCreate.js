@@ -7,7 +7,7 @@ import config from '../../../config.json'
 import {useTranslation} from "react-i18next";
 
 
-export const UserCreate = (props) => {
+export const UserCreate = () => {
 
 
     const {t} = useTranslation('common');

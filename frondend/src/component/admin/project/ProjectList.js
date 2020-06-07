@@ -1,10 +1,6 @@
 import React, { useState, useEffect,lazy, Suspense } from "react";
 import { Link } from 'react-router-dom';
-
-
 import config from '../../../config.json'
-import Cookies from 'js-cookie';
-
 import { useTranslation } from "react-i18next";
 import {FetchGet} from "../../../models/Fetch";
 

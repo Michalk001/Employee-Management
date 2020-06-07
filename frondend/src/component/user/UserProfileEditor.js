@@ -14,7 +14,7 @@ export const UserProfileEditor = (props) => {
 
     const [error, setError] = useState(null);
     const [user, setUser] = useState(null);
-    const [editUser, setEditUser] = useState([]);
+    const [editUser, setEditUser] = useState({});
     const [isValid, setIsValid] = useState({})
     const [passEdit, setPassEdit] = useState({oldPassword: "", newPassword: ""})
     const [passIsValid, setPassIsValid] = useState({oldPassword: true, newPassword: true})

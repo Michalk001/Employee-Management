@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next";
 
 export const InfoBoxContext = React.createContext({
 
-    addInfo: (text, time) => { },
-    Confirm: (msg, callback) => { },
-    addListInfo: (list, title, time) => { }
+    addInfo: () => { },
+    Confirm: () => { },
+    addListInfo: () => { }
 })
 
 
@@ -180,12 +180,12 @@ export const InfoBoxProvider = (props) => {
                 }
             }>
             <>
-                {information.length !== 0 && information.map((x, index) => (
+                {information.length !== 0 && information.map((x) => (
                     <span key={`error-${x.msg.id}`} >
                         {!x.isRemove && < RenderInfo {...x} callback={removeFromInformation} />}
                     </span>
                 ))}
-                {informationList.length !== 0 && informationList.map((x, index) => (
+                {informationList.length !== 0 && informationList.map((x) => (
                     <span key={`error-${x.msg.id}`} >
                         {!x.isRemove && < RenderListInfo {...x} callback={removeFromInformationList} />}
                     </span>

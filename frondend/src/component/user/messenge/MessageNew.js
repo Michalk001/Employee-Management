@@ -10,7 +10,7 @@ import {Fetch, FetchGet} from "../../../models/Fetch";
 export const MessageNew = (props) => {
 
 
-    const {t, i18n} = useTranslation('common');
+    const {t} = useTranslation('common');
     const [users, setUsers] = useState([]);
     const [message, setMessage] = useState({topic: "", description: ""});
 

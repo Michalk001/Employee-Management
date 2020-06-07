@@ -2,7 +2,6 @@ import React, {useState, useEffect, useContext} from "react";
 
 import {InfoBoxContext} from '../../../context/InfoBox/InfoBoxContext';
 import config from '../../../config.json'
-import Cookies from 'js-cookie';
 import Select from 'react-select'
 
 import {useTranslation} from 'react-i18next';

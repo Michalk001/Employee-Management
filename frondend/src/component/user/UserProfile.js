@@ -1,6 +1,6 @@
 
 
-import React, { useState, useEffect, state, useContext, useReducer, lazy, Suspense } from "react";
+import React, { useState, useEffect, useContext, lazy, Suspense } from "react";
 import { Link } from 'react-router-dom';
 
 import { AuthContext } from '../../context/AuthContext';
@@ -13,7 +13,7 @@ const UserReportPDF = lazy(() => import('../reportCreation/teamplet/UserReportPD
 
 export const UserProfile = (props) => {
 
-    const { t, i18n } = useTranslation('common');
+    const { t } = useTranslation('common');
 
     const [error, setError] = useState(null);
     const [user, setUser] = useState(null);

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, state, useReducer, useContext} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import {Link} from 'react-router-dom';
 import {AuthContext} from "../../context/AuthContext";
 import Cookies from 'js-cookie';
@@ -6,10 +6,10 @@ import {useTranslation} from 'react-i18next';
 
 export const SideBar = () => {
 
-    const {t, i18n} = useTranslation('common');
+    const {t} = useTranslation('common');
     const authContext = useContext(AuthContext);
     const [hiddenMenu, setHiddenMenu] = useState(null);
-    const {innerWidth: width, innerHeight: height} = window;
+    const {innerWidth: width} = window;
 
     const changeMenuVisible = () => {
         Cookies.set('hiddenMenu', !hiddenMenu, {expires: 365})
@@ -24,13 +24,12 @@ export const SideBar = () => {
 
     }, [])
 
-
     useEffect(() => {
 
     }, [hiddenMenu])
 
     const autoHiddenMenuSmallDevice = () => {
-        if (window.innerWidth <= 1180) {
+        if (width <= 1180) {
             changeMenuVisible()
         }
     }
