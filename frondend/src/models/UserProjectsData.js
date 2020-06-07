@@ -10,7 +10,7 @@ export const UserProjectsData = (items) => {
             hoursRetired += item.userProjects.hours;
         }
     })
-    const activeQuantity = items.projects.filter((item) => !(item.userProjects.isRemove || item.userProjects.isRetired)).length
-    const totalQuantity = items.projects.filter((item) => !(item.userProjects.isRemove)).length
+    const activeQuantity = items.filter((item) => !(item.userProjects.isRemove || item.userProjects.isRetired)).length
+    const totalQuantity = items.filter((item) => !(item.userProjects.isRemove)).length
     return {hoursActive,hoursRetired,activeQuantity,totalQuantity}
 }

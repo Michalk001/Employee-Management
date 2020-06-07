@@ -110,10 +110,8 @@ const UserReportPDFTemplate = (props) => {
         return hours
     }
 
-    const getActiveProjectList = (projects) => {
-        const activeProject = projects.filter(item => (!item.userProjects.isRetired && !item.userProjects.isRemove));
-
-        if (activeProject.length === 0)
+    const projectsList = (projects) => {
+        if (projects.length === 0)
             return (<View style={styles.noProject}>
                 <View style={styles.row}>
                     <Text> {t('project.non')}  </Text>
@@ -125,7 +123,7 @@ const UserReportPDFTemplate = (props) => {
                 <Text style={[styles.nameTitle, styles.marginLeft]}>{t('project.name')}</Text>
                 <Text style={[styles.hours]}>{t('list.hours')} </Text>
             </View>
-            {activeProject.map(item =>
+            {projects.map(item =>
                 <View key={item.id} style={styles.projectSection}>
                     <View style={styles.row}>
                         <Text style={[styles.name]}>
@@ -139,37 +137,19 @@ const UserReportPDFTemplate = (props) => {
                 </View>
             )}
         </>)
+
+    }
+
+    const getActiveProjectList = (projects) => {
+        const activeProject = projects.filter(item => (!item.userProjects.isRetired && !item.userProjects.isRemove));
+        return projectsList(activeProject);
+
     }
 
 
     const getOldProjectList = (projects) => {
         const oldProject = projects.filter(item => (item.userProjects.isRetired && !item.userProjects.isRemove));
-        if (oldProject.length === 0)
-            return (<View style={styles.noProject}>
-                <View style={styles.row}>
-                    <Text> {t('project.non')}  </Text>
-                </View>
-            </View>)
-
-        return (<>
-            <View style={styles.row}>
-                <Text style={[styles.nameTitle, styles.marginLeft]}>{t('project.name')}</Text>
-                <Text style={[styles.hours]}>{t('list.hours')} </Text>
-            </View>
-            {oldProject.map(item =>
-                <View key={item.id} style={styles.projectSection}>
-                    <View style={styles.row}>
-                        <Text style={[styles.name]}>
-                            {item.name}
-                        </Text>
-                        <Text style={[styles.hours]}>
-                            {`${item.userProjects.hours}`}
-                        </Text>
-                    </View>
-
-                </View>
-            )}
-        </>)
+        return projectsList(oldProject);
 
     }
 

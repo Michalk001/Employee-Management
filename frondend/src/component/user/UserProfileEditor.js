@@ -5,11 +5,10 @@ import {Link} from 'react-router-dom';
 import {InfoBoxContext} from '../../context/InfoBox/InfoBoxContext';
 import {AuthContext} from '../../context/AuthContext';
 import config from '../../config.json'
-import Cookies from 'js-cookie';
 import {ErrorPage} from "../common/ErrorPage";
 import {useTranslation} from "react-i18next";
 import {Fetch, FetchGet} from "../../models/Fetch";
-import {UserEditValid, UserNewValid, UserPasswordValid, validPhone} from "../../models/ValidForm";
+import {UserEditValid, UserPasswordValid, validPhone} from "../../models/ValidForm";
 
 export const UserProfileEditor = (props) => {
 

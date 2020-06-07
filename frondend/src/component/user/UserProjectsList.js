@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 
 import { AuthContext } from '../../context/AuthContext';
 import config from '../../config.json'
-import Cookies from 'js-cookie';
 import { useTranslation } from 'react-i18next';
 import {StatusFilter} from "../../models/StatusFilter";
 import {FetchGet} from "../../models/Fetch";
@@ -84,7 +83,6 @@ export const UserProjectsList = () => {
 
     return (
         <div className="box box--center box--medium ">
-
 
             <StatusFilter  listRaw={projectList} setFilterList={setFilterProjectList}/>
 

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext, lazy} from "react";
+import React, {useState, useEffect, useContext, lazy,Suspense} from "react";
 import {Link} from 'react-router-dom';
 
 import {AuthContext} from '../../context/AuthContext';
