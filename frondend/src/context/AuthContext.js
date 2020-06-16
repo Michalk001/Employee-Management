@@ -80,7 +80,6 @@ export const AuthProvider = (props) => {
             username: loginValue.username,
             password: loginValue.password
         }
-    console.log(obj)
         return await Fetch(`${config.apiRoot}/account/login`, "post", JSON.stringify(obj));
 
 
@@ -142,6 +141,7 @@ export const AuthProvider = (props) => {
 
     useEffect(() => {
         getUserData()
+
     }, [isLogin]);
 
     useEffect(() => {

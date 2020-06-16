@@ -8,14 +8,14 @@ import { userProjectController } from '../controllers/userProject'
 import { messageController } from '../controllers/message'
 
 
-export const router = (app) => {
+export const router = (app,io) => {
 
 
     accountController(app, passport.authenticate('jwt', { session: false }));
     projectController(app, passport.authenticate('jwt', { session: false }));
     userController(app, passport.authenticate('jwt', { session: false }));
     userProjectController(app, passport.authenticate('jwt', { session: false }));
-    messageController(app, passport.authenticate('jwt', { session: false }));
+    messageController(app, passport.authenticate('jwt', { session: false }),io);
 
     
 } 

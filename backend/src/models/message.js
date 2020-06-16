@@ -1,7 +1,7 @@
 import database from "../database/models/database";
 
 
-export const save = async (req, res) => {
+export const save = (io) => async (req, res) => {
 
     if (!req.headers.authorization) {
         res.status(401).json({ succeeded: false, error: ["require token "] });
@@ -35,7 +35,15 @@ export const save = async (req, res) => {
         description: req.body.message.description,
         topic: req.body.message.topic
     }
-    await database.message.create(message)
+    const saved = await database.message.create(message)
+
+    if (saved) {
+        const sender = await database.user.findOne({ where: { id: message.senderId } })
+
+        io.to(user.username).emit("receiveNewMessage", { topic: saved.topic, createdAt: saved.createdAt, sender: { firstname: sender.firstname, lastname: sender.lastname }  })
+    }
+
+
     res.status(201).json({ succeeded: true });
     res.end();
 }

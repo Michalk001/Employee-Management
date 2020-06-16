@@ -45,6 +45,7 @@
     "pg": "^8.0.2",
     "pg-hstore": "^2.3.3",
     "sequelize": "^5.21.6",
+    "socket.io": "^2.3.0",
     "webpack-dev-server": "^3.10.3"
   }
 }

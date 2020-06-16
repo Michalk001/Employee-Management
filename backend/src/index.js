@@ -8,6 +8,8 @@ import database from "./database/models/database"
 
 import { router } from "./routes/router"
 import { authorization } from "./utils/authorization"
+import { socket } from "./socket";
+  
 
 const bcrypt = require('bcryptjs');
 
@@ -51,15 +53,30 @@ database.sequelize.sync().then(function () {
 
 const express = require('express');
 const bodyParser = require("body-parser");
+const http = require("http");
+
 const app = express();
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(bodyParser.json());
-app.use(cors());
+const corsOptions = {
+  credentials: true, 
+  origin: (origin, callback) => {
+      return callback(null, true)
+
+  }
+}
+app.use(cors(corsOptions));
+
+
+
+
 
 authorization();
+const server = http.createServer(app);
+const io = socket(server)
 
-router(app);
+router(app,io);
 const PORT = process.env.PORT || config.PORT;
-app.listen(PORT, () => { console.log(`App listening on port ${PORT}`); }); 
+server.listen(PORT, () => { console.log(`App listening on port ${PORT}`); }); 

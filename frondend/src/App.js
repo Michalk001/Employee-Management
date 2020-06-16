@@ -10,6 +10,7 @@ import { UserRoute, RequireLogin,RequireAdmin } from "./component/Auth"
 
 import { AuthProvider } from './context/AuthContext';
 import { InfoBoxProvider } from './context/InfoBox/InfoBoxContext';
+import {SocketProvider} from "./context/SocketContext";
 
 import { Dashboard } from './component/dashboard/Dashboard'
 import { Project } from './component/user/Project'
@@ -33,6 +34,7 @@ import { I18nextProvider } from 'react-i18next';
 import { i18nInit } from './localization/i18nInit';
 
 
+
 export const App = () => {
 
 
@@ -40,34 +42,35 @@ export const App = () => {
 
         <BrowserRouter>
             <I18nextProvider i18n={i18nInit()}>
-                <InfoBoxProvider>
-                    <AuthProvider >
-                        <Header />
-                        <Switch>
-                            <RequireLogin path="/" exact component={Dashboard} />
-                            <UserRoute path="/login" component={Login} />
+                    <InfoBoxProvider>
+                        <AuthProvider >
+                            <SocketProvider>
+                                <Header />
+                                <Switch>
+                                    <RequireLogin path="/" exact component={Dashboard} />
+                                    <UserRoute path="/login" component={Login} />
 
-                            <RequireAdmin path="/Admin/Project/New" component={ProjectCreate} />
-                            <RequireAdmin path="/Admin/Project/Edit/:id" component={ProjectEditor} />
-                            <RequireAdmin path="/Admin/Project/" component={ProjectList} />
-                            <RequireAdmin path="/admin/user/new" component={UserCreate} />
-                            <RequireAdmin path="/Admin/User/" component={EmployeeList} />
+                                    <RequireAdmin path="/Admin/Project/New" component={ProjectCreate} />
+                                    <RequireAdmin path="/Admin/Project/Edit/:id" component={ProjectEditor} />
+                                    <RequireAdmin path="/Admin/Project/" component={ProjectList} />
+                                    <RequireAdmin path="/admin/user/new" component={UserCreate} />
+                                    <RequireAdmin path="/Admin/User/" component={EmployeeList} />
 
-                            <RequireLogin path="/Project/:id" component={Project} />
-                            <RequireAdmin path="/User/Profile/:id" component={UserProfileEditor} />
-                            <RequireLogin path="/User/Profile" component={UserProfileEditor} />
-                            <RequireLogin path="/User/Project/" component={UserProjectsList} />
-                            <RequireLogin path="/User/:id" component={UserProfile} />
+                                    <RequireLogin path="/Project/:id" component={Project} />
+                                    <RequireAdmin path="/User/Profile/:id" component={UserProfileEditor} />
+                                    <RequireLogin path="/User/Profile" component={UserProfileEditor} />
+                                    <RequireLogin path="/User/Project/" component={UserProjectsList} />
+                                    <RequireLogin path="/User/:id" component={UserProfile} />
 
-                            <RequireLogin path="/message/new" component={MessageNew} />
-                            <RequireLogin path="/message/:id" component={MessageView} />
-                            <RequireLogin path="/message/" component={Message} />
-                            <RequireLogin component={ErrorPage} />
+                                    <RequireLogin path="/message/new" component={MessageNew} />
+                                    <RequireLogin path="/message/:id" component={MessageView} />
+                                    <RequireLogin path="/message/" component={Message} />
+                                    <RequireLogin component={ErrorPage} />
 
-                        </Switch>
-
-                    </AuthProvider>
-                </InfoBoxProvider>
+                                </Switch>
+                            </SocketProvider>
+                        </AuthProvider>
+                    </InfoBoxProvider>
             </I18nextProvider>
         </BrowserRouter>
 

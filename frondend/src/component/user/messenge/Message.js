@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import { Link } from 'react-router-dom';
 
 
@@ -8,13 +8,28 @@ import { MessageReceive } from "./MessageReceive"
 import { MessageSent } from "./MessageSent"
 import { useTranslation } from 'react-i18next';
 import { FetchGet } from "../../../models/Fetch";
+import {SocketContext} from "../../../context/SocketContext";
 
 export const Message = () => {
 
     const { t } = useTranslation('common');
-    const [messages, setMessages] = useState({})
+    const [messages, setMessages] = useState({receiveMessages:[],sentMessages:[]})
     const [selectMessageType, setSelectMessageType] = useState("receive")
     const [isLoading, setIsLoading] = useState(true);
+
+    const socketContext = useContext(SocketContext)
+    useEffect(()=>{
+        if(socketContext.socket)
+            socketContext.socket.on("receiveNewMessage",(data)=>{
+                const newMessages = messages.receiveMessages;
+                newMessages.unshift({...data});
+                console.log({...messages, receiveMessages:[{...newMessages}]})
+                setMessages({sentMessages: messages.sentMessages, receiveMessages:newMessages});
+
+            })
+    },[socketContext.socket,messages])
+
+
 
     const updateSelectMessageType = (event) => {
         setSelectMessageType(event.target.value)

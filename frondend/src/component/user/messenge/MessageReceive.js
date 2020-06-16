@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect} from "react";
 import { Link } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
+
 
 export const MessageReceive = ({ receiveMessages }) => {
 
@@ -8,6 +9,7 @@ export const MessageReceive = ({ receiveMessages }) => {
     const convertDate = (date) => {
         return (date.substring(0, 10)).split("-").join('.');
     }
+
 
     const isRead = (isRead) => {
         return isRead ? "" : "message-list__item--no-read"
