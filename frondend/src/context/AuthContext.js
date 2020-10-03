@@ -32,12 +32,18 @@ export const AuthProvider = (props) => {
     const [isAdmin, setIsAdmin] = useState(null);
     const [userDate, setUserDate] = useState(null)
 
-    const checkIsLogin = () => {
+    const checkIsLogin = (token = null) => {
 
-        if (Cookies.get('token')) {
+        if (Cookies.get('token') || token) {
 
             const jwtDecode = require('jwt-decode');
-            const decoded = jwtDecode(Cookies.get('token'));
+            let decoded;
+            if(token){
+                 decoded = jwtDecode(token);
+            }
+            else {
+                 decoded = jwtDecode(Cookies.get('token'));
+            }
             if (decoded.exp > (new Date() / 1000)) {
                 setIsLogin(true)
 
@@ -50,16 +56,22 @@ export const AuthProvider = (props) => {
         }
     }
 
-    const getUserData = () => {
-        if (!isLogin) {
-            return;
-        }
-        if (!Cookies.get('token')) {
+    const getUserData = (token = null) => {
 
+        if (!Cookies.get('token') && !token) {
             return;
         }
+
+
         const jwtDecode = require('jwt-decode');
-        const tokenDecode = jwtDecode(Cookies.get('token'));
+        let tokenDecode;
+        if(token){
+            tokenDecode = jwtDecode(token);
+        }
+        else{
+            tokenDecode = jwtDecode(Cookies.get('token'));
+        }
+
         if (tokenDecode.isAdmin) {
             setIsAdmin(true)
         } else {
@@ -75,7 +87,6 @@ export const AuthProvider = (props) => {
 
 
     const singUp = async (loginValue) => {
-
         const obj = {
             username: loginValue.username,
             password: loginValue.password
@@ -127,9 +138,9 @@ export const AuthProvider = (props) => {
     }
 
 
-    const createUserData = () => {
-        checkIsLogin();
-        getUserData();
+    const createUserData = (token) => {
+        checkIsLogin(token);
+        getUserData(token);
 
     }
 
@@ -144,9 +155,6 @@ export const AuthProvider = (props) => {
 
     }, [isLogin]);
 
-    useEffect(() => {
-
-    }, [userDate]);
 
     return (
         <AuthContext.Provider

@@ -18,4 +18,4 @@ export const router = (app,io) => {
     messageController(app, passport.authenticate('jwt', { session: false }),io);
 
     
-} 
+}  

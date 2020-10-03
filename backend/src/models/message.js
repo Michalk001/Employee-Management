@@ -130,6 +130,74 @@ export const get = async (req, res) => {
     res.status(200).json({ succeeded: true, sentMessages, receiveMessages });
 }
 
+export const getReceived = async (req, res) => {
+
+
+    if (!req.headers.authorization) {
+        res.status(401).json({ succeeded: false, error: ["require token "] });
+        res.end();
+        return
+    }
+    const token = req.headers.authorization.substring(7, req.headers.authorization.length)
+    const jwtDecode = require('jwt-decode');
+    const tokenDecode = jwtDecode(token);
+    const page =  req.params.id
+    const offset = page * 5;
+    const limit = 5; 
+    
+    const receiveMessages = await database.message.findAll({
+        limit,
+        offset,
+        order: [
+            ['createdAt', 'DESC']
+        ],
+        where: {
+            recipientId: tokenDecode.id,
+            isRemove: false
+        },
+        attributes: ['topic', 'isRead', 'createdAt', 'id'],
+        include: [{
+            model: database.user,
+            as: "sender",
+            attributes: ['firstname', 'lastname', 'username'],
+
+        }]
+    });
+
+
+    res.status(200).json({ succeeded: true, receiveMessages });
+}
+
+export const getSent = async (req, res) => {
+
+
+    if (!req.headers.authorization) {
+        res.status(401).json({ succeeded: false, error: ["require token "] });
+        res.end();
+        return
+    }
+    const token = req.headers.authorization.substring(7, req.headers.authorization.length)
+    const jwtDecode = require('jwt-decode');
+    const tokenDecode = jwtDecode(token);
+
+    const sentMessages = await database.message.findAll({
+        where: {
+            senderId: tokenDecode.id,
+            isRemove: false
+        },
+        attributes: ['topic', 'createdAt', 'id'],
+        include: [{
+            model: database.user,
+            as: "recipient",
+            attributes: ['firstname', 'lastname', 'username'],
+
+        }]
+    });
+
+
+    res.status(200).json({ succeeded: true, sentMessages, receiveMessages });
+}
+
 export const getByID = async (req, res) => {
 
     try {

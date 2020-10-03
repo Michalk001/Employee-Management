@@ -20,7 +20,8 @@ const newInstance = i18next.createInstance();
 export const i18nInit = () =>{
     newInstance.use(initReactI18next).init({
         interpolation: { escapeValue: false },
-        lng: lang(),    
+        lng: lang(),
+        initImmediate : false,
         resources: {
             pl: {
                 common: langPL

@@ -1,9 +1,9 @@
 import Cookies from "js-cookie";
 
 
-export const  FetchGet = async (url,signal = null) =>{
+export const  FetchGet = async (url) =>{
+    const fetch = require("node-fetch");
     return await fetch(url, {
-        signal: signal,
         method: "get",
         headers: {
             "Content-type": "application/json; charset=UTF-8",
@@ -14,12 +14,12 @@ export const  FetchGet = async (url,signal = null) =>{
 }
 
 
-export const Fetch = async (url, method, body,signal=null) =>{
+export const Fetch = async (url, method, body) =>{
     if(method === "get"){
-        return FetchGet(url,signal)
+        return FetchGet(url)
     }
+    const fetch = require("node-fetch");
     return await fetch(url, {
-        signal: signal,
         method: method,
         headers: {
             "Content-type": "application/json; charset=UTF-8",

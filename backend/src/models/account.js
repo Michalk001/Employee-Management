@@ -47,14 +47,13 @@ export const login = async (req, res) => {
         res.end();
         return;
     }
-
+   
     const user = await database.user.findOne({
         where: {
             username:
                 { [database.Sequelize.Op.iLike]: `%${name}` }
         }
     });
-
     if (!user) {
         res.json({ succeeded: false, error: "not found user or password did not match", code: 2 });
         res.end();
@@ -64,7 +63,7 @@ export const login = async (req, res) => {
     if (user.isRemove) {
         res.json({ succeeded: false, error: "account is removed", code: 1 });
         res.end();
-        return;
+        return; 
     }
 
     if (user.isRetired) {
@@ -76,10 +75,10 @@ export const login = async (req, res) => {
 
         const payload = { id: user.id, sub: user.username, firstname: user.firstname, lastname: user.lastname, isAdmin: user.isAdmin };
         const token = jwt.sign(payload, jwtOptions.secretOrKey, { expiresIn: '3000m' });
-
+      
         res.json({ succeeded: true, token: token });
-
-
+        res.end();
+        return
     }
     res.json({ succeeded: false, error: "not found user or password did not match", code: 2 });
     res.end();
@@ -118,6 +117,7 @@ export const register = async (req, res) => {
     else {
         res.json({ succeeded: false, error: "username bussy", code: 2 })
         res.end();
+        return
     }
     res.json({ succeeded: true });
     res.end();

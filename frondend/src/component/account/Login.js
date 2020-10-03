@@ -22,7 +22,7 @@ export const Login = () => {
 
     const singUp = async () => {
         setIsLoading(true)
-        let result;
+        let result = null;
         try {
             result = await authContext.singUp(loginValue)
         } catch (err) {
@@ -64,10 +64,10 @@ export const Login = () => {
         <>
             {canRedirect && <Redirect to='/'/>}
 
-            <div className="box box--center box--login">
+            <div  data-testid="login" className="box box--center box--login">
                 {isLoading &&
-                <div className="box__loading"><i className="fas fa-spinner load-ico load-ico--center load-ico__spin "/>
-                </div>}
+                    <div className="box__loading"><i className="fas fa-spinner load-ico load-ico--center load-ico__spin "/> </div>
+                }
                 <div className="box__text box__text--center box__text--title  ">{t('common.singUpDes')}</div>
                 <form onSubmit={(event) => {
                     event.preventDefault();
@@ -75,18 +75,18 @@ export const Login = () => {
                 }}>
 
                     <div className="box__text box__item box__item--border-top">
-                        <input className="box__input box__input--password-login" type="text" name="username"
+                        <input className="box__input box__input--password-login" data-testid="username" type="text" name="username"
                                placeholder={t('common.login')} onChange={UpdateLoginValue}/>
                     </div>
 
                     <div className="box__text box__item box__item--border-bottom">
-                        <input className="box__input box__input--password-login" type="password" name="password"
+                        <input className="box__input box__input--password-login"  data-testid="password" type="password" name="password"
                                placeholder={t('common.password')} onChange={UpdateLoginValue}/>
                     </div>
 
 
                     <div className="box__item box__item--center">
-                        <input type="submit" className="button button--full-width  box__text"
+                        <input data-testid="submit" type="submit" className="button button--full-width  box__text"
                                value={t('common.singUp')}/>
                     </div>
 
