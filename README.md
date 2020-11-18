@@ -64,14 +64,6 @@ Example config.json
 
 - apiRoot - url to backend server
 
-## Other
-
-Database was created for testing. Configuration data to db is in config.json
-
-Backend server was created for testing. `https://empbackend.ew.r.appspot.com/`
-
-Hosting provider: Google Cloud Platform
-
 ## Technologies
 
 - React
